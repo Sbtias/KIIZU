@@ -7,6 +7,7 @@ const modeButton = document.querySelector("#toggle-mode");
 const title = document.querySelector("#auth-title");
 const submit = document.querySelector("#auth-submit");
 const username = document.querySelector("#username");
+const usernameWrap = document.querySelector("#username-wrap");
 const email = document.querySelector("#email");
 const password = document.querySelector("#password");
 let mode = "login";
@@ -16,6 +17,7 @@ modeButton?.addEventListener("click", () => {
   title.textContent = mode === "login" ? "Bienvenido de vuelta" : "Crea tu identidad";
   submit.textContent = mode === "login" ? "Entrar a KIIZU" : "Crear cuenta";
   username.hidden = mode === "login";
+  usernameWrap.hidden = mode === "login";
   modeButton.textContent = mode === "login" ? "Crear cuenta" : "Ya tengo cuenta";
 });
 
