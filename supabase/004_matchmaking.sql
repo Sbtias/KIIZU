@@ -85,10 +85,8 @@ begin
   if (select count(*) from public.match_players where match_id = m.id) >= max_players then raise exception 'MATCH_FULL'; end if;
 
   insert into public.match_players(match_id,user_id) values(m.id,caller)
-  on conflict do nothing returning * into result_row;
-  if result_row.id is null then
-    select * into result_row from public.match_players where match_id=m.id and user_id=caller;
-  end if;
+  on conflict do nothing;
+  select * into result_row from public.match_players where match_id=m.id and user_id=caller;
   return result_row;
 end;
 $$;
