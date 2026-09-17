@@ -1,0 +1,1 @@
+Módulos previstos: auth, coins, shop, inventory, multiplayer y juegos.
