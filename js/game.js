@@ -40,6 +40,9 @@ async function begin() {
       const started = await supabase.rpc("start_match", { p_match_id: match.id });
       if (!started.error) match = started.data;
     }
+  }).on("postgres_changes", { event: "UPDATE", schema: "public", table: "matches", filter: `id=eq.${match.id}` }, payload => {
+    match = payload.new;
+    if (match.status === "starting" && !running) startCountdown();
   }).on("broadcast", { event: "score" }, ({ payload }) => {
     if (payload.user_id !== state.session.user.id) detail.textContent = `${payload.name || "Player"} está jugando...`;
   }).subscribe(async statusValue => {
