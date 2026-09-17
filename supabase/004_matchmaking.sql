@@ -129,3 +129,26 @@ values
 ('race','Race','Corre hasta la meta.',2,8,true,0),
 ('survival','Survival','Aguanta hasta el final.',2,8,true,0)
 on conflict (slug) do update set price=excluded.price;
+
+create or replace function public.start_match(p_match_id uuid)
+returns public.matches
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare caller uuid := auth.uid(); m public.matches%rowtype; min_players integer; player_count integer;
+begin
+  if caller is null then raise exception 'AUTH_REQUIRED'; end if;
+  select * into m from public.matches where id=p_match_id for update;
+  if not found then raise exception 'MATCH_NOT_FOUND'; end if;
+  if m.host_id <> caller then raise exception 'ONLY_HOST'; end if;
+  if m.status <> 'waiting' then return m; end if;
+  select g.min_players into min_players from public.games g where g.id=m.game_id;
+  select count(*) into player_count from public.match_players where match_id=m.id;
+  if player_count < min_players then raise exception 'NOT_ENOUGH_PLAYERS'; end if;
+  update public.matches set status='starting', started_at=now() where id=m.id returning * into m;
+  return m;
+end;
+$$;
+revoke all on function public.start_match(uuid) from public;
+grant execute on function public.start_match(uuid) to authenticated;
