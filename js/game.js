@@ -81,6 +81,7 @@ async function openRoomPicker() {
       picker.hidden = true;
       await enterMatch(data);
     } catch (e) {
+      console.error("create_match_room:", e);
       toast(e.message || "No se pudo crear la sala.", "error");
     } finally { btn.disabled = false; }
   }, { once: true });
@@ -89,8 +90,16 @@ async function refreshRooms() {
   const list = document.querySelector("#rooms-list");
   if (!list) return;
   list.innerHTML = '<div class="room-empty">Buscando salas...</div>';
+  if (!gameSlug) {
+    list.innerHTML = '<div class="room-empty">No se encontró el juego.</div>';
+    return;
+  }
   const { data, error } = await supabase.rpc("get_game_rooms", { p_game_slug: gameSlug });
-  if (error) { list.innerHTML = '<div class="room-empty">No se pudieron cargar las salas.</div>'; return; }
+  if (error) {
+    console.error("get_game_rooms:", error);
+    list.innerHTML = '<div class="room-empty">No se pudieron cargar las salas.<br><small>' + escapeHtml(error.message || "Error desconocido") + '</small></div>';
+    return;
+  }
   const rooms = Array.isArray(data) ? data : [];
   if (!rooms.length) { list.innerHTML = '<div class="room-empty">No hay salas abiertas. Crea la primera.</div>'; return; }
   list.innerHTML = rooms.map(r => '<div class="room-row"><div><strong>Sala <span class="room-code">'+escapeHtml(r.code)+'</span></strong><small>'+escapeHtml(r.host_username)+' · '+Number(r.player_count)+'/'+Number(r.max_players)+' jugadores</small></div><button class="button button--small" data-room-id="'+r.id+'">Entrar</button></div>').join("");
