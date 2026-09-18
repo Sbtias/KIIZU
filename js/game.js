@@ -136,6 +136,10 @@ async function begin() {
       await syncMatchState();
     });
 
+  // Intentamos arrancar inmediatamente. No dependemos de Realtime para
+  // iniciar una partida de un solo jugador.
+  await syncMatchState();
+
   if (match.status === "starting" || match.status === "playing") startCountdown();
 }
 
