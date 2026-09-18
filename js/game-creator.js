@@ -22,12 +22,20 @@ $("#grid-toggle").onclick=()=>{grid=!grid;$("#grid-toggle").classList.toggle("ac
 async function save(publish=false){if(!state)return;const btn=$(publish?"#publish":"#save");setBusy(btn,true,publish?"Publicando...":"Guardando...");try{const name=$("#name").value.trim(),description=$("#description").value.trim(),max=Number($("#max").value),time=Number($("#time").value);if(name.length<2||name.length>60)throw Error("El nombre debe tener entre 2 y 60 caracteres.");if(!entities.some(e=>e.type==="spawn"))throw Error("Coloca un punto de aparición para el personaje.");if(!entities.some(e=>e.type==="goal"))throw Error("Coloca una meta para terminar el juego.");const config={engine:"kiizu-2d",version:3,world:{...world},entities:entities.map(e=>({...e})),spawn:entities.find(e=>e.type==="spawn")||null,objective:$("#objective").value.trim()||"Llega a la meta",time_limit:time};
 let thumbnail_url=null; const imageFile=$("#game-image")?.files?.[0]; if(imageFile){ if(imageFile.size>4*1024*1024) throw Error("La imagen debe pesar menos de 4 MB."); const ext=imageFile.type==="image/png"?"png":imageFile.type==="image/webp"?"webp":"jpg"; const path=state.session.user.id+"/"+(gameId||"new")+"."+ext; const {error:uploadError}=await supabase.storage.from("game-media").upload(path,imageFile,{upsert:true,contentType:imageFile.type,cacheControl:"3600"}); if(uploadError) throw uploadError; thumbnail_url=supabase.storage.from("game-media").getPublicUrl(path).data.publicUrl+"?v="+Date.now(); }if(gameId){const{error}=await supabase.from("games").update({name,description,max_players:max,game_config:config,...(thumbnail_url?{thumbnail_url}:{})}).eq("id",gameId).eq("creator_id",state.session.user.id);if(error)throw error}else{const{data,error}=await supabase.rpc("create_game",{p_name:name,p_description:description,p_mechanic:"world2d",p_min:1,p_max:max});if(error)throw error;gameId=data.id;const{error:e}=await supabase.from("games").update({game_config:config,...(thumbnail_url?{thumbnail_url}:{})}).eq("id",gameId).eq("creator_id",state.session.user.id);if(e)throw e}if(publish){const{error}=await supabase.rpc("publish_game",{p_game_id:gameId});if(error)throw error;$("#status").textContent="Publicado en Jugar."}else $("#status").textContent="Guardado en tus proyectos.";toast($("#status").textContent,"success")}catch(e){$("#status").textContent=e.message||"No se pudo guardar.";toast($("#status").textContent,"error")}finally{setBusy(btn,false)}}$("#save").onclick=()=>save(false);$("#publish").onclick=()=>save(true);
 const achievementBox=document.querySelector("#achievement-status");
+const achievementList=document.querySelector("#achievement-list");
+async function loadAchievements(){
+ if(!achievementList||!gameId)return;
+ const {data,error}=await supabase.from("game_achievements").select("id,name,description,icon,xp_reward,created_at").eq("game_id",gameId).eq("creator_id",state.session.user.id).order("created_at",{ascending:true});
+ if(error){achievementList.innerHTML=""; return;}
+ achievementList.innerHTML=data?.length?data.map(a=>`<div class="achievement-row"><span>${a.icon||"🏆"}</span><div><strong>${escapeHtml(a.name)}</strong><small>${escapeHtml(a.description||"")}</small></div><b>+${Number(a.xp_reward||0)} XP</b></div>`).join(""):`<div class="status">Todavía no hay logros creados.</div>`;
+}
+function escapeHtml(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 document.querySelector("#create-achievement")?.addEventListener("click",async()=>{
  if(!gameId){toast("Guarda el juego primero para crear logros.","error");return;}
  const name=document.querySelector("#achievement-name").value.trim(), description=document.querySelector("#achievement-description").value.trim(), xp=Number(document.querySelector("#achievement-xp").value)||10, icon=document.querySelector("#achievement-icon").value.trim()||"🏆";
  if(name.length<2){toast("Ponle un nombre al logro.","error");return;}
  const {error}=await supabase.from("game_achievements").insert({game_id:gameId,creator_id:state.session.user.id,name,description,icon,xp_reward:Math.max(1,Math.min(500,xp)),condition:{}});
  if(error){toast(error.message,"error");return;}
- achievementBox.textContent="Logro creado."; toast("Logro añadido al juego.","success");
+ achievementBox.textContent="Logro creado y guardado."; toast("Logro añadido al juego.","success"); await loadAchievements();
 });
-renderList();resize();
+renderList();resize(); loadAchievements();
