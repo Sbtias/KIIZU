@@ -5,7 +5,7 @@ import { toast, setBusy } from "./ui.js";
 const state=await bootShell();
 const canvas=document.querySelector("#design"), ctx=canvas?.getContext("2d");
 const color=document.querySelector("#color"), type=document.querySelector("#type"), name=document.querySelector("#name"), description=document.querySelector("#description"), price=document.querySelector("#price"), status=document.querySelector("#creator-status");
-let drawing=false, tool="brush", zoom=1, currentId=null, history=[],startPoint=null;
+let drawing=false, tool="brush", zoom=1, currentId=null, history=[],startPoint=null;const deleteButton=document.querySelector("#delete-creation");
 
 function resetCanvas(){ctx.fillStyle="#f4f3ef";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.strokeStyle="#d8d5cc";ctx.lineWidth=2;ctx.strokeRect(90,90,460,460);}
 function snapshot(){history.push(ctx.getImageData(0,0,canvas.width,canvas.height));if(history.length>20)history.shift();}
@@ -33,10 +33,11 @@ async function save(publish=false){
    if(currentId) result=await supabase.from("clothing_items").update(payload).eq("id",currentId).select().single();
    else result=await supabase.from("clothing_items").insert(payload).select().single();
    if(result.error)throw result.error;
-   currentId=result.data.id;
+   currentId=result.data.id;deleteButton?.removeAttribute("hidden");
    status.textContent=publish?"Publicado en Marketplace.":"Guardado en tus creaciones.";
    toast(status.textContent,"success");
  }catch(e){toast(e.message||"No se pudo guardar.","error");}finally{setBusy(btn,false);}
 }
 document.querySelector("#save").onclick=()=>save(false);document.querySelector("#publish").onclick=()=>save(true);
 resetCanvas();
+async function deleteCreation(){if(!currentId)return;if(!confirm("¿Eliminar esta prenda? Esta acción no se puede deshacer."))return;const code=prompt("Para confirmar, escribe ELIMINAR");if(code!=="ELIMINAR"){toast("Eliminación cancelada.","info");return}setBusy(deleteButton,true,"Eliminando...");try{const{error}=await supabase.rpc("delete_own_clothing",{p_clothing_id:currentId,p_confirmation:code});if(error)throw error;toast("Prenda eliminada.","success");location.reload()}catch(e){toast(e.message||"No se pudo eliminar.","error");setBusy(deleteButton,false)}}deleteButton?.addEventListener("click",deleteCreation);
