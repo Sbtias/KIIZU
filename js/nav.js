@@ -62,8 +62,8 @@ function setupAccount(profile) {
       '<div class="account-menu-head">' + avatar(profile.avatar_url, name) +
         '<div><strong>' + safe(name) + '</strong><small>🪙 ' +
         Number(profile.coins ?? 0).toLocaleString() + ' Coins</small></div></div>' +
-      '<a href="profile.html">Perfil</a><a href="inventory.html">Inventario</a>' +
-      '<a href="friends.html">Amigos</a><button class="danger" data-signout type="button">Cerrar sesión</button>' +
+      '<a href="profile.html">Mi perfil</a>' +
+      '<button class="danger" data-signout type="button">Cerrar sesión</button>' +
     '</div>';
 
   const trigger = host.querySelector(".account-trigger");
