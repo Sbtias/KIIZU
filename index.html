@@ -6,4 +6,8 @@
 <section class="landing-hero"><div><span class="eyebrow">KIIZU</span><h1>Juega.<br><em>Crea.</em></h1><p>Minijuegos, ropa y una comunidad para compartir lo que haces.</p><div class="hero-actions"><a class="button hero-start" href="login.html">Empezar</a></div></div>
 <div class="landing-panel"><span class="eyebrow">KIIZU EN NÚMEROS</span><h2>La comunidad en movimiento.</h2><p>Tiempo activo acumulado y contenido creado por la comunidad.</p><div class="principles"><span><strong data-platform-minutes>—</strong><small> minutos en KIIZU</small></span><span><strong data-clothing-count>—</strong><small> prendas creadas</small></span><span><strong data-game-count>—</strong><small> juegos creados</small></span></div></div></section>
 <section class="feature-row"><div><strong>01</strong><h3>Juega</h3><p>Encuentra minijuegos y entra a partidas con otros jugadores.</p></div><div><strong>02</strong><h3>Crea</h3><p>Diseña ropa y crea tus propios minijuegos.</p></div><div><strong>03</strong><h3>Personaliza</h3><p>Haz que tu perfil y tu inventario sean tuyos.</p></div></section>
-</main><script src="js/ui-sound.js"></script></body></html>
+</main><script type="module">
+import { getLandingStats } from "./js/nav.js";
+const render=async()=>{try{const s=await getLandingStats();document.querySelector("[data-platform-minutes]").textContent=s.minutes.toLocaleString();document.querySelector("[data-clothing-count]").textContent=s.clothing.toLocaleString();document.querySelector("[data-game-count]").textContent=s.games.toLocaleString();}catch{}};
+render();setInterval(render,30000);
+</script><script src="js/ui-sound.js"></script></body></html>
