@@ -776,3 +776,137 @@ body.settings-open{overflow:hidden}
 .creator-action--primary>b{color:#c8cdd2}
 @media(max-width:800px){.creator-actions{grid-template-columns:1fr}.creator-action{min-height:70px}}
 @media(max-width:560px){.profile-creator{padding:16px;margin-top:14px}.profile-creator-head h2{font-size:21px}.profile-creator-head p{font-size:10px}.creator-action small{font-size:8px}}
+
+
+/* KIIZU / Minimal product UI
+   Flat, compact, human-made feel. */
+:root{
+  --bg:#0b0c0e;
+  --surface:#111316;
+  --surface-2:#17191d;
+  --surface-3:#1d2024;
+  --line:#272a2f;
+  --line-soft:#1d2024;
+  --text:#f1f1ef;
+  --muted:#858a92;
+  --dim:#5f646b;
+  --accent:#e8e8e5;
+  --radius:10px;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+html,body{background:var(--bg)!important}
+body{
+  background:#0b0c0e!important;
+  animation:none!important;
+}
+body:before,body:after{display:none!important}
+a,button,input,textarea,select{transition:background .14s ease,border-color .14s ease,color .14s ease,transform .14s ease,box-shadow .14s ease}
+.brand{font-size:17px;letter-spacing:-.035em}
+.brand-mark{width:28px;height:28px;border-radius:7px;box-shadow:none}
+.eyebrow{font-size:9px;letter-spacing:.14em;color:#70757c}
+.button{
+  min-height:38px;
+  border-radius:8px;
+  padding:9px 13px;
+  box-shadow:none!important;
+  font-size:13px;
+  font-weight:700;
+}
+.button:hover{transform:translateY(-1px);background:#f1f1ef}
+.button--ghost{background:#15171a;color:#e8e8e5;border-color:#2a2d32}
+.button--ghost:hover{background:#1c1f23;border-color:#383c42}
+.text-button{font-size:13px}
+.landing-shell,.app-shell{width:min(1120px,calc(100% - 32px))}
+.landing-shell{padding:18px 0}
+.topbar,.appbar{min-height:52px}
+.topbar{border-bottom:1px solid var(--line-soft)}
+.appbar{padding:11px 0}
+.main-nav{gap:4px;padding:3px;background:#111316;border:1px solid var(--line-soft);border-radius:8px}
+.main-nav a{padding:7px 10px;border-radius:6px;font-size:12px}
+.main-nav a:hover,.main-nav .active{background:#1b1e22;color:var(--text)}
+.top-status{font-size:9px;color:#5f646b}
+.landing-hero{min-height:590px;grid-template-columns:1.15fr .85fr;gap:56px}
+.landing-hero h1{font-size:clamp(48px,6vw,78px);letter-spacing:-.065em;margin:12px 0}
+.landing-hero h1 em{color:#aaaeb4}
+.landing-hero p{font-size:16px;line-height:1.55;max-width:500px}
+.landing-panel,.panel{
+  border-radius:10px;
+  background:#111316!important;
+  box-shadow:none!important;
+}
+.landing-panel{padding:26px}
+.landing-panel h2{font-size:27px;margin:12px 0 8px}
+.principles{margin-top:22px}
+.principles span{padding:12px 0}
+.feature-row{border-radius:10px}
+.feature-row>div{padding:22px;background:#111316}
+.feature-row h3{font-size:16px}
+.feature-row p{font-size:13px}
+.hub-hero{padding:52px 0 30px}
+.hub-hero h1,.page-heading h1{font-size:clamp(40px,5vw,62px);letter-spacing:-.055em;margin:10px 0}
+.hub-hero p,.page-heading p{font-size:14px}
+.hub-brand-stats{gap:7px!important}
+.home-quick-grid,.home-lower-grid{gap:10px!important}
+.home-quick-card,.home-info-panel{
+  border-radius:10px!important;
+  box-shadow:none!important;
+  background:#111316!important;
+}
+.section-head{padding:28px 0 14px}
+.section-head h2{font-size:23px}
+.game-grid,.discover-grid,.item-grid{gap:10px}
+.experience,.discover-card,.item-card{
+  border-radius:10px;
+  background:#111316!important;
+  box-shadow:none!important;
+  padding:15px;
+}
+.experience:hover,.discover-card:hover,.item-card:hover{
+  transform:translateY(-1px);
+  border-color:#363a40;
+  background:#14171a!important;
+  box-shadow:none!important;
+}
+.discover-art,.item-art{height:140px;border-radius:7px;background:#0e1013!important}
+.stats{border-radius:10px}
+.stats>div{padding:18px;background:#111316}
+.stats b{font-size:24px}
+.page-heading{padding:48px 0 24px}
+.chip{border-radius:7px;padding:7px 10px}
+.empty-state{padding:34px;border-radius:9px}
+.achievement{border-radius:9px;background:#111316!important}
+.profile-hero{padding:48px 0 26px}
+.profile-hero h1{font-size:44px}
+.profile-photo,.profile-photo-wrap{border-radius:12px}
+.profile-creator{border-radius:10px!important;box-shadow:none!important}
+.creator-action{border-radius:8px!important}
+.auth{background:#0b0c0e}
+.auth-art{padding:38px;border-color:var(--line-soft)}
+.auth-art h1{font-size:54px}
+.panel--clean{padding:28px;border-radius:10px}
+.panel--clean h2{font-size:28px}
+input,textarea,select{
+  border-radius:7px;
+  background:#0d0f11;
+  padding:10px;
+}
+input:focus,textarea:focus,select:focus{box-shadow:0 0 0 2px rgba(255,255,255,.035)}
+.match-card{border-radius:12px;box-shadow:none!important;background:#111316}
+.play-orb{box-shadow:none!important}
+.creator-layout{gap:12px}
+.creator-tools,.creator-canvas{border-radius:10px}
+.canvas-wrap{border-radius:8px;background:#0d0f11}
+.toast{border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,.3)}
+.account-trigger{border-radius:8px!important;background:#111316!important}
+.account-menu{border-radius:9px;box-shadow:0 16px 35px rgba(0,0,0,.4)}
+.photo-upload{border-radius:7px}
+@media(max-width:850px){
+  .landing-hero{padding:64px 0}
+  .main-nav{display:none}
+}
+@media(max-width:560px){
+  .landing-shell,.app-shell{width:calc(100% - 22px)}
+  .landing-hero{padding:54px 0}
+  .landing-hero h1{font-size:50px}
+  .hub-hero h1,.page-heading h1{font-size:42px}
+}
