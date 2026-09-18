@@ -1,4 +1,4 @@
-import{bootShell}from"./nav.js?v=20260918-1510";
+import{bootShell}from"./nav.js?v=20260918-2010";
 import{supabase}from"./app.js";
 import{toast}from"./ui.js";
 
