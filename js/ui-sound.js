@@ -17,8 +17,16 @@
       osc.stop(ctx.currentTime + 0.05);
     } catch (_) {}
   };
+  const pressSelector = "button, .button, .chip, .text-button, .account-trigger, .photo-upload";
   document.addEventListener("pointerdown", e => {
-    if (e.target.closest("button, .button, .chip, .text-button, .account-trigger, .photo-upload")) playClick();
+    const target = e.target.closest(pressSelector);
+    if (!target || target.disabled) return;
+
+    playClick();
+    target.classList.remove("ui-press");
+    void target.offsetWidth;
+    target.classList.add("ui-press");
+    window.setTimeout(() => target.classList.remove("ui-press"), 460);
   }, {passive:true});
   document.addEventListener("keydown", e => {
     if ((e.key === "Enter" || e.key === " ") && document.activeElement?.matches("button, a, select, input[type=submit]")) playClick();
