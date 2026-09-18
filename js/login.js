@@ -1,5 +1,5 @@
 import { supabase } from "./app.js";
-import { signIn, signUp, resetPassword } from "./auth.js";
+import { signInWithUsername, signUp } from "./auth.js";
 import { setBusy, toast } from "./ui.js";
 
 const form = document.querySelector("#auth-form");
@@ -9,25 +9,19 @@ const submit = document.querySelector("#auth-submit");
 const username = document.querySelector("#username");
 const usernameWrap = document.querySelector("#username-wrap");
 const email = document.querySelector("#email");
+const emailWrap = document.querySelector("#email-wrap");
 const password = document.querySelector("#password");
 const forgot = document.querySelector("#forgot-password");
 let mode = "login";
 
-forgot?.addEventListener("click", async () => {
-  const address=email.value.trim();
-  if(!address){toast("Escribe tu correo electrónico primero.","error");return;}
-  setBusy(forgot,true,"Enviando...");
-  try{await resetPassword(address);toast("Si la cuenta existe, recibirás un correo para recuperar el acceso.","success");}
-  catch(e){toast(e.message||"No se pudo iniciar la recuperación.","error");}
-  finally{setBusy(forgot,false);}
-});
-
 modeButton?.addEventListener("click", () => {
   mode = mode === "login" ? "signup" : "login";
-  title.textContent = mode === "login" ? "Bienvenido de vuelta" : "Crea tu identidad";
+  title.textContent = mode === "login" ? "Bienvenido de vuelta" : "Crea tu cuenta";
   submit.textContent = mode === "login" ? "Entrar a KIIZU" : "Crear cuenta";
-  username.hidden = mode === "login";
-  usernameWrap.hidden = mode === "login";
+  username.hidden = false;
+  usernameWrap.hidden = false;
+  emailWrap.hidden = mode === "login";
+  email.required = mode === "signup";
   modeButton.textContent = mode === "login" ? "Crear cuenta" : "Ya tengo cuenta";
 });
 
@@ -37,7 +31,7 @@ form?.addEventListener("submit", async event => {
   try {
     if (!supabase) throw new Error("Configura js/config.js con tu URL y anon key de Supabase.");
     if (mode === "login") {
-      await signIn(email.value.trim(), password.value);
+      await signInWithUsername(username.value.trim(), password.value);
       window.location.href = "lobby.html";
     } else {
       const name = username.value.trim();
