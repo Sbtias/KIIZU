@@ -19,7 +19,7 @@ const canvas = document.querySelector("#game-canvas");
 
 let match = null, channel = null, game = null, engine = null, appearance = null;
 let score = 0, coins = 0, health = 100;
-let running = false, finished = false, countdownRunning = false;
+let running = false, finished = false, countdownRunning = false, resultsShown = false;
 let roundTimer = null, positionTimer = null;
 
 const fallbackGames = {
@@ -188,10 +188,13 @@ async function finishGame() {
     const { data, error } = await supabase.rpc("submit_match_score", { p_match_id: match.id, p_score: finalScore });
     if (error) throw error;
     match = data;
+    const { data: reward, error: rewardError } = await supabase.rpc("complete_game_run", { p_match_id: match.id });
+    if (rewardError) throw rewardError;
     status.textContent = "RESULTADO REGISTRADO";
     detail.textContent = match.status === "finished"
-      ? "La partida terminó y los resultados fueron calculados."
-      : "Tu resultado quedó guardado. Esperando a los demás jugadores.";
+      ? "La partida terminó y tus recompensas fueron calculadas."
+      : "Tu resultado quedó guardado. Tus recompensas ya están registradas.";
+    showResults(reward);
     toast("Resultado guardado.", "success");
   } catch (error) {
     finished = false; running = true;
@@ -202,6 +205,26 @@ async function finishGame() {
   }
 }
 
+function showResults(reward) {
+  if (resultsShown) return;
+  resultsShown = true;
+  const modal = document.querySelector("#results-modal");
+  if (!modal) return;
+  document.querySelector("#result-score").textContent = Number(reward?.score || 0).toLocaleString();
+  document.querySelector("#result-coins").textContent = "+" + Number(reward?.coins_earned || 0).toLocaleString();
+  document.querySelector("#result-xp").textContent = "+" + Number(reward?.total_xp_earned || 0).toLocaleString();
+  document.querySelector("#results-summary").textContent =
+    "Posición #" + Number(reward?.placement || 0) + " · Nivel " + Number(reward?.new_level || 1);
+  const list = document.querySelector("#results-achievements");
+  const unlocked = Array.isArray(reward?.achievements_unlocked) ? reward.achievements_unlocked : [];
+  list.innerHTML = unlocked.length
+    ? unlocked.map(a => '<article class="result-achievement"><span>' + (a.icon || "🏆") + '</span><div><strong>' + escapeHtml(a.name || "Logro") + '</strong><small>' + escapeHtml(a.description || "Logro desbloqueado") + '</small></div><b>+' + Number(a.xp_reward || 0) + ' XP</b></article>').join("")
+    : '<div class="result-achievement result-achievement--empty"><span>✓</span><div><strong>Sin logros nuevos</strong><small>Completa otro juego para desbloquear más.</small></div></div>';
+  modal.hidden = false;
+}
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+}
 window.addEventListener("pagehide", () => {
   clearInterval(positionTimer);
   if (match?.id && !finished) supabase.rpc("leave_match", { p_match_id: match.id }).catch(() => {});
