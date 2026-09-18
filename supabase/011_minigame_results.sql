@@ -49,3 +49,52 @@ grant execute on function public.start_match(uuid) to authenticated;
 grant execute on function public.leave_match(uuid) to authenticated;
 grant execute on function public.publish_game(uuid) to authenticated;
 grant execute on function public.submit_match_score(uuid,integer) to authenticated;
+
+-- Estado de partida seguro para el cliente. Evita depender de SELECT directos
+-- sobre matches/match_players cuando RLS está activo.
+create or replace function public.get_match_state(p_match_id uuid)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  caller uuid := auth.uid();
+  m public.matches%rowtype;
+  players jsonb;
+begin
+  if caller is null then raise exception 'AUTH_REQUIRED'; end if;
+
+  select * into m
+  from public.matches
+  where id = p_match_id
+    and exists (
+      select 1
+      from public.match_players mp
+      where mp.match_id = p_match_id
+        and mp.user_id = caller
+    );
+
+  if not found then raise exception 'MATCH_NOT_FOUND'; end if;
+
+  select coalesce(jsonb_agg(
+    jsonb_build_object(
+      'user_id', mp.user_id,
+      'score', mp.score,
+      'placement', mp.placement
+    )
+    order by mp.joined_at
+  ), '[]'::jsonb)
+  into players
+  from public.match_players mp
+  where mp.match_id = p_match_id;
+
+  return jsonb_build_object(
+    'match', to_jsonb(m),
+    'players', players
+  );
+end;
+$$;
+
+revoke all on function public.get_match_state(uuid) from public;
+grant execute on function public.get_match_state(uuid) to authenticated;
