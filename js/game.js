@@ -5,7 +5,16 @@ import { Kiizu2D, buildWorld, buildWorldFromConfig } from "./game-engine.js";
 
 const params = new URLSearchParams(location.search);
 const gameSlug = params.get("game");
-const state = await bootShell();
+let state = null;
+try {
+  state = await bootShell();
+} catch (error) {
+  const bootStatus = document.querySelector("#match-status");
+  const bootDetail = document.querySelector("#match-detail");
+  if (bootStatus) bootStatus.textContent = "NO SE PUDO INICIAR";
+  if (bootDetail) bootDetail.textContent = error?.message || "Error al cargar la partida.";
+  console.error("KIIZU game boot error:", error);
+}
 
 const status = document.querySelector("#match-status");
 const detail = document.querySelector("#match-detail");
@@ -135,8 +144,6 @@ async function enterMatch(data) {
   if (match.status === "starting" || match.status === "playing") startCountdown();
   else await syncMatchState();
 }
-
-function escapeHtml(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 
 async function syncMatchState() {
   if (!match?.id) return;
@@ -269,8 +276,7 @@ function escapeHtml(value) {
 }
 window.addEventListener("pagehide", () => {
   clearInterval(positionTimer);
-  if (match?.id && !finished) supabase.rpc("leave_match", { p_match_id: match.id }).catch(() => {});
-  channel?.unsubscribe();
+    channel?.unsubscribe();
 });
 
 if (state) {
