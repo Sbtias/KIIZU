@@ -1,72 +1,86 @@
 # KIIZU
 
-**KIIZU** es una base funcional para una plataforma social de videojuegos: identidad, mundos, descubrimiento, economía, inventario, progresión y partidas realtime.
+KIIZU es una plataforma social de minijuegos centrada en **crear, jugar, personalizar y socializar**.
 
-## Estado actual
+## Principios del producto
 
-- Landing con identidad visual 3D/futurista y fallback CSS.
-- Autenticación real con Supabase Auth.
-- Perfil persistente con Coins, XP, nivel y estadísticas.
-- Hub social y descubrimiento de mundos.
-- Tienda persistente con compras atómicas mediante RPC.
+- Producción muestra únicamente datos reales de Supabase.
+- No se usan usuarios, jugadores, visitas, likes, rankings, Coins o estadísticas ficticias.
+- Supabase Auth gestiona contraseñas, sesiones, confirmación y recuperación.
+- Coins, compras, publicaciones, likes y equipamiento se validan en PostgreSQL.
+- No hay NPCs ni mundos 3D en el producto actual.
+- La interfaz usa un sistema visual propio, simple y consistente.
+
+## Funciones actuales
+
+- Registro/login con Supabase Auth.
+- Confirmación de correo y recuperación de contraseña.
+- Perfil con progreso y logros realmente desbloqueados.
+- Presencia online basada en heartbeat y última actividad real.
+- Hub con cuentas creadas y usuarios conectados reales.
+- Catálogo y marketplace.
 - Inventario persistente.
-- Base de avatares, mundos, amigos/social y logros.
-- Matchmaking con salas persistentes y Supabase Realtime.
-- Partidas con presencia y sincronización de estado.
-- Arquitectura modular en HTML/CSS/JS.
-- RLS y operaciones sensibles server-side mediante funciones PostgreSQL.
+- Creador de ropa 2D con guardado y publicación.
+- Likes únicos por usuario.
+- Compra de ropa con transferencia atómica de Coins al creador.
+- Equipar/quitar ropa.
+- Creación de minijuegos basada en mecánicas seguras y configurables.
+- Publicación de minijuegos.
+- Matchmaking con Supabase Realtime.
+- Partidas singleplayer y multiplayer según los límites definidos en la base de datos.
 
-## Configuración
+## Base de datos
 
-1. Crea un proyecto en Supabase.
-2. Ejecuta en orden:
-   - `supabase/schema.sql`
-   - `supabase/002_platform.sql`
-   - `supabase/003_seed.sql`
-   - `supabase/004_matchmaking.sql`
-   - `supabase/005_realtime.sql`
-3. Configura `js/config.js` con la URL pública y la publishable/anon key de tu proyecto.
-4. Nunca pongas una service-role key en el frontend.
-5. Sirve el proyecto mediante un servidor local. Los módulos ES y Auth no deben probarse abriendo los HTML con `file://`.
+Ejecutar los archivos en este orden:
 
-## Arquitectura
+1. `supabase/schema.sql`
+2. `supabase/002_platform.sql`
+3. `supabase/003_seed.sql`
+4. `supabase/004_matchmaking.sql`
+5. `supabase/005_realtime.sql`
+6. `supabase/006_presence.sql`
+7. `supabase/007_clothing.sql`
+8. `supabase/008_retire_worlds.sql`
+9. `supabase/009_equipment.sql`
+10. `supabase/010_game_creator.sql`
+11. `supabase/011_matchmaking_published_games.sql`
+12. `supabase/012_reports.sql`
+
+Después configura `js/config.js` con la URL pública y la publishable/anon key de Supabase.
+
+## Estructura
 
 ```
-/css
-  global.css
-/js
-  app.js
-  auth.js
-  coins.js
-  game.js
-  lobby.js
-  login.js
-  nav.js
-  profile.js
-  shop.js
-  ui.js
-/supabase
-  schema.sql
-  002_platform.sql
-  003_seed.sql
-  004_matchmaking.sql
-  005_realtime.sql
-index.html
-login.html
-lobby.html
-discover.html
-shop.html
-inventory.html
-profile.html
-game.html
+/
+├── css/global.css
+├── js/
+│   ├── app.js
+│   ├── auth.js
+│   ├── coins.js
+│   ├── creator.js
+│   ├── game.js
+│   ├── game-creator.js
+│   ├── inventory.js
+│   ├── lobby.js
+│   ├── login.js
+│   ├── nav.js
+│   ├── profile.js
+│   ├── shop.js
+│   └── ui.js
+└── supabase/
+    ├── schema.sql
+    └── 002–012 migrations
 ```
 
 ## Seguridad
 
-El navegador nunca recibe una service-role key y no escribe directamente el saldo de Coins. Las compras pasan por `purchase_item()`, que bloquea el perfil, valida propiedad y saldo, descuenta y registra la transacción en una operación atómica.
+El frontend nunca recibe una service-role key ni modifica directamente Coins. Las operaciones sensibles utilizan RPC/security definer y RLS.
 
-El matchmaking también usa funciones PostgreSQL para crear/unirse/iniciar salas.
+La presencia no crea usuarios artificiales. Un usuario cuenta como online solo mientras su `last_seen` sea reciente.
 
-### Próxima capa de producción
+Las puntuaciones competitivas calculadas por el navegador todavía no otorgan automáticamente Coins/XP. Para economía competitiva real hace falta validar cada mecánica en servidor antes de conceder recompensas.
 
-La puntuación competitiva y las recompensas finales todavía deben migrarse a un validador server-side/Edge Function por juego. La UI puede sincronizar puntuaciones por Realtime, pero una plataforma comercial no debe confiar en un resultado calculado por el navegador para entregar Coins. Esa separación es intencional.
+## Desarrollo
+
+Usa GitHub Pages para producción y un servidor local para desarrollo. Configura en Supabase Auth la URL de producción y las URLs de redirección permitidas.
+
