@@ -102,6 +102,9 @@ export async function bootShell() {
 
   setupAccount(profile);
   await startPresence();
+  try { await supabase.rpc("track_activity"); } catch {}
+  clearInterval(window.__kiizuActivityTimer);
+  window.__kiizuActivityTimer = setInterval(() => supabase.rpc("track_activity").catch(() => {}), 30000);
   initMotion();
 
   return { session, profile };
