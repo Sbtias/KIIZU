@@ -99,14 +99,10 @@ async function begin() {
       event: "*", schema: "public", table: "match_players",
       filter: `match_id=eq.${match.id}`
     }, async () => {
-      const { data: rows } = await supabase
-        .from("match_players")
-        .select("user_id,score,placement")
-        .eq("match_id", match.id);
-      playersEl.textContent = rows?.length ?? 0;
-      if (match.host_id === state.session.user.id && rows?.length >= game.min_players && match.status === "waiting") {
-        const started = await supabase.rpc("start_match", { p_match_id: match.id });
-        if (!started.error) match = started.data;
+      try {
+        await syncMatchState();
+      } catch (error) {
+        console.warn("No se pudo sincronizar la sala:", error);
       }
     })
     .on("postgres_changes", {
