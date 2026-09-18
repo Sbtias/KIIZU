@@ -1,4 +1,4 @@
-import { bootShell, getPublicStats } from "./nav.js?v=20260918-1335";
+import { bootShell, getPublicStats } from "./nav.js?v=20260918-2010";
 import { supabase } from "./app.js";
 
 const state = await bootShell();
