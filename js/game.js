@@ -136,11 +136,19 @@ async function begin() {
       await syncMatchState();
     });
 
-  // Intentamos arrancar inmediatamente. No dependemos de Realtime para
-  // iniciar una partida de un solo jugador.
-  await syncMatchState();
+  // Los juegos base permiten jugar con 1 jugador. Arrancamos directamente
+  // después de crear la sala para que la pantalla no dependa de Realtime.
+  if (match.status === "waiting" && match.host_id === state.session.user.id && Number(game?.min_players || 1) <= 1) {
+    const started = await supabase.rpc("start_match", { p_match_id: match.id });
+    if (started.error) throw started.error;
+    match = started.data;
+  }
 
-  if (match.status === "starting" || match.status === "playing") startCountdown();
+  if (match.status === "starting" || match.status === "playing") {
+    startCountdown();
+  } else {
+    await syncMatchState();
+  }
 }
 
 async function syncMatchState() {
