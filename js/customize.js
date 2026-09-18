@@ -31,8 +31,8 @@ async function load(){
  grid.innerHTML=items.map(x=>card(x,[...equippedMap.values()].some(e=>e?.id===x.id))).join("")||'<div class="empty-state"><h3>No tienes ropa todavía.</h3><p>Crea o compra prendas para personalizarte.</p></div>';
  summary.textContent=[...equippedMap.entries()].map(([slot,item])=>slot+": "+(item?.name||"—")).join(" · ")||"Nada equipado";
  preview.innerHTML='<div class="avatar-preview-body"></div>';
- const images=[...equippedMap.values()].filter(Boolean).map(x=>x.thumbnail||x.design_data?.thumbnail||x.design_data?.layers?.find(l=>l?.data)?.data).filter(Boolean);
- images.forEach(src=>{const img=document.createElement("img");img.src=src;img.alt="";preview.appendChild(img)});
+ const images=[...equippedMap.values()].filter(Boolean).map(x=>({type:String(x.type||"full").toLowerCase(),src:x.thumbnail||x.design_data?.thumbnail||x.design_data?.layers?.find(l=>l?.data)?.data})).filter(x=>x.src);
+ images.forEach(item=>{const img=document.createElement("img");img.src=item.src;img.alt="";img.className="avatar-clothing-layer avatar-clothing-"+item.type.replace(/[^a-z0-9_-]/g,"");preview.appendChild(img)});
 
  grid.querySelectorAll("[data-equip]").forEach(btn=>btn.addEventListener("click",async()=>{
    const {error}=await supabase.rpc("equip_clothing",{p_clothing_id:btn.dataset.equip});
