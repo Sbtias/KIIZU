@@ -54,11 +54,50 @@ function setCoins(value) { coins = Math.max(0, value); coinsEl.textContent = Str
 async function begin() {
   if (!state || !supabase) return;
   await loadGame();
-  status.innerHTML = 'Buscando jugadores<span class="dots">...</span>';
-  detail.textContent = "Creando o encontrando una sala disponible.";
-
-  const { data, error } = await supabase.rpc("create_match", { p_game_slug: gameSlug });
-  if (error) throw error;
+  await openRoomPicker();
+}
+async function openRoomPicker() {
+  const picker = document.querySelector("#room-picker");
+  const list = document.querySelector("#rooms-list");
+  if (!picker || !list) return;
+  picker.hidden = false;
+  await refreshRooms();
+  document.querySelector("#refresh-rooms")?.addEventListener("click", refreshRooms);
+  document.querySelector("#create-room")?.addEventListener("click", async () => {
+    const btn = document.querySelector("#create-room");
+    btn.disabled = true;
+    try {
+      const { data, error } = await supabase.rpc("create_match_room", { p_game_slug: gameSlug });
+      if (error) throw error;
+      picker.hidden = true;
+      await enterMatch(data);
+    } catch (e) {
+      toast(e.message || "No se pudo crear la sala.", "error");
+    } finally { btn.disabled = false; }
+  }, { once: true });
+}
+async function refreshRooms() {
+  const list = document.querySelector("#rooms-list");
+  if (!list) return;
+  list.innerHTML = '<div class="room-empty">Buscando salas...</div>';
+  const { data, error } = await supabase.rpc("get_game_rooms", { p_game_slug: gameSlug });
+  if (error) { list.innerHTML = '<div class="room-empty">No se pudieron cargar las salas.</div>'; return; }
+  const rooms = Array.isArray(data) ? data : [];
+  if (!rooms.length) { list.innerHTML = '<div class="room-empty">No hay salas abiertas. Crea la primera.</div>'; return; }
+  list.innerHTML = rooms.map(r => '<div class="room-row"><div><strong>Sala <span class="room-code">'+escapeHtml(r.code)+'</span></strong><small>'+escapeHtml(r.host_username)+' · '+Number(r.player_count)+'/'+Number(r.max_players)+' jugadores</small></div><button class="button button--small" data-room-id="'+r.id+'">Entrar</button></div>').join("");
+  list.querySelectorAll("[data-room-id]").forEach(btn => btn.addEventListener("click", async () => {
+    btn.disabled = true;
+    try {
+      const { data, error } = await supabase.rpc("join_match", { p_match_id: btn.dataset.roomId });
+      if (error) throw error;
+      document.querySelector("#room-picker").hidden = true;
+      await enterMatch(data);
+    } catch (e) { toast(e.message || "No se pudo entrar a la sala.", "error"); btn.disabled = false; }
+  }));
+}
+async function enterMatch(data) {
+  status.innerHTML = 'Esperando jugadores<span class="dots">...</span>';
+  detail.textContent = "La partida comenzará cuando la sala tenga los jugadores necesarios.";
   match = data;
 
   channel = supabase.channel(`match:${match.id}`, { config: { presence: { key: state.session.user.id } } });
@@ -96,6 +135,8 @@ async function begin() {
   if (match.status === "starting" || match.status === "playing") startCountdown();
   else await syncMatchState();
 }
+
+function escapeHtml(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 
 async function syncMatchState() {
   if (!match?.id) return;
