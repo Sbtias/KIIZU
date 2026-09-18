@@ -75,4 +75,5 @@ end;
 $$;
 
 revoke all on function public.complete_game_run(uuid) from public;
+revoke execute on function public.complete_game_run(uuid) from anon;
 grant execute on function public.complete_game_run(uuid) to authenticated;
