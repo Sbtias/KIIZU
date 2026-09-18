@@ -5,22 +5,22 @@ import { toast, setBusy } from "./ui.js";
 const state=await bootShell();
 const canvas=document.querySelector("#design"), ctx=canvas?.getContext("2d");
 const color=document.querySelector("#color"), type=document.querySelector("#type"), name=document.querySelector("#name"), description=document.querySelector("#description"), price=document.querySelector("#price"), status=document.querySelector("#creator-status");
-let drawing=false, tool="brush", zoom=1, currentId=null, history=[];
+let drawing=false, tool="brush", zoom=1, currentId=null, history=[],startPoint=null;
 
 function resetCanvas(){ctx.fillStyle="#f4f3ef";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.strokeStyle="#d8d5cc";ctx.lineWidth=2;ctx.strokeRect(90,90,460,460);}
 function snapshot(){history.push(ctx.getImageData(0,0,canvas.width,canvas.height));if(history.length>20)history.shift();}
 function point(e){const r=canvas.getBoundingClientRect();return {x:(e.clientX-r.left)*canvas.width/r.width,y:(e.clientY-r.top)*canvas.height/r.height};}
-function start(e){snapshot();drawing=true;const p=point(e);ctx.beginPath();ctx.moveTo(p.x,p.y);}
-function move(e){if(!drawing)return;const p=point(e);ctx.lineCap="round";ctx.lineJoin="round";ctx.lineWidth=tool==="eraser"?32:10;ctx.strokeStyle=tool==="eraser"?"#f4f3ef":color.value;ctx.lineTo(p.x,p.y);ctx.stroke();}
+function start(e){const p=point(e);if(tool==="fill"){snapshot();floodFill(Math.floor(p.x),Math.floor(p.y),hexToRgba(color.value));return}if(tool==="text"){snapshot();const value=prompt("Texto del diseño:");if(value){ctx.fillStyle=color.value;ctx.font="700 34px DM Sans";ctx.fillText(value,p.x,p.y)}return}snapshot();drawing=true;startPoint=p;ctx.beginPath();ctx.moveTo(p.x,p.y);}
+function move(e){if(!drawing)return;const p=point(e);if(tool==="rect"||tool==="circle"){ctx.putImageData(history[history.length-1],0,0);ctx.strokeStyle=color.value;ctx.lineWidth=8;const x=Math.min(startPoint.x,p.x),y=Math.min(startPoint.y,p.y),w=Math.abs(p.x-startPoint.x),h=Math.abs(p.y-startPoint.y);if(tool==="rect")ctx.strokeRect(x,y,w,h);else{ctx.beginPath();ctx.ellipse(x+w/2,y+h/2,w/2,h/2,0,0,Math.PI*2);ctx.stroke()}return}ctx.lineCap="round";ctx.lineJoin="round";ctx.lineWidth=tool==="eraser"?32:10;ctx.strokeStyle=tool==="eraser"?"#f4f3ef":color.value;ctx.lineTo(p.x,p.y);ctx.stroke();}
 function end(){drawing=false;ctx.closePath();}
 canvas?.addEventListener("pointerdown",start);canvas?.addEventListener("pointermove",move);window.addEventListener("pointerup",end);
-document.querySelector("#brush").onclick=()=>tool="brush";document.querySelector("#eraser").onclick=()=>tool="eraser";
+document.querySelector("#brush").onclick=()=>tool="brush";document.querySelector("#eraser").onclick=()=>tool="eraser";document.querySelector("#fill").onclick=()=>tool="fill";document.querySelector("#rect").onclick=()=>tool="rect";document.querySelector("#circle").onclick=()=>tool="circle";document.querySelector("#text").onclick=()=>tool="text";
 document.querySelector("#undo").onclick=()=>{const img=history.pop();if(img)ctx.putImageData(img,0,0);};
 document.querySelector("#clear").onclick=()=>{snapshot();resetCanvas();};
 document.querySelector("#zoom-in").onclick=()=>{zoom=Math.min(2,zoom+.1);canvas.style.transform=`scale(${zoom})`;document.querySelector("#zoom-label").textContent=`${Math.round(zoom*100)}%`;};
 document.querySelector("#zoom-out").onclick=()=>{zoom=Math.max(.6,zoom-.1);canvas.style.transform=`scale(${zoom})`;document.querySelector("#zoom-label").textContent=`${Math.round(zoom*100)}%`;};
 
-function data(){return {version:1,canvas:{width:canvas.width,height:canvas.height},layers:[{type:"raster",data:canvas.toDataURL("image/png")} ]};}
+function hexToRgba(hex){const n=parseInt(hex.slice(1),16);return[(n>>16)&255,(n>>8)&255,n&255,255]}\nfunction floodFill(sx,sy,target){const img=ctx.getImageData(0,0,canvas.width,canvas.height),d=img.data,i=(sy*canvas.width+sx)*4,base=[d[i],d[i+1],d[i+2],d[i+3]];if(base.every((v,k)=>Math.abs(v-target[k])<5))return;const stack=[[sx,sy]],seen=new Uint8Array(canvas.width*canvas.height);while(stack.length){const [x,y]=stack.pop();if(x<0||y<0||x>=canvas.width||y>=canvas.height)continue;const p=y*canvas.width+x;if(seen[p])continue;const q=p*4;if(Math.abs(d[q]-base[0])>5||Math.abs(d[q+1]-base[1])>5||Math.abs(d[q+2]-base[2])>5||Math.abs(d[q+3]-base[3])>5)continue;seen[p]=1;d[q]=target[0];d[q+1]=target[1];d[q+2]=target[2];d[q+3]=target[3];stack.push([x+1,y],[x-1,y],[x,y+1],[x,y-1])}ctx.putImageData(img,0,0)}\nfunction data(){return {version:1,canvas:{width:canvas.width,height:canvas.height},layers:[{id:"base",type:"raster",data:canvas.toDataURL("image/png")} ]};}
 async function save(publish=false){
  if(!state)return;
  if(!name.value.trim()){toast("Ponle un nombre a tu creación.","error");return;}
