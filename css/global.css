@@ -609,3 +609,13 @@ body.settings-open{overflow:hidden}
   .chat-send{min-width:48px;padding:10px 12px}
   .chat-send span{display:none}
 }
+/* KIIZU Light */
+:root[data-theme="light"]{--bg:#f3f5f7;--surface:#fff;--surface-2:#eef1f3;--surface-3:#e5e9ec;--line:#d4d9de;--line-soft:#e1e5e8;--text:#171b20;--muted:#68717b;--dim:#8b949e;--accent:#171b20;background:#f3f5f7}
+:root[data-theme="light"] body{color:var(--text);background:radial-gradient(ellipse 55% 32% at 16% 18%,rgba(120,140,160,.10),transparent 68%),radial-gradient(ellipse 48% 28% at 82% 25%,rgba(150,130,160,.08),transparent 70%),#f3f5f7}
+:root[data-theme="light"] body:before{opacity:.12}:root[data-theme="light"] body:after{opacity:.08}
+:root[data-theme="light"] .landing-panel,:root[data-theme="light"] .panel,:root[data-theme="light"] .experience,:root[data-theme="light"] .discover-card,:root[data-theme="light"] .item-card,:root[data-theme="light"] .achievement,:root[data-theme="light"] .match-card{background:rgba(255,255,255,.82);border-color:rgba(25,30,35,.11);color:var(--text);box-shadow:0 18px 50px rgba(40,50,60,.10),inset 0 1px 0 rgba(255,255,255,.95)}
+:root[data-theme="light"] .button{background:#171b20;color:#fff;border-color:#171b20}:root[data-theme="light"] .button--ghost{background:#fff;color:#20252a;border-color:#d0d5da}:root[data-theme="light"] .button--ghost:hover{background:#f0f2f4;border-color:#bfc6cc}
+:root[data-theme="light"] input,:root[data-theme="light"] textarea,:root[data-theme="light"] select{background:rgba(255,255,255,.9);color:#171b20;border-color:#d0d5da}:root[data-theme="light"] input:focus,:root[data-theme="light"] textarea:focus,:root[data-theme="light"] select:focus{background:#fff;border-color:#9da6af}
+:root[data-theme="light"] .main-nav{background:rgba(255,255,255,.72);border-color:#d8dde1}:root[data-theme="light"] .main-nav a:hover,:root[data-theme="light"] .main-nav .active{background:rgba(20,25,30,.06);border-color:rgba(20,25,30,.10);box-shadow:none}
+:root[data-theme="light"] .stats>div,:root[data-theme="light"] .feature-row>div{background:#fff}:root[data-theme="light"] .stats,:root[data-theme="light"] .feature-row{background:#d8dde1;border-color:#d8dde1}
+:root[data-theme="light"] .studio-card,:root[data-theme="light"] .studio-toolbar{background:rgba(255,255,255,.82);border-color:rgba(20,25,30,.11);box-shadow:0 12px 35px rgba(40,50,60,.08),inset 0 1px 0 #fff}:root[data-theme="light"] .studio-tool,:root[data-theme="light"] .studio-toolbar button{background:rgba(20,25,30,.035);border-color:rgba(20,25,30,.09);color:#30363c}:root[data-theme="light"] .studio-tool:hover,:root[data-theme="light"] .studio-tool.active{background:rgba(20,25,30,.08);border-color:rgba(20,25,30,.17)}
