@@ -4,8 +4,8 @@ values
 ('quickclick', 'Quick Click', 'Pulsa y consigue la mayor puntuación.', 1, 8, true),
 ('memory', 'Memory', 'Encuentra las parejas.', 1, 8, true),
 ('obstacle', 'Obstacle Run', 'Supera el circuito.', 1, 8, true),
-('race', 'Race', 'Corre hasta la meta.', 2, 8, true),
-('survival', 'Survival', 'Aguanta hasta el final.', 2, 8, true)
+('race', 'Race', 'Corre hasta la meta.', 1, 8, true),
+('survival', 'Survival', 'Aguanta hasta el final.', 1, 8, true)
 on conflict (slug) do nothing;
 
 insert into public.achievements (slug, name, description, icon, xp_reward)
