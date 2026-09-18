@@ -14,6 +14,9 @@ export class Kiizu2D {
     this.onHazard = options.onHazard || (() => {});
     this.onGoal = options.onGoal || (() => {});
     this.onFrame = options.onFrame || (() => {});
+    this.spawn = options.spawn || null;
+    this.checkpoint = options.spawn || null;
+    this.hazardCooldown = 0;
     this.bindInput();
     this.resize();
     addEventListener("resize", () => this.resize());
@@ -65,6 +68,7 @@ export class Kiizu2D {
 
   update(dt) {
     const p = this.player;
+    this.hazardCooldown = Math.max(0, this.hazardCooldown - dt);
     const left = this.keys.has("a") || this.keys.has("arrowleft");
     const right = this.keys.has("d") || this.keys.has("arrowright");
     const jump = this.keys.has("w") || this.keys.has("arrowup") || this.keys.has(" ");
@@ -79,10 +83,12 @@ export class Kiizu2D {
     this.collideVertical();
 
     for (const e of this.entities) {
-      if (e.collected || e.type === "platform") continue;
+      if (e.collected || e.type === "platform" || e.type === "spawn") continue;
       if (this.overlap(p, e)) {
         if (e.type === "coin") { e.collected = true; this.onCollect(e); }
-        if (e.type === "hazard") this.onHazard(e);
+        if (e.type === "checkpoint") this.checkpoint = { x:e.x, y:e.y + e.h - p.h, w:p.w, h:p.h };
+        if (e.type === "spring" && p.vy >= 0) { p.vy = -(Number(e.power) || 15); p.grounded = false; }
+        if ((e.type === "hazard" || e.type === "water" || e.type === "enemy") && this.hazardCooldown <= 0) { this.hazardCooldown = 35; this.onHazard(e); }
         if (e.type === "goal") this.onGoal(e);
       }
     }
@@ -94,10 +100,18 @@ export class Kiizu2D {
     this.onFrame({ player: p, camera: this.camera });
   }
 
+  respawn() {
+    const s = this.checkpoint || this.spawn || { x:150, y:600 };
+    this.player.x = s.x;
+    this.player.y = s.y;
+    this.player.vx = 0;
+    this.player.vy = 0;
+  }
+
   collideHorizontal() {
     const p = this.player;
     for (const e of this.entities) {
-      if (e.type !== "platform" || !this.overlap(p, e)) continue;
+      if (!["platform","moving"].includes(e.type) || !this.overlap(p, e)) continue;
       if (p.vx > 0) p.x = e.x - p.w;
       else if (p.vx < 0) p.x = e.x + e.w;
       p.vx = 0;
@@ -113,7 +127,7 @@ export class Kiizu2D {
       else { p.y = e.y + e.h; p.vy = 0; }
     }
     if (p.y > this.world.height + 120) {
-      p.x = 150; p.y = 600; p.vy = 0;
+      this.respawn();
       this.onHazard({ type: "fall" });
     }
   }
@@ -140,7 +154,12 @@ export class Kiizu2D {
     this.drawBackground(ctx);
     for (const e of this.entities) {
       if (e.collected) continue;
-      if (e.type === "platform") this.drawPlatform(ctx, e);
+      if (e.type === "platform" || e.type === "moving") this.drawPlatform(ctx, e);
+      if (e.type === "spawn") this.drawSpawn(ctx, e);
+      if (e.type === "enemy") this.drawEnemy(ctx, e);
+      if (e.type === "checkpoint") this.drawCheckpoint(ctx, e);
+      if (e.type === "spring") this.drawSpring(ctx, e);
+      if (e.type === "water") this.drawWater(ctx, e);
       if (e.type === "coin") this.drawCoin(ctx, e);
       if (e.type === "hazard") this.drawHazard(ctx, e);
       if (e.type === "goal") this.drawGoal(ctx, e);
@@ -166,6 +185,12 @@ export class Kiizu2D {
       ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(this.world.width, y); ctx.stroke();
     }
   }
+
+  drawSpawn(ctx,e) { ctx.strokeStyle="#dce2e9"; ctx.setLineDash([6,4]); ctx.strokeRect(e.x,e.y,e.w,e.h); ctx.setLineDash([]); ctx.fillStyle="#fff"; ctx.font='700 9px "Space Grotesk"'; ctx.textAlign="center"; ctx.fillText("START",e.x+e.w/2,e.y-7); }
+  drawEnemy(ctx,e) { ctx.fillStyle="#777f89"; ctx.beginPath(); ctx.roundRect(e.x,e.y,e.w,e.h,9); ctx.fill(); ctx.fillStyle="#171b20"; ctx.fillRect(e.x+8,e.y+12,6,5); ctx.fillRect(e.x+24,e.y+12,6,5); }
+  drawCheckpoint(ctx,e) { ctx.strokeStyle="#dce2e9"; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(e.x+8,e.y+e.h); ctx.lineTo(e.x+8,e.y); ctx.stroke(); ctx.strokeRect(e.x+8,e.y,25,18); }
+  drawSpring(ctx,e) { ctx.fillStyle="#8b949e"; ctx.fillRect(e.x,e.y+e.h-5,e.w,5); ctx.strokeStyle="#dce2e8"; ctx.beginPath(); ctx.moveTo(e.x+5,e.y+e.h-5); ctx.lineTo(e.x+12,e.y+4); ctx.lineTo(e.x+23,e.y+e.h-5); ctx.lineTo(e.x+34,e.y+4); ctx.lineTo(e.x+41,e.y+e.h-5); ctx.stroke(); }
+  drawWater(ctx,e) { ctx.fillStyle="rgba(112,133,151,.5)"; ctx.fillRect(e.x,e.y,e.w,e.h); }
 
   drawPlatform(ctx, e) {
     ctx.fillStyle = e.variant === "stone" ? "#424a53" : "#343d37";
@@ -291,5 +316,6 @@ export function buildWorld(type = "adventure") {
 export function buildWorldFromConfig(config = {}) {
   const world = config.world || { width: 3600, height: 900, gravity: .72 };
   const entities = Array.isArray(config.entities) ? config.entities.map(e => ({...e})) : [];
-  return { world, entities };
+  const spawn = config.spawn || entities.find(e => e.type === "spawn") || { x:150, y:600, w:34, h:52 };
+  return { world, entities, spawn };
 }
