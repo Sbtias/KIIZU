@@ -47,6 +47,30 @@ function setMode(nextMode) {
 loginButton?.addEventListener("click", () => setMode("login"));
 signupButton?.addEventListener("click", () => setMode("signup"));
 
+
+forgot?.addEventListener("click", async () => {
+  if (mode === "signup") {
+    setMode("login");
+    return;
+  }
+
+  const currentEmail = window.prompt("Escribe el correo asociado a tu cuenta de KIIZU:");
+  const recoveryEmail = currentEmail?.trim();
+
+  if (!recoveryEmail) return;
+
+  setBusy(forgot, true, "Enviando...");
+  try {
+    const { resetPassword } = await import("./auth.js");
+    await resetPassword(recoveryEmail);
+    toast("Si el correo existe, recibirás un enlace para restablecer tu contraseña.", "success");
+  } catch (error) {
+    toast(error?.message || "No se pudo enviar el enlace de recuperación.", "error");
+  } finally {
+    setBusy(forgot, false);
+  }
+});
+
 form?.addEventListener("submit", async event => {
   event.preventDefault();
   setBusy(submit, true, mode === "login" ? "Entrando..." : "Creando...");
