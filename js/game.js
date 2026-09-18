@@ -79,7 +79,7 @@ async function begin() {
   if (!state || !supabase) return;
   await loadGame();
 
-  status.innerHTML = "Buscando jugadores<span class="dots">...</span>";
+  status.innerHTML = `Buscando jugadores<span class="dots">...</span>`;
   detail.textContent = "Creando o encontrando una sala disponible.";
 
   const { data, error } = await supabase.rpc("create_match", { p_game_slug: gameSlug });
