@@ -17,7 +17,7 @@ const coinsEl = document.querySelector("#world-coins");
 const objectiveEl = document.querySelector("#objective");
 const canvas = document.querySelector("#game-canvas");
 
-let match = null, channel = null, game = null, engine = null;
+let match = null, channel = null, game = null, engine = null, appearance = null;
 let score = 0, coins = 0, health = 100;
 let running = false, finished = false, countdownRunning = false;
 let roundTimer = null, positionTimer = null;
@@ -39,6 +39,9 @@ async function loadGame() {
   if (error) throw error;
   if (!data || (!data.unlocked_by_default && !data.is_published)) throw new Error("Este juego no está disponible.");
   game = data;
+  const { data: clothingRows } = await supabase.from("clothing_purchases").select("clothing_items(type,thumbnail,design_data)").eq("buyer_id", state.session.user.id);
+  const image = clothingRows?.map(r => r.clothing_items).find(c => c?.thumbnail || c?.design_data?.layers?.find(l => l?.data));
+  appearance = image ? { image: image.thumbnail || image.design_data.layers.find(l => l?.data)?.data } : null;
   gameName.textContent = data.name;
   objectiveEl.textContent = data.game_config?.objective || fallbackGames[gameSlug]?.objective || "Completa el mundo";
 }
@@ -136,7 +139,7 @@ function buildGame() {
     user_id: state.session.user.id,
     username: state.profile.username || "Player",
     x: spawn.x, y: spawn.y, w: 34, h: 52, vx: 0, vy: 0,
-    speed: 4.4, jump: 12, grounded: false, color: "#f0f2f5"
+    speed: 4.4, jump: 12, grounded: false, color: "#f0f2f5", appearance
   };
 
   engine = new Kiizu2D(canvas, {
@@ -169,7 +172,7 @@ function buildGame() {
     if (!running || !channel || !engine) return;
     channel.send({
       type: "broadcast", event: "player_move",
-      payload: { user_id: state.session.user.id, username: state.profile.username, x: engine.player.x, y: engine.player.y, color: engine.player.color }
+      payload: { user_id: state.session.user.id, username: state.profile.username, x: engine.player.x, y: engine.player.y, color: engine.player.color, appearance }
     }).catch(() => {});
   }, 80);
 }
