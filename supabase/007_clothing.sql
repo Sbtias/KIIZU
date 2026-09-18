@@ -88,10 +88,21 @@ begin
  update profiles set coins=coins-item.price,updated_at=now() where id=buyer;
  update profiles set coins=coins+item.price,updated_at=now() where id=item.creator_id;
  insert into clothing_purchases(clothing_id,buyer_id,creator_id,price) values(item.id,buyer,item.creator_id,item.price);
- insert into inventory(user_id,item_id) select buyer,id from items where false;
+ insert into clothing_inventory(user_id, clothing_id) values (buyer, item.id);
  insert into coin_transactions(user_id,amount,reason) values(buyer,-item.price,'clothing_purchase:'||item.id);
  insert into coin_transactions(user_id,amount,reason) values(item.creator_id,item.price,'clothing_sale:'||item.id);
  return jsonb_build_object('clothing_id',item.id,'price',item.price,'balance',buyer_balance-item.price);
 end; $$;
 revoke all on function public.purchase_clothing(uuid) from public;
 grant execute on function public.purchase_clothing(uuid) to authenticated;
+
+
+create table if not exists public.clothing_inventory (
+  user_id uuid not null references public.profiles(id) on delete cascade,
+  clothing_id uuid not null references public.clothing_items(id) on delete cascade,
+  acquired_at timestamptz not null default now(),
+  primary key(user_id,clothing_id)
+);
+alter table public.clothing_inventory enable row level security;
+drop policy if exists "own clothing inventory read" on public.clothing_inventory;
+create policy "own clothing inventory read" on public.clothing_inventory for select using(auth.uid()=user_id);
