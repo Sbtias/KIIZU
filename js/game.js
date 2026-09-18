@@ -29,7 +29,7 @@ const canvas = document.querySelector("#game-canvas");
 let match = null, channel = null, game = null, engine = null, appearance = null;
 let score = 0, coins = 0, health = 100;
 let running = false, finished = false, countdownRunning = false, resultsShown = false;
-let roundTimer = null, positionTimer = null;
+let roundTimer = null, positionTimer = null, roomRefreshTimer = null, roomStateTimer = null;
 
 const fallbackGames = {
   reaction: { world: "adventure", objective: "Llega a la meta" },
@@ -71,13 +71,19 @@ async function openRoomPicker() {
   if (!picker || !list) return;
   picker.hidden = false;
   await refreshRooms();
-  document.querySelector("#refresh-rooms")?.addEventListener("click", refreshRooms);
+  clearInterval(roomRefreshTimer);
+  roomRefreshTimer = setInterval(() => {
+    if (!picker.hidden) refreshRooms();
+  }, 2500);
+  document.querySelector("#refresh-rooms")?.addEventListener("click", refreshRooms, { once: false });
   document.querySelector("#create-room")?.addEventListener("click", async () => {
     const btn = document.querySelector("#create-room");
     btn.disabled = true;
     try {
       const { data, error } = await supabase.rpc("create_match_room", { p_game_slug: gameSlug });
       if (error) throw error;
+      if (!data?.id) throw new Error("La sala no se creó correctamente.");
+      clearInterval(roomRefreshTimer);
       picker.hidden = true;
       await enterMatch(data);
     } catch (e) {
@@ -101,7 +107,10 @@ async function refreshRooms() {
     return;
   }
   const rooms = Array.isArray(data) ? data : [];
-  if (!rooms.length) { list.innerHTML = '<div class="room-empty">No hay salas abiertas. Crea la primera.</div>'; return; }
+  if (!rooms.length) {
+    list.innerHTML = '<div class="room-empty"><strong>No hay salas abiertas.</strong><br><small>Las salas nuevas aparecerán automáticamente aquí.</small></div>';
+    return;
+  }
   list.innerHTML = rooms.map(r => '<div class="room-row"><div><strong>Sala <span class="room-code">'+escapeHtml(r.code)+'</span></strong><small>'+escapeHtml(r.host_username)+' · '+Number(r.player_count)+'/'+Number(r.max_players)+' jugadores</small></div><button class="button button--small" data-room-id="'+r.id+'">Entrar</button></div>').join("");
   list.querySelectorAll("[data-room-id]").forEach(btn => btn.addEventListener("click", async () => {
     btn.disabled = true;
@@ -110,8 +119,11 @@ async function refreshRooms() {
       if (error) throw error;
       const { data: roomState, error: stateError } = await supabase.rpc("get_match_state", { p_match_id: btn.dataset.roomId });
       if (stateError) throw stateError;
+      const joinedMatch = roomState?.match;
+      if (!joinedMatch?.id) throw new Error("La sala ya no está disponible. Actualiza la lista.");
+      clearInterval(roomRefreshTimer);
       document.querySelector("#room-picker").hidden = true;
-      await enterMatch(roomState?.match);
+      await enterMatch(joinedMatch);
     } catch (e) { toast(e.message || "No se pudo entrar a la sala.", "error"); btn.disabled = false; }
   }));
 }
@@ -149,6 +161,10 @@ async function enterMatch(data) {
 
   if (match.status === "starting" || match.status === "playing") startCountdown();
   else await syncMatchState();
+  clearInterval(roomStateTimer);
+  roomStateTimer = setInterval(() => {
+    if (!finished && match?.status === "waiting") syncMatchState().catch(() => {});
+  }, 2000);
   updateStartButton();
 }
 
@@ -307,7 +323,9 @@ function escapeHtml(value) {
 }
 window.addEventListener("pagehide", () => {
   clearInterval(positionTimer);
-    channel?.unsubscribe();
+  clearInterval(roomRefreshTimer);
+  clearInterval(roomStateTimer);
+  channel?.unsubscribe();
 });
 
 document.querySelector("#start-match")?.addEventListener("click", startMatchManually);
