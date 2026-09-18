@@ -164,8 +164,8 @@ function openDeleteFlow(){
     if(event.target.closest("[data-delete-final]"))deleteAccount();
   });
   card.addEventListener("input",event=>{
-    if(event.target.matches("[data-delete-check]"))card.querySelector("[data-delete-next="3"]").disabled=!event.target.checked;
-    if(event.target.matches("[data-delete-word]"))card.querySelector("[data-delete-next="4"]").disabled=event.target.value.trim()!=="ELIMINAR";
+    if(event.target.matches("[data-delete-check]"))card.querySelector(`[data-delete-next="3"]`).disabled=!event.target.checked;
+    if(event.target.matches("[data-delete-word]"))card.querySelector(`[data-delete-next="4"]`).disabled=event.target.value.trim()!=="ELIMINAR";
   });
 }
 async function deleteAccount(){
