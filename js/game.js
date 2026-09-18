@@ -1,5 +1,5 @@
 import { supabase } from "./app.js";
-import { bootShell } from "./nav.js";
+import { bootShell } from "./nav.js?v=20260918-1335";
 import { toast } from "./ui.js";
 
 const params = new URLSearchParams(location.search);
