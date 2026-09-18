@@ -290,7 +290,7 @@ export class Kiizu2D {
       if (type.includes("camis") || type === "shirt") box = { x:x + 5, y:y + 17, w:24, h:29, clip:[x + 6,y + 17,x + 28,y + 46] };
       else if (type.includes("pantal") || type === "pants") box = { x:x + 7, y:y + 40, w:20, h:13, clip:[x + 7,y + 39,x + 27,y + 53] };
       else if (type.includes("sombr") || type === "hat") box = { x:x + 3, y:y - 1, w:28, h:18, clip:[x + 2,y - 3,x + 32,y + 16] };
-      else if (type.includes("cara") || type === "face") box = { x:x + 6, y:y + 1, w:22, h:20, clip:[x + 5,y,y + 27,y + 21] };
+      else if (type.includes("cara") || type === "face") box = { x:x + 6, y:y + 1, w:22, h:20, clip:[x + 5,y,x + 27,y + 21] };
       else if (type.includes("acces") || type === "accessory") box = { x:x + 3, y:y + 20, w:28, h:22, clip:[x + 2,y + 18,x + 32,y + 44] };
 
       ctx.save();
