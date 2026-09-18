@@ -1,4 +1,4 @@
-import{bootShell}from"./nav.js?v=20260918-1335";import{supabase}from"./app.js";import{toast,setBusy}from"./ui.js";
+import{bootShell}from"./nav.js?v=20260918-2010";import{supabase}from"./app.js";import{toast,setBusy}from"./ui.js";
 const state=await bootShell();const $=s=>document.querySelector(s),canvas=$("#studio-canvas"),ctx=canvas.getContext("2d");
 let gameId=null,tool="select",selected=null,drag=null,zoom=.8,grid=true,space=false,pan={x:0,y:0},cameraDrag=null,hasBuilt=false;const deleteGameButton=document.querySelector("#delete-game");
 const world={width:3600,height:900,gravity:.72,background:"night"};let entities=[];
