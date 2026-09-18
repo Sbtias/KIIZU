@@ -63,11 +63,13 @@ function setupAccount(profile) {
         '<div><strong>' + safe(name) + '</strong><small>🪙 ' +
         Number(profile.coins ?? 0).toLocaleString() + ' Coins</small></div></div>' +
       '<a href="profile.html">Mi perfil</a>' +
+      '<button data-settings type="button">Ajustes</button>' +
       '<button class="danger" data-signout type="button">Cerrar sesión</button>' +
     '</div>';
 
   const trigger = host.querySelector(".account-trigger");
   const menu = host.querySelector(".account-menu");
+  const settingsButton = host.querySelector("[data-settings]");
 
   trigger.addEventListener("click", event => {
     event.stopPropagation();
@@ -82,6 +84,8 @@ function setupAccount(profile) {
     trigger.setAttribute("aria-expanded", "false");
     menu.hidden = true;
   });
+
+  settingsButton.addEventListener("click", () => openSettings());
 
   host.querySelector("[data-signout]").addEventListener("click", async () => {
     await updatePresence("offline");
@@ -122,3 +126,23 @@ export async function bootShell() {
 
   return { session, profile };
 }
+
+const THEME_KEY="kiizu-theme";
+const THEMES=["dark","aurora","light"];
+function applyTheme(theme){const selected=THEMES.includes(theme)?theme:"dark";document.documentElement.dataset.theme=selected;try{localStorage.setItem(THEME_KEY,selected)}catch{}return selected}
+function initTheme(){try{applyTheme(localStorage.getItem(THEME_KEY)||"dark")}catch{applyTheme("dark")}}
+function closeSettings(){const modal=document.querySelector("[data-settings-modal]");if(!modal)return;modal.classList.remove("is-open");document.body.classList.remove("settings-open");setTimeout(()=>{if(!modal.classList.contains("is-open"))modal.hidden=true},180)}
+function updateThemeOptions(selected){document.querySelectorAll("[data-theme-option]").forEach(button=>{const active=button.dataset.themeOption===selected;button.classList.toggle("is-selected",active);button.setAttribute("aria-pressed",String(active))})}
+function openSettings(){
+  let modal=document.querySelector("[data-settings-modal]");
+  if(!modal){
+    modal=document.createElement("div");modal.className="settings-modal";modal.dataset.settingsModal="";modal.hidden=true;
+    modal.innerHTML='<div class="settings-backdrop" data-settings-close></div><section class="settings-card" role="dialog" aria-modal="true" aria-labelledby="settings-title" tabindex="-1"><header class="settings-head"><div><span class="eyebrow">PREFERENCIAS</span><h2 id="settings-title">Ajustes</h2></div><button class="settings-close" type="button" aria-label="Cerrar ajustes" data-settings-close>×</button></header><div class="settings-section"><div class="settings-section-title"><strong>Apariencia</strong><span>Elige cómo quieres ver KIIZU.</span></div><div class="theme-grid"><button type="button" class="theme-option" data-theme-option="dark"><span class="theme-preview theme-preview-dark"></span><span><strong>KIIZU Dark</strong><small>Minimalista y oscuro</small></span></button><button type="button" class="theme-option" data-theme-option="aurora"><span class="theme-preview theme-preview-aurora"></span><span><strong>KIIZU Aurora</strong><small>Tecnológico y ambiental</small></span></button><button type="button" class="theme-option" data-theme-option="light"><span class="theme-preview theme-preview-light"></span><span><strong>KIIZU Light</strong><small>Claro y limpio</small></span></button></div></div><div class="settings-section settings-info"><div><strong>Sonido de interfaz</strong><span>Los sonidos se reproducen solo al interactuar.</span></div><span class="settings-badge">ACTIVO</span></div></section>';
+    document.body.appendChild(modal);
+    modal.addEventListener("click",event=>{if(event.target.closest("[data-settings-close]"))closeSettings();const option=event.target.closest("[data-theme-option]");if(option)updateThemeOptions(applyTheme(option.dataset.themeOption))});
+    modal.addEventListener("keydown",event=>{if(event.key==="Escape")closeSettings()});
+  }
+  updateThemeOptions(document.documentElement.dataset.theme||"dark");modal.hidden=false;
+  requestAnimationFrame(()=>{modal.classList.add("is-open");document.body.classList.add("settings-open");modal.querySelector(".settings-close")?.focus()});
+}
+initTheme();
