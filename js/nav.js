@@ -17,7 +17,7 @@ async function startPresence() {
   window.addEventListener("pagehide", () => updatePresence("offline"), { once: true });
 }
 
-export async function getPublicStats() {
+export async function getLandingStats() {\n  if (!supabase) throw new Error("Supabase no está configurado.");\n  const { data, error } = await supabase.rpc("get_landing_stats");\n  if (error) throw error;\n  return { minutes: Number(data?.minutes ?? 0), clothing: Number(data?.clothing ?? 0), games: Number(data?.games ?? 0) };\n}\n\nexport async function getPublicStats() {
   if (!supabase) throw new Error("Supabase no está configurado.");
   const cutoff = new Date(Date.now() - 90000).toISOString();
   const [{ count: total, error: totalError }, { count: online, error: onlineError }] = await Promise.all([
