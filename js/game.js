@@ -35,7 +35,7 @@ async function begin() {
     if (count >= 1 && !running) detail.textContent = "Sala sincronizada. Esperando el inicio...";
   }).on("postgres_changes", { event: "*", schema: "public", table: "match_players", filter: `match_id=eq.${match.id}` }, async () => {
     const { data: rows } = await supabase.from("match_players").select("user_id").eq("match_id", match.id);
-    playersEl.textContent = rows?.length || 1;
+    playersEl.textContent = rows?.length ?? 0;
     if (match.host_id === state.session.user.id && rows?.length >= 1 && match.status === "waiting") {
       const started = await supabase.rpc("start_match", { p_match_id: match.id });
       if (!started.error) match = started.data;
@@ -74,12 +74,12 @@ action.addEventListener("click", async () => {
     running = false;
     action.disabled = true;
     status.textContent = "PARTIDA TERMINADA";
-    detail.textContent = "La puntuación se sincronizó con la sala. Las recompensas competitivas requieren validación server-side.";
+    detail.textContent = "Puntuación de esta sesión. Las recompensas y estadísticas competitivas requieren validación del servidor.";
     toast("Resultado registrado en esta sesión.", "success");
   }
 });
 
-window.addEventListener("beforeunload", () => channel?.unsubscribe());
+window.addEventListener("pagehide", () => { if (match?.id) supabase.rpc("leave_match", { p_match_id: match.id }).catch(()=>{}); channel?.unsubscribe(); });
 
 if (state) {
   try { await begin(); } catch (error) {
