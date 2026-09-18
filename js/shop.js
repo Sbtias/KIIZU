@@ -82,7 +82,7 @@ async function load() {
 function render() {
   if (!grid) return;
 
-  const official = catalog.official.filter(item => filter === "all" || filter === normalizeFilter(item.category));
+  const official = catalog.official.filter(item => filter === "all" || filter === normalizeCategory(item.category));
   const clothing = catalog.clothing.filter(item => filter === "all" || filter === "clothing" || filter === normalizeFilter(item.type));
 
   grid.innerHTML = "";
