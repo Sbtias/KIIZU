@@ -40,7 +40,7 @@ async function loadGame() {
   if (!data || (!data.unlocked_by_default && !data.is_published)) throw new Error("Este juego no está disponible.");
   game = data;
   const { data: equippedRows } = await supabase.from("equipped_clothing").select("slot,clothing_items(type,thumbnail,design_data)").eq("user_id", state.session.user.id);
-  const images = (equippedRows || []).map(r => r.clothing_items?.thumbnail || r.clothing_items?.design_data?.thumbnail || r.clothing_items?.design_data?.layers?.find(l => l?.data)?.data).filter(Boolean);
+  const images = (equippedRows || []).map(r => ({ slot: r.slot, type: r.clothing_items?.type || r.slot, src: r.clothing_items?.thumbnail || r.clothing_items?.design_data?.thumbnail || r.clothing_items?.design_data?.layers?.find(l => l?.data)?.data })).filter(x => x.src);
   appearance = { images };
   gameName.textContent = data.name;
   objectiveEl.textContent = data.game_config?.objective || fallbackGames[gameSlug]?.objective || "Completa el mundo";
