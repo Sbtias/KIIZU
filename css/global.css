@@ -451,3 +451,7 @@ input,textarea,select{
     transform:perspective(900px) translateY(-3px) rotateX(.5deg);
   }
 }
+
+/* Inicio: marca y métricas compactas */
+.hub-branding{display:flex;flex-direction:column;align-items:flex-start;gap:0}.hub-brand-stats{display:flex;gap:10px;margin-bottom:12px}.hub-brand-stats>div{min-width:88px;padding:7px 11px;border:1px solid var(--line-soft);border-radius:10px;background:rgba(16,18,20,.55);display:flex;flex-direction:column;gap:2px}.hub-brand-stats b{font:600 15px/1 "Space Grotesk"}.hub-brand-stats small{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.hub-brand-name{font:700 clamp(34px,5vw,58px)/.95 "Space Grotesk"!important;letter-spacing:-.07em!important;margin:7px 0 8px!important}.hub-branding>p{font-size:13px}.hub-hero{align-items:flex-end}
+@media(max-width:700px){.hub-brand-stats{gap:7px}.hub-brand-stats>div{min-width:76px;padding:6px 9px}.hub-brand-name{font-size:44px!important}.hub-hero{padding-top:48px}}
