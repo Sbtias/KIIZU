@@ -146,16 +146,16 @@ async function begin() {
 async function syncMatchState() {
   if (!match?.id) return;
 
-  const [{ data: freshMatch, error: matchError }, { data: rows, error: playersError }] = await Promise.all([
-    supabase.from("matches").select("*").eq("id", match.id).maybeSingle(),
-    supabase.from("match_players").select("user_id,score,placement").eq("match_id", match.id)
-  ]);
+  // El estado de la partida se obtiene mediante una función segura del servidor.
+  // Así el cliente no queda bloqueado por las políticas RLS de matches/match_players.
+  const { data, error } = await supabase.rpc("get_match_state", { p_match_id: match.id });
+  if (error) throw error;
 
-  if (matchError) throw matchError;
-  if (playersError) throw playersError;
+  const freshMatch = data?.match;
+  const rows = Array.isArray(data?.players) ? data.players : [];
 
   if (freshMatch) match = freshMatch;
-  playersEl.textContent = String(rows?.length ?? 0);
+  playersEl.textContent = String(rows.length);
 
   if (match.status === "starting" || match.status === "playing") {
     if (!running && !finished) startCountdown();
@@ -165,7 +165,7 @@ async function syncMatchState() {
   if (
     match.status === "waiting" &&
     match.host_id === state.session.user.id &&
-    rows?.length >= Number(game?.min_players || 1)
+    rows.length >= Number(game?.min_players || 1)
   ) {
     const started = await supabase.rpc("start_match", { p_match_id: match.id });
     if (started.error) throw started.error;
