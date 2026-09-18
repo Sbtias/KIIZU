@@ -94,7 +94,20 @@ export async function bootShell() {
   const session = await requireAuth();
   if (!session || !supabase) return null;
 
-  const profile = await getProfile(session.user.id);
+  let profile;
+  try {
+    profile = await getProfile(session.user.id);
+  } catch (error) {
+    profile = {
+      id: session.user.id,
+      username: session.user.user_metadata?.username
+        || session.user.email?.split("@")[0]
+        || "Usuario",
+      coins: 0
+    };
+    console.warn("No se pudo cargar el perfil desde la base de datos:", error);
+  }
+
   document.querySelectorAll("[data-username]").forEach(el => el.textContent = profile.username);
   document.querySelectorAll("[data-coins]").forEach(el => {
     el.textContent = Number(profile.coins ?? 0).toLocaleString();
