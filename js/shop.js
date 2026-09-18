@@ -32,15 +32,17 @@ async function load() {
   const [{ data: items, error: itemError }, { data: clothing, error: clothingError }, { data: inventory, error: inventoryError }] = await Promise.all([
     supabase.from("items").select("id,slug,name,category,price,metadata,created_at").order("created_at", { ascending: false }),
     supabase.from("clothing_items")
-      .select("id,creator_id,name,description,type,price,design_data,thumbnail,created_at,profiles(username)")
+      .select("id,creator_id,name,description,type,price,design_data,thumbnail,created_at,profiles!clothing_items_creator_id_fkey(username)")
       .eq("is_published", true)
       .order("created_at", { ascending: false }),
     supabase.from("inventory").select("item_id").eq("user_id", state.session.user.id)
   ]);
 
-  if (itemError) throw itemError;
   if (clothingError) throw clothingError;
+  // El catálogo oficial puede estar vacío o tener RLS sin afectar las creaciones de la comunidad.
+  // La sesión autenticada debe poder leer el inventario propio para marcar lo comprado.
   if (inventoryError) throw inventoryError;
+  if (itemError) console.warn("No se pudo cargar el catálogo oficial:", itemError);
 
   const clothingIds = (clothing || []).map(c => c.id);
   const likes = new Map();
@@ -83,7 +85,7 @@ function render() {
   if (!grid) return;
 
   const official = catalog.official.filter(item => filter === "all" || filter === normalizeCategory(item.category));
-  const clothing = catalog.clothing.filter(item => filter === "all" || filter === "clothing" || filter === normalizeFilter(item.type));
+  const clothing = catalog.clothing.filter(item => filter === "all" || filter === "clothing" || filter === normalizeCategory(item.type));
 
   grid.innerHTML = "";
 
