@@ -255,29 +255,59 @@ export class Kiizu2D {
     ctx.beginPath();
     ctx.ellipse(x + 17, y + 52, 18, 5, 0, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.roundRect(x + 6, y + 17, 22, 28, 7);
-    ctx.fill();
-    const imageUrls = Array.isArray(appearance?.images) ? appearance.images : (appearance?.image ? [appearance.image] : []);
-    for (const imageUrl of imageUrls) {
-      let image = this.appearanceImages.get(imageUrl);
-      if (!image) { image = new Image(); image.src = imageUrl; this.appearanceImages.set(imageUrl, image); }
-      if (image.complete && image.naturalWidth) ctx.drawImage(image, x + 3, y + 12, 28, 34);
-    }
+
+    // Cuerpo base con zonas separadas para que la ropa se adapte al personaje.
     ctx.fillStyle = "#e4e7eb";
     ctx.beginPath();
     ctx.arc(x + 17, y + 10, 11, 0, Math.PI * 2);
     ctx.fill();
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.roundRect(x + 7, y + 18, 20, 27, 6);
+    ctx.fill();
+    ctx.fillRect(x + 9, y + 43, 7, 9);
+    ctx.fillRect(x + 18, y + 43, 7, 9);
+
     ctx.fillStyle = "#14181d";
     ctx.fillRect(x + 11, y + 7, 4, 3);
     ctx.fillRect(x + 20, y + 7, 4, 3);
+
+    const layers = Array.isArray(appearance?.images) ? appearance.images : [];
+    for (const layer of layers) {
+      const src = typeof layer === "string" ? layer : layer?.src;
+      const type = String(typeof layer === "string" ? "full" : (layer?.type || layer?.slot || "full")).toLowerCase();
+      if (!src) continue;
+
+      let image = this.appearanceImages.get(src);
+      if (!image) {
+        image = new Image();
+        image.src = src;
+        this.appearanceImages.set(src, image);
+      }
+      if (!image.complete || !image.naturalWidth) continue;
+
+      let box = { x:x + 4, y:y + 4, w:26, h:48, clip:null };
+      if (type.includes("camis") || type === "shirt") box = { x:x + 5, y:y + 17, w:24, h:29, clip:[x + 6,y + 17,x + 28,y + 46] };
+      else if (type.includes("pantal") || type === "pants") box = { x:x + 7, y:y + 40, w:20, h:13, clip:[x + 7,y + 39,x + 27,y + 53] };
+      else if (type.includes("sombr") || type === "hat") box = { x:x + 3, y:y - 1, w:28, h:18, clip:[x + 2,y - 3,x + 32,y + 16] };
+      else if (type.includes("cara") || type === "face") box = { x:x + 6, y:y + 1, w:22, h:20, clip:[x + 5,y,y + 27,y + 21] };
+      else if (type.includes("acces") || type === "accessory") box = { x:x + 3, y:y + 20, w:28, h:22, clip:[x + 2,y + 18,x + 32,y + 44] };
+
+      ctx.save();
+      if (box.clip) {
+        ctx.beginPath();
+        ctx.rect(box.clip[0],box.clip[1],box.clip[2]-box.clip[0],box.clip[3]-box.clip[1]);
+        ctx.clip();
+      }
+      ctx.drawImage(image, box.x, box.y, box.w, box.h);
+      ctx.restore();
+    }
+
     ctx.fillStyle = "rgba(255,255,255,.72)";
     ctx.font = '600 9px "Space Grotesk"';
     ctx.textAlign = "center";
     ctx.fillText(name, x + 17, y - 6);
-  }
-}
+  }}
 
 export function buildWorld(type = "adventure") {
   const world = { width: 3600, height: 900, gravity: .72 };
