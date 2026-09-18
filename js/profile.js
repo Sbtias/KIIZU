@@ -1,18 +1,8 @@
 import { supabase } from "./app.js";
-
-export async function getProfile(userId) {
-  if (!supabase) throw new Error("Supabase no está configurado.");
-  const { data, error } = await supabase.from("profiles").select("*").eq("id", userId).single();
-  if (error) throw error;
-  return data;
-}
-
-export async function ensureProfile(user, username = "") {
-  if (!supabase || !user) return null;
-  const fallback = username || user.user_metadata?.username || user.email?.split("@")[0] || "Player";
-  const { data, error } = await supabase.from("profiles")
-    .upsert({ id: user.id, username: fallback }, { onConflict: "id", ignoreDuplicates: true })
-    .select().single();
-  if (error && error.code !== "23505") throw error;
-  return data;
-}
+import { bootShell } from "./nav.js";
+import { toast } from "./ui.js";
+export async function getProfile(userId){const{data,error}=await supabase.from("profiles").select("*").eq("id",userId).single();if(error)throw error;return data}
+export async function ensureProfile(user,username=""){if(!supabase||!user)return null;const fallback=username||user.user_metadata?.username||user.email?.split("@")[0]||"Player";const{data,error}=await supabase.from("profiles").upsert({id:user.id,username:fallback},{onConflict:"id",ignoreDuplicates:true}).select().single();if(error&&error.code!=="23505")throw error;return data}
+const s=await bootShell();
+if(s){const p=s.profile;const photo=document.querySelector("#profile-photo");photo.innerHTML=p.avatar_url?'<img class="profile-photo" src="'+safe(p.avatar_url)+'" alt="Foto de perfil">':safe((p.username||"K").slice(0,1).toUpperCase());document.querySelector("#level").textContent=p.level??1;document.querySelector("#xp").textContent=(p.xp??0).toLocaleString();document.querySelector("#wins").textContent=p.wins??0;document.querySelector("#losses").textContent=p.losses??0;document.querySelector("#games").textContent=p.games_played??0;document.querySelector("#coins").textContent=Number(p.coins??0).toLocaleString();document.querySelector("#xpbar").style.width=Math.min(100,(p.xp??0)%100)+"%";const file=document.querySelector("#avatar-file"),status=document.querySelector("#photo-status");file.onchange=async()=>{const f=file.files?.[0];if(!f)return;if(f.size>3*1024*1024){status.textContent="La imagen debe pesar menos de 3 MB.";return}status.textContent="Subiendo foto...";try{const ext=(f.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";const path=s.session.user.id+"/avatar."+ext;const{error:up}=await supabase.storage.from("avatars").upload(path,f,{upsert:true,contentType:f.type,cacheControl:"3600"});if(up)throw up;const{data}=supabase.storage.from("avatars").getPublicUrl(path);const url=data.publicUrl+"?v="+Date.now();const{error:db}=await supabase.from("profiles").update({avatar_url:url}).eq("id",s.session.user.id);if(db)throw db;photo.innerHTML='<img class="profile-photo" src="'+safe(url)+'" alt="Foto de perfil">';status.textContent="Foto de perfil actualizada."}catch(e){status.textContent="No se pudo subir la foto. Crea un bucket público llamado avatars en Supabase Storage.";toast(e.message||"Error al subir la foto.","error")}};try{const{data,error}=await supabase.from("user_achievements").select("unlocked_at,achievements(name,description,icon,xp_reward)").eq("user_id",s.session.user.id).order("unlocked_at",{ascending:false});if(error)throw error;const box=document.querySelector("#achievements");box.innerHTML=data?.length?data.map(x=>'<article class="achievement"><span>'+safe(x.achievements.icon)+"</span><div><b>"+safe(x.achievements.name)+"</b><small>"+safe(x.achievements.description)+"</small></div></article>").join(""):'<div class="empty-state"><h3>Todavía no hay logros desbloqueados.</h3><p>Juega y completa objetivos para conseguirlos.</p></div>'}catch(e){toast("No se pudieron cargar los logros.","error")}}
+function safe(v){return String(v??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]))}
