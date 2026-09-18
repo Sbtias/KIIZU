@@ -15,6 +15,7 @@ export class Kiizu2D {
     this.onGoal = options.onGoal || (() => {});
     this.onFrame = options.onFrame || (() => {});
     this.spawn = options.spawn || null;
+    this.appearanceImages = new Map();
     this.checkpoint = options.spawn || null;
     this.hazardCooldown = 0;
     this.bindInput();
@@ -155,7 +156,7 @@ export class Kiizu2D {
     for (const e of this.entities) {
       if (e.collected) continue;
       if (e.type === "platform" || e.type === "moving") this.drawPlatform(ctx, e);
-      if (e.type === "spawn") this.drawSpawn(ctx, e);
+      
       if (e.type === "enemy") this.drawEnemy(ctx, e);
       if (e.type === "checkpoint") this.drawCheckpoint(ctx, e);
       if (e.type === "spring") this.drawSpring(ctx, e);
@@ -167,9 +168,9 @@ export class Kiizu2D {
       if (e.type === "rock") this.drawRock(ctx, e);
     }
     for (const p of this.remotePlayers.values()) {
-      if (p.user_id !== this.player.user_id) this.drawCharacter(ctx, p.x, p.y, p.color || "#aeb8c7", p.username || "Player");
+      if (p.user_id !== this.player.user_id) this.drawCharacter(ctx, p.x, p.y, p.color || "#aeb8c7", p.username || "Player", p.appearance);
     }
-    this.drawCharacter(ctx, this.player.x, this.player.y, this.player.color || "#f0f2f5", this.player.username || "Tú");
+    this.drawCharacter(ctx, this.player.x, this.player.y, this.player.color || "#f0f2f5", this.player.username || "Tú", this.player.appearance);
     ctx.restore();
   }
 
@@ -186,7 +187,7 @@ export class Kiizu2D {
     }
   }
 
-  drawSpawn(ctx,e) { ctx.strokeStyle="#dce2e9"; ctx.setLineDash([6,4]); ctx.strokeRect(e.x,e.y,e.w,e.h); ctx.setLineDash([]); ctx.fillStyle="#fff"; ctx.font='700 9px "Space Grotesk"'; ctx.textAlign="center"; ctx.fillText("START",e.x+e.w/2,e.y-7); }
+  drawSpawn(ctx,e) { ctx.strokeStyle="rgba(220,226,233,.18)"; ctx.setLineDash([5,4]); ctx.strokeRect(e.x,e.y,e.w,e.h); ctx.setLineDash([]); }
   drawEnemy(ctx,e) { ctx.fillStyle="#777f89"; ctx.beginPath(); ctx.roundRect(e.x,e.y,e.w,e.h,9); ctx.fill(); ctx.fillStyle="#171b20"; ctx.fillRect(e.x+8,e.y+12,6,5); ctx.fillRect(e.x+24,e.y+12,6,5); }
   drawCheckpoint(ctx,e) { ctx.strokeStyle="#dce2e9"; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(e.x+8,e.y+e.h); ctx.lineTo(e.x+8,e.y); ctx.stroke(); ctx.strokeRect(e.x+8,e.y,25,18); }
   drawSpring(ctx,e) { ctx.fillStyle="#8b949e"; ctx.fillRect(e.x,e.y+e.h-5,e.w,5); ctx.strokeStyle="#dce2e8"; ctx.beginPath(); ctx.moveTo(e.x+5,e.y+e.h-5); ctx.lineTo(e.x+12,e.y+4); ctx.lineTo(e.x+23,e.y+e.h-5); ctx.lineTo(e.x+34,e.y+4); ctx.lineTo(e.x+41,e.y+e.h-5); ctx.stroke(); }
@@ -249,7 +250,7 @@ export class Kiizu2D {
     ctx.fill();
   }
 
-  drawCharacter(ctx, x, y, color, name) {
+  drawCharacter(ctx, x, y, color, name, appearance) {
     ctx.fillStyle = "rgba(0,0,0,.28)";
     ctx.beginPath();
     ctx.ellipse(x + 17, y + 52, 18, 5, 0, 0, Math.PI * 2);
@@ -258,6 +259,12 @@ export class Kiizu2D {
     ctx.beginPath();
     ctx.roundRect(x + 6, y + 17, 22, 28, 7);
     ctx.fill();
+    const imageUrl = appearance?.image;
+    if (imageUrl) {
+      let image = this.appearanceImages.get(imageUrl);
+      if (!image) { image = new Image(); image.src = imageUrl; this.appearanceImages.set(imageUrl, image); }
+      if (image.complete && image.naturalWidth) ctx.drawImage(image, x + 4, y + 15, 26, 30);
+    }
     ctx.fillStyle = "#e4e7eb";
     ctx.beginPath();
     ctx.arc(x + 17, y + 10, 11, 0, Math.PI * 2);
