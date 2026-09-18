@@ -5,7 +5,7 @@ import { toast, setBusy } from "./ui.js";
 const state=await bootShell();
 const canvas=document.querySelector("#design"), ctx=canvas?.getContext("2d");
 const color=document.querySelector("#color"), type=document.querySelector("#type"), name=document.querySelector("#name"), description=document.querySelector("#description"), price=document.querySelector("#price"), status=document.querySelector("#creator-status");
-let drawing=false, tool="brush", zoom=1, currentId=null, history=[],startPoint=null;const deleteButton=document.querySelector("#delete-creation");
+let drawing=false, tool="brush", zoom=1, currentId=null, history=[],startPoint=null;const deleteButton=document.querySelector("#delete-creation"),myClothes=document.querySelector("#my-clothes");
 
 function resetCanvas(){ctx.fillStyle="#f4f3ef";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.strokeStyle="#d8d5cc";ctx.lineWidth=2;ctx.strokeRect(90,90,460,460);}
 function snapshot(){history.push(ctx.getImageData(0,0,canvas.width,canvas.height));if(history.length>20)history.shift();}
@@ -19,25 +19,14 @@ document.querySelector("#undo").onclick=()=>{const img=history.pop();if(img)ctx.
 document.querySelector("#clear").onclick=()=>{snapshot();resetCanvas();};
 document.querySelector("#zoom-in").onclick=()=>{zoom=Math.min(2,zoom+.1);canvas.style.transform=`scale(${zoom})`;document.querySelector("#zoom-label").textContent=`${Math.round(zoom*100)}%`;};
 document.querySelector("#zoom-out").onclick=()=>{zoom=Math.max(.6,zoom-.1);canvas.style.transform=`scale(${zoom})`;document.querySelector("#zoom-label").textContent=`${Math.round(zoom*100)}%`;};
-
 function hexToRgba(hex){const n=parseInt(hex.slice(1),16);return[(n>>16)&255,(n>>8)&255,n&255,255]}
 function floodFill(sx,sy,target){const img=ctx.getImageData(0,0,canvas.width,canvas.height),d=img.data,i=(sy*canvas.width+sx)*4,base=[d[i],d[i+1],d[i+2],d[i+3]];if(base.every((v,k)=>Math.abs(v-target[k])<5))return;const stack=[[sx,sy]],seen=new Uint8Array(canvas.width*canvas.height);while(stack.length){const [x,y]=stack.pop();if(x<0||y<0||x>=canvas.width||y>=canvas.height)continue;const p=y*canvas.width+x;if(seen[p])continue;const q=p*4;if(Math.abs(d[q]-base[0])>5||Math.abs(d[q+1]-base[1])>5||Math.abs(d[q+2]-base[2])>5||Math.abs(d[q+3]-base[3])>5)continue;seen[p]=1;d[q]=target[0];d[q+1]=target[1];d[q+2]=target[2];d[q+3]=target[3];stack.push([x+1,y],[x-1,y],[x,y+1],[x,y-1])}ctx.putImageData(img,0,0)}
-function data(){return {version:1,canvas:{width:canvas.width,height:canvas.height},layers:[{id:"base",type:"raster",data:canvas.toDataURL("image/png")} ]};}
-async function save(publish=false){
- if(!state)return;
- if(!name.value.trim()){toast("Ponle un nombre a tu creación.","error");return;}
- const btn=document.querySelector(publish?"#publish":"#save");setBusy(btn,true,publish?"Publicando...":"Guardando...");
- try{
-   const payload={creator_id:state.session.user.id,name:name.value.trim(),description:description.value.trim(),type:type.value,price:Number(price.value)||0,design_data:data(),thumbnail:null,is_published:publish};
-   let result;
-   if(currentId) result=await supabase.from("clothing_items").update(payload).eq("id",currentId).select().single();
-   else result=await supabase.from("clothing_items").insert(payload).select().single();
-   if(result.error)throw result.error;
-   currentId=result.data.id;deleteButton?.removeAttribute("hidden");
-   status.textContent=publish?"Publicado en Marketplace.":"Guardado en tus creaciones.";
-   toast(status.textContent,"success");
- }catch(e){toast(e.message||"No se pudo guardar.","error");}finally{setBusy(btn,false);}
-}
+function data(){return {version:1,canvas:{width:canvas.width,height:canvas.height},layers:[{id:"base",type:"raster",data:canvas.toDataURL("image/png")}]};}
+async function loadMyClothes(){if(!myClothes||!state)return;const{data,error}=await supabase.from("clothing_items").select("id,name,type,price,is_published,created_at").eq("creator_id",state.session.user.id).order("created_at",{ascending:false});if(error){myClothes.innerHTML='<div class="status">No se pudieron cargar tus prendas.</div>';return}myClothes.innerHTML=(data||[]).map(c=>'<div class="my-clothing-row"><div><strong>'+escapeHtml(c.name)+'</strong><small>'+escapeHtml(c.type)+' · '+(c.is_published?"Publicado":"Borrador")+' · '+Number(c.price||0).toLocaleString()+' Coins</small></div><button class="button button--small button--ghost danger" data-clothing-id="'+c.id+'">Eliminar</button></div>').join("")||'<div class="status">Todavía no tienes prendas guardadas.</div>';myClothes.querySelectorAll("[data-clothing-id]").forEach(b=>b.onclick=()=>deleteClothing(b.dataset.clothingId,b))}
+function escapeHtml(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+async function deleteClothing(id,button){if(!confirm("¿Eliminar esta prenda? Esta acción no se puede deshacer."))return;const code=prompt("Para confirmar la eliminación, escribe ELIMINAR");if(code!=="ELIMINAR"){toast("Eliminación cancelada.","info");return}setBusy(button,true,"Eliminando...");try{const{error}=await supabase.rpc("delete_own_clothing",{p_clothing_id:id,p_confirmation:code});if(error)throw error;if(currentId===id){currentId=null;deleteButton?.setAttribute("hidden","");}toast("Prenda eliminada.","success");await loadMyClothes()}catch(e){toast(e.message||"No se pudo eliminar.","error");setBusy(button,false)}}
+async function save(publish=false){if(!state)return;if(!name.value.trim()){toast("Ponle un nombre a tu creación.","error");return}const btn=document.querySelector(publish?"#publish":"#save");setBusy(btn,true,publish?"Publicando...":"Guardando...");try{const payload={creator_id:state.session.user.id,name:name.value.trim(),description:description.value.trim(),type:type.value,price:Number(price.value)||0,design_data:data(),thumbnail:null,is_published:publish};let result;if(currentId)result=await supabase.from("clothing_items").update(payload).eq("id",currentId).select().single();else result=await supabase.from("clothing_items").insert(payload).select().single();if(result.error)throw result.error;currentId=result.data.id;deleteButton?.removeAttribute("hidden");status.textContent=publish?"Publicado en Marketplace.":"Guardado en tus creaciones.";toast(status.textContent,"success");await loadMyClothes()}catch(e){toast(e.message||"No se pudo guardar.","error")}finally{setBusy(btn,false)}}
 document.querySelector("#save").onclick=()=>save(false);document.querySelector("#publish").onclick=()=>save(true);
 resetCanvas();
-async function deleteCreation(){if(!currentId)return;if(!confirm("¿Eliminar esta prenda? Esta acción no se puede deshacer."))return;const code=prompt("Para confirmar, escribe ELIMINAR");if(code!=="ELIMINAR"){toast("Eliminación cancelada.","info");return}setBusy(deleteButton,true,"Eliminando...");try{const{error}=await supabase.rpc("delete_own_clothing",{p_clothing_id:currentId,p_confirmation:code});if(error)throw error;toast("Prenda eliminada.","success");location.reload()}catch(e){toast(e.message||"No se pudo eliminar.","error");setBusy(deleteButton,false)}}deleteButton?.addEventListener("click",deleteCreation);
+deleteButton?.addEventListener("click",()=>currentId&&deleteClothing(currentId,deleteButton));
+loadMyClothes();
