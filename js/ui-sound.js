@@ -12,10 +12,10 @@
   };
 
   const rainCSS =
-    '.kiizu-rain{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden;background:linear-gradient(180deg,rgba(9,12,16,.015),rgba(9,12,16,.08));isolation:isolate}' +
-    '.kiizu-rain::before{content:"";position:absolute;inset:-18%;background:repeating-linear-gradient(104deg,transparent 0 31px,rgba(225,235,245,.13) 32px,rgba(225,235,245,.025) 34px,transparent 36px 67px);filter:blur(.45px);animation:kiizuRainSheet 2.25s linear infinite;opacity:.8}' +
-    '.kiizu-rain::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 18% 8%,rgba(255,255,255,.09),transparent 25%),radial-gradient(circle at 82% 78%,rgba(160,180,200,.065),transparent 31%),linear-gradient(115deg,rgba(255,255,255,.035),transparent 28%,rgba(255,255,255,.018) 65%,transparent);backdrop-filter:blur(.8px) saturate(.82);-webkit-backdrop-filter:blur(.8px) saturate(.82);border:1px solid rgba(255,255,255,.055);box-shadow:inset 0 0 110px rgba(0,0,0,.2),inset 0 1px 24px rgba(255,255,255,.025)}' +
-    '.kiizu-rain-drop{position:absolute;top:-12vh;width:1.5px;border-radius:999px;background:linear-gradient(180deg,transparent,rgba(235,243,250,.58),rgba(255,255,255,.08));filter:blur(.15px);animation:kiizuRainFall linear infinite;box-shadow:0 0 5px rgba(220,235,245,.12)}' +
+    '.kiizu-rain{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden;background:transparent;isolation:isolate}' +
+    '.kiizu-rain::before{content:"";position:absolute;inset:-18%;background:repeating-linear-gradient(104deg,transparent 0 31px,rgba(225,235,245,.13) 32px,rgba(225,235,245,.025) 34px,transparent 36px 67px);filter:blur(.35px);animation:kiizuRainSheet 2.25s linear infinite;opacity:.8}' +
+    '.kiizu-rain::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.025),transparent 28%,rgba(255,255,255,.012) 65%,transparent);border:1px solid rgba(255,255,255,.045);box-shadow:inset 0 0 110px rgba(0,0,0,.12),inset 0 1px 24px rgba(255,255,255,.025)}' +
+    '.kiizu-rain-drop{position:absolute;top:-12vh;width:1.5px;border-radius:999px;background:linear-gradient(180deg,transparent,rgba(235,243,250,.58),rgba(255,255,255,.08));filter:blur(.1px);animation:kiizuRainFall linear infinite;box-shadow:0 0 5px rgba(220,235,245,.12)}' +
     '.kiizu-glass-bead{position:absolute;width:clamp(18px,2.3vw,34px);height:clamp(24px,3.5vw,48px);border-radius:48% 52% 55% 45%;background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.32) 0 4%,rgba(255,255,255,.1) 8%,transparent 24%),radial-gradient(ellipse at 52% 58%,rgba(190,215,235,.065),transparent 68%);border:1px solid rgba(225,238,248,.11);box-shadow:inset 3px 3px 8px rgba(255,255,255,.08),inset -4px -5px 9px rgba(0,0,0,.16),0 0 12px rgba(200,220,235,.035);filter:blur(.1px);animation:kiizuGlassDrift 5.5s ease-in-out infinite}' +
     '.kiizu-glass-bead::before{content:"";position:absolute;left:22%;top:13%;width:26%;height:17%;border-radius:50%;background:rgba(255,255,255,.28);filter:blur(1px);transform:rotate(-20deg)}' +
     '@keyframes kiizuRainFall{to{transform:translate3d(18vw,118vh,0)}}@keyframes kiizuRainSheet{to{transform:translate3d(11vw,8vh,0)}}@keyframes kiizuGlassDrift{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(8px,13px,0) scale(1.035)}}' +
@@ -39,7 +39,7 @@
 
   const playDrop=()=>{
     const ac=ensureContext();if(!ac||!rain)return;
-    try{const buffer=ac.createBuffer(1,ac.sampleRate*.055,ac.sampleRate),data=buffer.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*Math.pow(1-i/data.length,3);const src=ac.createBufferSource(),filter=ac.createBiquadFilter(),gain=ac.createGain();src.buffer=buffer;filter.type="bandpass";filter.frequency.value=2600+Math.random()*1800;filter.Q.value=1.2;gain.gain.value=.35*getVolume()*(.006+Math.random()*.012);src.connect(filter).connect(gain).connect(rain.master);src.start();}catch(_){}
+    try{const buffer=ac.createBuffer(1,ac.sampleRate*.055,ac.sampleRate),data=buffer.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*Math.pow(1-i/data.length,3);const src=ac.createBufferSource(),filter=ac.createBiquadFilter(),gain=ac.createGain();src.buffer=buffer;filter.type="bandpass";filter.frequency.value=2600+Math.random()*1800;filter.Q.value=1.2;gain.gain.value=.35*getVolume()*(.006+Math.random()*.012);src.connect(filter).connect(gain).connect(rain.master);src.start();}catch(_) {}
   };
   const startRain=()=>{
     if(!getEnabled())return;const ac=ensureContext();if(!ac||rain)return;
