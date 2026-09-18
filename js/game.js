@@ -25,6 +25,10 @@ const healthEl = document.querySelector("#health");
 const coinsEl = document.querySelector("#world-coins");
 const objectiveEl = document.querySelector("#objective");
 const canvas = document.querySelector("#game-canvas");
+const playerList = document.querySelector("#room-players");
+const chatList = document.querySelector("#room-chat-list");
+const chatInput = document.querySelector("#room-chat-input");
+const chatForm = document.querySelector("#room-chat-form");
 
 let match = null, channel = null, game = null, engine = null, appearance = null;
 let score = 0, coins = 0, health = 100;
@@ -150,9 +154,9 @@ async function enterMatch(data) {
     })
     .on("broadcast", { event: "player_move" }, ({ payload }) => {
       if (!engine || !payload?.user_id || payload.user_id === state.session.user.id) return;
-      const current = Array.from(engine.remotePlayers.values()).filter(p => p.user_id !== payload.user_id);
-      engine.setRemotePlayers([...current, payload]);
+      engine.updateRemotePlayer(payload);
     })
+    .on("broadcast", { event: "room_chat" }, ({ payload }) => addRoomChatMessage(payload))
     .subscribe(async value => {
       if (value !== "SUBSCRIBED") return;
       await channel.track({ user_id: state.session.user.id, username: state.profile.username });
@@ -168,6 +172,24 @@ async function enterMatch(data) {
   updateStartButton();
 }
 
+function renderRoomPlayers(rows) {
+  if (!playerList) return;
+  playerList.innerHTML = rows.map(p => {
+    const avatar = p.avatar_url ? `<img src="${escapeHtml(p.avatar_url)}" alt="">` : `<span>${escapeHtml((p.username || "J").slice(0,1).toUpperCase())}</span>`;
+    return `<a class="room-player" href="public-profile.html?user=${encodeURIComponent(p.user_id)}">${avatar}<strong>${escapeHtml(p.username || "Jugador")}</strong></a>`;
+  }).join("");
+}
+
+function addRoomChatMessage(message) {
+  if (!chatList || !message?.body) return;
+  const item = document.createElement("a");
+  item.className = "room-chat-message";
+  item.href = "public-profile.html?user=" + encodeURIComponent(message.user_id || "");
+  item.innerHTML = `<strong>${escapeHtml(message.username || "Jugador")}</strong><span>${escapeHtml(message.body)}</span>`;
+  chatList.appendChild(item);
+  chatList.scrollTop = chatList.scrollHeight;
+}
+
 async function syncMatchState() {
   if (!match?.id) return;
   const { data, error } = await supabase.rpc("get_match_state", { p_match_id: match.id });
@@ -175,6 +197,7 @@ async function syncMatchState() {
   if (data?.match) match = data.match;
   const rows = Array.isArray(data?.players) ? data.players : [];
   playersEl.textContent = String(rows.length);
+  renderRoomPlayers(rows);
 
   if (match.status === "starting" || match.status === "playing") {
     if (!countdownRunning && !finished) startCountdown();
@@ -267,7 +290,7 @@ function buildGame() {
     if (!running || !channel || !engine) return;
     channel.send({
       type: "broadcast", event: "player_move",
-      payload: { user_id: state.session.user.id, username: state.profile.username, x: engine.player.x, y: engine.player.y, color: engine.player.color, appearance }
+      payload: { user_id: state.session.user.id, username: state.profile.username, avatar_url: state.profile.avatar_url || null, x: engine.player.x, y: engine.player.y, color: engine.player.color, appearance }
     }).catch(() => {});
   }, 80);
 }
@@ -329,6 +352,13 @@ window.addEventListener("pagehide", () => {
 });
 
 document.querySelector("#start-match")?.addEventListener("click", startMatchManually);
+chatForm?.addEventListener("submit", e => {
+  e.preventDefault();
+  const body = chatInput?.value?.trim();
+  if (!body || !channel) return;
+  channel.send({ type:"broadcast", event:"room_chat", payload:{ user_id:state.session.user.id, username:state.profile.username, body:body.slice(0,300) } }).catch(() => {});
+  if (chatInput) chatInput.value = "";
+});
 
 if (state) {
   try { await begin(); }
