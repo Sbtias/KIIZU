@@ -106,10 +106,12 @@ async function refreshRooms() {
   list.querySelectorAll("[data-room-id]").forEach(btn => btn.addEventListener("click", async () => {
     btn.disabled = true;
     try {
-      const { data, error } = await supabase.rpc("join_match", { p_match_id: btn.dataset.roomId });
+      const { error } = await supabase.rpc("join_match", { p_match_id: btn.dataset.roomId });
       if (error) throw error;
+      const { data: roomState, error: stateError } = await supabase.rpc("get_match_state", { p_match_id: btn.dataset.roomId });
+      if (stateError) throw stateError;
       document.querySelector("#room-picker").hidden = true;
-      await enterMatch(data);
+      await enterMatch(roomState?.match);
     } catch (e) { toast(e.message || "No se pudo entrar a la sala.", "error"); btn.disabled = false; }
   }));
 }
@@ -145,13 +147,9 @@ async function enterMatch(data) {
       await syncMatchState();
     });
 
-  if (match.status === "waiting" && match.host_id === state.session.user.id && Number(game?.min_players || 1) <= 1) {
-    const started = await supabase.rpc("start_match", { p_match_id: match.id });
-    if (started.error) throw started.error;
-    match = started.data;
-  }
   if (match.status === "starting" || match.status === "playing") startCountdown();
   else await syncMatchState();
+  updateStartButton();
 }
 
 async function syncMatchState() {
@@ -166,11 +164,35 @@ async function syncMatchState() {
     if (!countdownRunning && !finished) startCountdown();
     return;
   }
-  if (match.status === "waiting" && match.host_id === state.session.user.id && rows.length >= Number(game?.min_players || 1)) {
-    const started = await supabase.rpc("start_match", { p_match_id: match.id });
-    if (started.error) throw started.error;
-    match = started.data;
+  updateStartButton(rows.length);
+}
+
+
+function updateStartButton(playerCount) {
+  const btn = document.querySelector("#start-match");
+  if (!btn || !match) return;
+  const count = Number(playerCount ?? playersEl?.textContent ?? 0);
+  const isHost = match.host_id === state.session.user.id;
+  const waiting = match.status === "waiting";
+  btn.hidden = !(isHost && waiting);
+  btn.disabled = !waiting;
+  if (waiting) {
+    btn.textContent = count > 1 ? "Iniciar partida" : "Iniciar partida";
+  }
+}
+
+async function startMatchManually() {
+  if (!match || match.host_id !== state.session.user.id || match.status !== "waiting") return;
+  const btn = document.querySelector("#start-match");
+  if (btn) btn.disabled = true;
+  try {
+    const { data, error } = await supabase.rpc("start_match", { p_match_id: match.id });
+    if (error) throw error;
+    match = data;
     startCountdown();
+  } catch (error) {
+    toast(error.message || "No se pudo iniciar la partida.", "error");
+    updateStartButton();
   }
 }
 
@@ -287,6 +309,8 @@ window.addEventListener("pagehide", () => {
   clearInterval(positionTimer);
     channel?.unsubscribe();
 });
+
+document.querySelector("#start-match")?.addEventListener("click", startMatchManually);
 
 if (state) {
   try { await begin(); }
