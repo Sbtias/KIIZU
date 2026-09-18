@@ -221,6 +221,7 @@ function showResults(reward) {
     ? unlocked.map(a => '<article class="result-achievement"><span>' + (a.icon || "🏆") + '</span><div><strong>' + escapeHtml(a.name || "Logro") + '</strong><small>' + escapeHtml(a.description || "Logro desbloqueado") + '</small></div><b>+' + Number(a.xp_reward || 0) + ' XP</b></article>').join("")
     : '<div class="result-achievement result-achievement--empty"><span>✓</span><div><strong>Sin logros nuevos</strong><small>Completa otro juego para desbloquear más.</small></div></div>';
   modal.hidden = false;
+  modal.style.display = "grid";
 }
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
