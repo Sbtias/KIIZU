@@ -1,4 +1,4 @@
-import { bootShell, getPublicStats } from "./nav.js";
+import { bootShell, getPublicStats } from "./nav.js?v=20260918-1335";
 
 const state = await bootShell();
 const totalEl = document.querySelector("[data-total-users]");
