@@ -1,5 +1,5 @@
 import { supabase } from "./app.js";
-import { signIn, signUp } from "./auth.js";
+import { signIn, signUp, resetPassword } from "./auth.js";
 import { setBusy, toast } from "./ui.js";
 
 const form = document.querySelector("#auth-form");
@@ -10,7 +10,17 @@ const username = document.querySelector("#username");
 const usernameWrap = document.querySelector("#username-wrap");
 const email = document.querySelector("#email");
 const password = document.querySelector("#password");
+const forgot = document.querySelector("#forgot-password");
 let mode = "login";
+
+forgot?.addEventListener("click", async () => {
+  const address=email.value.trim();
+  if(!address){toast("Escribe tu correo electrónico primero.","error");return;}
+  setBusy(forgot,true,"Enviando...");
+  try{await resetPassword(address);toast("Si la cuenta existe, recibirás un correo para recuperar el acceso.","success");}
+  catch(e){toast(e.message||"No se pudo iniciar la recuperación.","error");}
+  finally{setBusy(forgot,false);}
+});
 
 modeButton?.addEventListener("click", () => {
   mode = mode === "login" ? "signup" : "login";
