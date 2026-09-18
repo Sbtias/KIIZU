@@ -51,6 +51,18 @@ async function loadGame() {
 function mechanic() {
   return game?.game_config?.mechanic || fallbackGames[gameSlug]?.mechanic || "click";
 }
+function targetScore() {
+  return Number(game?.game_config?.target_score) || (gameSlug === "race" ? 40 : 10);
+}
+function timeLimit() {
+  return Math.max(5, Number(game?.game_config?.time_limit) || 30);
+}
+function startGameTimer() {
+  clearTimeout(roundTimer);
+  roundTimer = setTimeout(() => {
+    if (running && !finished) finishGame();
+  }, timeLimit() * 1000);
+}
 
 function setScore(value) {
   score = Math.max(0, Math.floor(value));
@@ -134,6 +146,7 @@ async function startCountdown() {
   status.textContent = "GO!";
   detail.textContent = "Completa el reto. Tu resultado se valida en el servidor.";
   buildGame();
+  startGameTimer();
 }
 
 function buildGame() {
@@ -150,7 +163,7 @@ function buildClickGame() {
   action.onclick = () => {
     if (!running) return;
     setScore(score + (gameSlug === "race" ? 2 : 1));
-    if (score >= (gameSlug === "race" ? 40 : 10)) finishGame();
+    if (score >= targetScore()) finishGame();
     else if (channel) channel.send({
       type: "broadcast", event: "score",
       payload: { user_id: state.session.user.id, name: state.profile.username, score }
@@ -173,7 +186,7 @@ async function buildReaction() {
     const reactionMs = Math.max(120, Math.round(performance.now() - startedAt));
     const points = Math.max(1, 11 - Math.floor(reactionMs / 100));
     setScore(score + points);
-    if (score >= 30) finishGame();
+    if (score >= targetScore()) finishGame();
     else buildReaction();
   };
 }
