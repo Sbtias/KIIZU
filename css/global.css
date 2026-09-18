@@ -276,3 +276,10 @@ input:focus,textarea:focus,select:focus{border-color:rgba(230,235,240,.32);backg
 .auth-security{display:flex;flex-direction:column;gap:5px;margin:0 0 16px;padding:12px 14px;border:1px solid rgba(255,255,255,.13);border-radius:14px;background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.035));box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 10px 30px rgba(0,0,0,.16);backdrop-filter:blur(18px) saturate(125%);-webkit-backdrop-filter:blur(18px) saturate(125%)}
 .auth-security strong{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.88)}
 .auth-security span{font-size:12px;line-height:1.5;color:rgba(255,255,255,.60)}
+
+
+.memory-grid{display:grid;grid-template-columns:repeat(4,minmax(58px,1fr));gap:10px;max-width:520px;margin:22px auto}
+.memory-card{min-height:78px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,.03));color:var(--text);font:700 24px "Space Grotesk";cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.08);transition:transform .15s,border-color .15s,background .15s}
+.memory-card:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.24)}
+.memory-card.is-open,.memory-card.is-match{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.28)}
+@media(max-width:600px){.memory-grid{grid-template-columns:repeat(4,1fr);gap:7px}.memory-card{min-height:62px}}
