@@ -35,3 +35,17 @@ end;
 $$;
 revoke all on function public.submit_match_score(uuid,integer) from public;
 grant execute on function public.submit_match_score(uuid,integer) to authenticated;
+
+-- Only authenticated players may call match functions.
+revoke execute on function public.create_game(text,text,text,integer,integer) from anon;
+revoke execute on function public.create_match(text) from anon;
+revoke execute on function public.start_match(uuid) from anon;
+revoke execute on function public.leave_match(uuid) from anon;
+revoke execute on function public.publish_game(uuid) from anon;
+revoke execute on function public.submit_match_score(uuid,integer) from anon;
+grant execute on function public.create_game(text,text,text,integer,integer) to authenticated;
+grant execute on function public.create_match(text) to authenticated;
+grant execute on function public.start_match(uuid) to authenticated;
+grant execute on function public.leave_match(uuid) to authenticated;
+grant execute on function public.publish_game(uuid) to authenticated;
+grant execute on function public.submit_match_score(uuid,integer) to authenticated;
