@@ -1,5 +1,4 @@
 # KIIZU
- https://chatgpt.com/g/g-p-6aac70af834081919d676a710d305512-minijuegos/project
 KIIZU es una plataforma social de minijuegos centrada en **crear, jugar, personalizar y socializar**.
 
 ## Principios del producto
