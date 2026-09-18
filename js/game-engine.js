@@ -259,11 +259,11 @@ export class Kiizu2D {
     ctx.beginPath();
     ctx.roundRect(x + 6, y + 17, 22, 28, 7);
     ctx.fill();
-    const imageUrl = appearance?.image;
-    if (imageUrl) {
+    const imageUrls = Array.isArray(appearance?.images) ? appearance.images : (appearance?.image ? [appearance.image] : []);
+    for (const imageUrl of imageUrls) {
       let image = this.appearanceImages.get(imageUrl);
       if (!image) { image = new Image(); image.src = imageUrl; this.appearanceImages.set(imageUrl, image); }
-      if (image.complete && image.naturalWidth) ctx.drawImage(image, x + 4, y + 15, 26, 30);
+      if (image.complete && image.naturalWidth) ctx.drawImage(image, x + 3, y + 12, 28, 34);
     }
     ctx.fillStyle = "#e4e7eb";
     ctx.beginPath();
