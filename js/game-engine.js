@@ -6,6 +6,7 @@ export class Kiizu2D {
     this.player = options.player || { x: 150, y: 600, w: 34, h: 52, vx: 0, vy: 0, speed: 4.4, jump: 12 };
     this.entities = options.entities || [];
     this.remotePlayers = new Map();
+    this.remoteTargets = new Map();
     this.keys = new Set();
     this.camera = { x: 0, y: 0 };
     this.running = false;
@@ -139,6 +140,14 @@ export class Kiizu2D {
 
   setRemotePlayers(players) {
     this.remotePlayers = new Map(players.map(p => [p.user_id, p]));
+    for (const p of players) this.remoteTargets.set(p.user_id, {...p});
+  }
+
+  updateRemotePlayer(payload) {
+    if (!payload?.user_id || payload.user_id === this.player.user_id) return;
+    const previous = this.remotePlayers.get(payload.user_id) || payload;
+    this.remotePlayers.set(payload.user_id, {...previous, ...payload});
+    this.remoteTargets.set(payload.user_id, {...payload});
   }
 
   render() {
@@ -168,7 +177,12 @@ export class Kiizu2D {
       if (e.type === "rock") this.drawRock(ctx, e);
     }
     for (const p of this.remotePlayers.values()) {
-      if (p.user_id !== this.player.user_id) this.drawCharacter(ctx, p.x, p.y, p.color || "#aeb8c7", p.username || "Player", p.appearance);
+      if (p.user_id !== this.player.user_id) {
+        const target = this.remoteTargets.get(p.user_id) || p;
+        p.x += (Number(target.x) - Number(p.x)) * .22;
+        p.y += (Number(target.y) - Number(p.y)) * .22;
+        this.drawCharacter(ctx, p.x, p.y, p.color || "#aeb8c7", p.username || "Player", p.appearance);
+      }
     }
     this.drawCharacter(ctx, this.player.x, this.player.y, this.player.color || "#f0f2f5", this.player.username || "Tú", this.player.appearance);
     ctx.restore();
