@@ -701,3 +701,5 @@ body.settings-open{overflow:hidden}
 .avatar-preview img.avatar-clothing-accesorio,.avatar-preview img.avatar-clothing-accessory{left:50%;top:49%;width:88px;height:70px;transform:translate(-50%,-50%);clip-path:inset(4px 4px 8px 4px round 12px);}
 .avatar-preview img.avatar-clothing-full{left:50%;top:53%;width:84px;height:190px;transform:translate(-50%,-50%);clip-path:inset(3px 5px 3px 5px round 20px);}
 @media(max-width:560px){.avatar-preview{width:220px}.avatar-preview-body{transform:translate(-50%,-50%) scale(.88)}}
+
+.public-profile{padding:28px 0}.public-profile-card{display:flex;align-items:center;gap:20px;padding:28px;margin-top:12px}.public-profile-card h1{margin:6px 0;font:700 40px "Space Grotesk";letter-spacing:-.04em}.public-profile-card p{margin:0;color:var(--muted)}.public-profile-photo{width:92px;height:92px;border-radius:16px;background:#1a1e23;border:1px solid var(--line);display:grid;place-items:center;font:700 30px "Space Grotesk";overflow:hidden}.public-profile-photo img{width:100%;height:100%;object-fit:cover}.public-profile-stats{margin-top:12px}
