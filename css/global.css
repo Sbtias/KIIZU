@@ -241,6 +241,36 @@ input::placeholder,textarea::placeholder{color:#565d66}
   .top-status{display:none}
 }
 @media(max-width:700px){.account-name{display:none}.main-nav{display:none}}
+
+/* Premium press feedback */
+.ui-press{
+  animation:ui-button-press .46s cubic-bezier(.16,1,.3,1);
+}
+.ui-press:after{
+  content:"";
+  position:absolute;
+  inset:-35%;
+  pointer-events:none;
+  border-radius:inherit;
+  background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.30),rgba(255,255,255,.08) 22%,transparent 58%);
+  transform:scale(.25);
+  opacity:0;
+  animation:ui-ripple .46s ease-out;
+}
+@keyframes ui-button-press{
+  0%{transform:translateY(0) scale(1);filter:brightness(1)}
+  18%{transform:translateY(1px) scale(.965);filter:brightness(1.18)}
+  48%{transform:translateY(-2px) scale(1.015);filter:brightness(1.08)}
+  100%{transform:translateY(0) scale(1);filter:brightness(1)}
+}
+@keyframes ui-ripple{
+  0%{transform:scale(.25);opacity:.75}
+  55%{opacity:.28}
+  100%{transform:scale(1.2);opacity:0}
+}
+@media(prefers-reduced-motion:reduce){
+  .ui-press,.ui-press:after{animation:none!important}
+}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}
   body:before,body:after{animation:none!important}
