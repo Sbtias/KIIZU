@@ -287,3 +287,9 @@ export function buildWorld(type = "adventure") {
   addGoal(3400, ground - 90);
   return { world, entities };
 }
+
+export function buildWorldFromConfig(config = {}) {
+  const world = config.world || { width: 3600, height: 900, gravity: .72 };
+  const entities = Array.isArray(config.entities) ? config.entities.map(e => ({...e})) : [];
+  return { world, entities };
+}
