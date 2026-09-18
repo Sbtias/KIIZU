@@ -1,5 +1,5 @@
 import { supabase } from "./app.js";
-import { signInWithUsername, signUp } from "./auth.js";
+import { signInWithUsername, signUp, getSession } from "./auth.js";
 import { setBusy, toast } from "./ui.js";
 
 const form = document.querySelector("#auth-form");
@@ -17,6 +17,11 @@ const forgot = document.querySelector("#forgot-password");
 const securityNote = document.querySelector("#security-note");
 
 let mode = "login";
+
+const existingSession = await getSession();
+if (existingSession?.data?.session && !new URLSearchParams(location.search).has("reset")) {
+  window.location.replace("lobby.html");
+}
 
 function setMode(nextMode) {
   mode = nextMode;
