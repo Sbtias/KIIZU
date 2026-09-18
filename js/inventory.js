@@ -1,4 +1,4 @@
-import{bootShell}from"./nav.js";import{supabase}from"./app.js";import{toast,setBusy}from"./ui.js";
+import{bootShell}from"./nav.js?v=20260918-1335";import{supabase}from"./app.js";import{toast,setBusy}from"./ui.js";
 const state=await bootShell(),grid=document.querySelector("#inventory-grid");
 if(state){try{
  const [{data:official,error:e1},{data:created,error:e2},{data:equipped,error:e3}]=await Promise.all([
