@@ -35,6 +35,7 @@ if (state) {
   document.querySelector("#losses").textContent = profile.losses ?? 0;
   document.querySelector("#games").textContent = profile.games_played ?? 0;
   document.querySelector("#coins").textContent = Number(profile.coins ?? 0).toLocaleString();
+  document.querySelector("#creator-points").textContent = Number(profile.creator_points ?? 0).toLocaleString();
   document.querySelector("#xpbar").style.width = Math.min(100, (profile.xp ?? 0) % 100) + "%";
 
   document.querySelector("#avatar-file").addEventListener("change", async event => {
