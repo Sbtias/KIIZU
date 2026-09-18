@@ -1,4 +1,4 @@
-import{bootShell}from"./nav.js";import{supabase}from"./app.js";import{toast,setBusy}from"./ui.js";
+import{bootShell}from"./nav.js?v=20260918-1335";import{supabase}from"./app.js";import{toast,setBusy}from"./ui.js";
 const state=await bootShell();let id=null;const $=s=>document.querySelector(s);
 async function save(publish=false){
  if(!state)return;
