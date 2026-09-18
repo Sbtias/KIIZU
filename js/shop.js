@@ -194,15 +194,6 @@ function normalizeCategory(value) {
   return v;
 }
 
-function normalizeFilter(value) {
-  const v = String(value || "").trim().toLowerCase();
-  if (v === "ropa" || v === "camiseta" || v === "camisa" || v === "pantalon" || v === "sudadera" || v === "gorra") return "clothing";
-  if (v === "accesorios" || v === "accesorio" || v === "accessory" || v === "accessories") return "accessories";
-  if (v === "efectos" || v === "efecto" || v === "effect" || v === "effects") return "effects";
-  if (v === "emotes" || v === "emote") return "emotes";
-  return v === "todo" ? "all" : v;
-}
-
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, char => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
