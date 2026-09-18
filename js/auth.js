@@ -17,6 +17,24 @@ export async function signUp({email,password,username}) {
   if(data.user && Array.isArray(data.user.identities) && data.user.identities.length===0) throw new Error("Este correo electrónico ya está registrado.");
   return data;
 }
+export async function signInWithUsername(username,password) {
+  if(!supabase) throw new Error("Supabase no está configurado.");
+  const name=username.trim();
+  if(!name) throw new Error("Escribe tu username.");
+  const {data:profile,error:profileError}=await supabase.from("profiles").select("id").eq("username",name).maybeSingle();
+  if(profileError) throw profileError;
+  if(!profile) throw new Error("Username o contraseña incorrectos.");
+  const {data:userData,error:userError}=await supabase.auth.admin.getUserById(profile.id);
+  if(userError) {
+    throw new Error("No se pudo iniciar sesión con este username.");
+  }
+  const email=userData?.user?.email;
+  if(!email) throw new Error("La cuenta no tiene un correo asociado.");
+  const {data,error}=await supabase.auth.signInWithPassword({email,password});
+  if(error) throw new Error("Username o contraseña incorrectos.");
+  return data;
+}
+
 export async function signIn(email,password) {
   if(!supabase) throw new Error("Supabase no está configurado.");
   const {data,error}=await supabase.auth.signInWithPassword({email,password});
