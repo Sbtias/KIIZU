@@ -37,7 +37,7 @@ declare
   generated_code text;
 begin
   if caller is null then raise exception 'AUTH_REQUIRED'; end if;
-  select * into g from public.games where slug = p_game_slug and unlocked_by_default = true limit 1;
+  select * into g from public.games where slug = p_game_slug and (unlocked_by_default = true or is_published = true) limit 1;
   if not found then raise exception 'GAME_NOT_FOUND'; end if;
 
   select * into m
