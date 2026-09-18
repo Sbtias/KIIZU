@@ -129,6 +129,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .experience p,.discover-card p,.item-card p{color:var(--muted);font-size:13px;margin:0 0 12px;line-height:1.5}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin:26px 0}
 .stats>div{padding:22px;background:rgba(16,18,20,.96)}
+.stats--compact{grid-template-columns:minmax(180px,260px);justify-content:start}
+.stats--compact>div{text-align:left}
 .stats b{display:block;font:700 28px "Space Grotesk"}
 .stats small{color:var(--muted)}
 .page-heading{padding:64px 0 30px}
