@@ -4,6 +4,7 @@ import { toast, setBusy } from "./ui.js";
 
 const state = await bootShell();
 const grid = document.querySelector("#shop-grid");
+const gamesGrid = document.querySelector("#market-games");
 const filters = [...document.querySelectorAll(".filter-row .chip")];
 let filter = "all";
 let catalog = { official: [], clothing: [] };
@@ -13,6 +14,7 @@ filters.forEach(chip => chip.addEventListener("click", () => {
   chip.classList.add("active");
   filter = normalizeFilter(chip.textContent);
   render();
+  loadGames();
 }));
 
 function normalizeFilter(label) {
@@ -80,6 +82,8 @@ async function load() {
 
   render();
 }
+
+async function loadGames(){if(!gamesGrid)return;const{data,error}=await supabase.from("games").select("slug,name,description,min_players,max_players,thumbnail_url,profiles!games_creator_id_fkey(username)").eq("is_published",true).order("created_at",{ascending:false});if(error){gamesGrid.innerHTML='<div class="empty-state"><h3>No se pudieron cargar los juegos.</h3></div>';return;}gamesGrid.innerHTML=(data||[]).map(x=>'<article class="discover-card">'+(x.thumbnail_url?'<img src="'+escapeHtml(x.thumbnail_url)+'" alt="">':'<div class="discover-art">KIIZU</div>')+'<div class="discover-card-body"><span class="eyebrow">por '+escapeHtml(x.profiles?.username||"Creador")+'</span><h3>'+escapeHtml(x.name)+'</h3><p>'+escapeHtml(x.description||"Sin descripción")+'</p><small>'+x.min_players+'–'+x.max_players+' jugadores</small><a class="button button--small" href="game.html?game='+encodeURIComponent(x.slug)+'">Jugar</a></div></article>').join("")||'<div class="empty-state"><h3>No hay juegos publicados todavía.</h3></div>';}
 
 function render() {
   if (!grid) return;
