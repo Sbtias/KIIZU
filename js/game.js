@@ -131,10 +131,11 @@ async function startCountdown() {
 function buildGame() {
   engine?.stop();
   const built = game?.game_config?.version >= 2 ? buildWorldFromConfig(game.game_config) : buildWorld(worldType());
+  const spawn = built.spawn || built.entities.find(e => e.type === "spawn") || { x:150, y:600 };
   const player = {
     user_id: state.session.user.id,
     username: state.profile.username || "Player",
-    x: 150, y: 600, w: 34, h: 52, vx: 0, vy: 0,
+    x: spawn.x, y: spawn.y, w: 34, h: 52, vx: 0, vy: 0,
     speed: 4.4, jump: 12, grounded: false, color: "#f0f2f5"
   };
 
@@ -142,6 +143,7 @@ function buildGame() {
     world: built.world,
     entities: built.entities,
     player,
+    spawn,
     onCollect: () => { setCoins(coins + 1); setScore(score + 10); },
     onHazard: () => {
       setHealth(health - 20);
