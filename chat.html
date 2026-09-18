@@ -1,1 +1,71 @@
-<!doctype html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chat · KIIZU</title><link rel="stylesheet" href="css/global.css"></head><body><main class="app-shell"><header class="appbar"><a class="brand" href="lobby.html">KIIZU</a><nav class="main-nav"><a href="lobby.html">Inicio</a><a href="discover.html">Jugar</a><a href="shop.html">Marketplace</a><a href="creator.html">Ropa</a><a href="game-creator.html">Crear juego</a></nav><div class="user-pill"></div></header><section class="page-heading"><span class="eyebrow">SOCIAL</span><h1>Chat.</h1><p>Habla con tus amigos en privado.</p></section><section class="chat-layout"><aside class="chat-friends panel"><div class="section-head"><div><span class="eyebrow">AMIGOS</span><h2>Conversaciones</h2></div></div><div id="chat-friends" class="chat-friend-list"><div class="empty-state"><h3>Cargando...</h3></div></div></aside><section class="chat-panel panel"><header id="chat-header" class="chat-header"><div><span class="eyebrow">CONVERSACIÓN</span><h2>Selecciona un amigo</h2></div></header><div id="chat-messages" class="chat-messages"><div class="chat-empty">Selecciona un amigo para empezar a chatear.</div></div><form id="chat-form" class="chat-composer"><input id="chat-input" maxlength="500" autocomplete="off" placeholder="Escribe un mensaje..." disabled><button class="button" type="submit" disabled>Enviar</button></form></section></section></main><script type="module" src="js/chat.js?v=20260918-1400"></script><script src="js/ui-sound.js?v=20260918-1400"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chat · KIIZU</title><link rel="stylesheet" href="css/global.css">
+</head>
+<body>
+<main class="app-shell chat-shell">
+  <header class="appbar">
+    <a class="brand" href="lobby.html">KIIZU</a>
+    <nav class="main-nav"><a href="lobby.html">Inicio</a><a href="discover.html">Jugar</a><a href="shop.html">Marketplace</a><a href="creator.html">Ropa</a><a href="game-creator.html">Crear juego</a></nav>
+    <div class="user-pill"></div>
+  </header>
+
+  <section class="page-heading chat-page-heading">
+    <div>
+      <span class="eyebrow">SOCIAL</span>
+      <h1>Mensajes.</h1>
+      <p>Conversaciones privadas con tus amigos, sin el caos habitual de una bandeja de entrada humana.</p>
+    </div>
+    <a class="button button--ghost" href="friends.html">Gestionar amigos <span>→</span></a>
+  </section>
+
+  <section class="chat-layout">
+    <aside class="chat-sidebar panel">
+      <div class="chat-sidebar-head">
+        <div><span class="eyebrow">MENSAJES</span><h2>Conversaciones</h2></div>
+        <span id="chat-count" class="chat-count">0</span>
+      </div>
+      <label class="chat-search">
+        <span>⌕</span>
+        <input id="chat-search-input" type="search" autocomplete="off" placeholder="Buscar amigo...">
+      </label>
+      <div class="chat-filters" role="tablist" aria-label="Filtro de conversaciones">
+        <button class="chat-filter is-active" data-chat-filter="all" type="button">Todos</button>
+        <button class="chat-filter" data-chat-filter="online" type="button">En línea</button>
+      </div>
+      <div id="chat-friends" class="chat-friend-list" aria-live="polite">
+        <div class="chat-loading"><span></span><span></span><span></span></div>
+      </div>
+    </aside>
+
+    <section class="chat-panel panel">
+      <header id="chat-header" class="chat-header">
+        <div class="chat-header-empty">
+          <span class="chat-header-icon">✦</span>
+          <div><span class="eyebrow">CONVERSACIÓN</span><h2>Selecciona un amigo</h2><p>Tus mensajes aparecerán aquí.</p></div>
+        </div>
+      </header>
+      <div id="chat-messages" class="chat-messages" aria-live="polite">
+        <div class="chat-welcome">
+          <div class="chat-welcome-icon">✦</div>
+          <h3>Tu espacio privado</h3>
+          <p>Selecciona una conversación para empezar a hablar.</p>
+        </div>
+      </div>
+      <form id="chat-form" class="chat-composer">
+        <div class="chat-compose-wrap">
+          <input id="chat-input" maxlength="500" autocomplete="off" placeholder="Selecciona un amigo para escribir..." disabled>
+          <span id="chat-character-count">0/500</span>
+        </div>
+        <button class="button chat-send" type="submit" disabled><span>Enviar</span><b>↵</b></button>
+      </form>
+      <div class="chat-compose-note">Solo puedes enviar mensajes a amigos aceptados.</div>
+    </section>
+  </section>
+</main>
+<script type="module" src="js/chat.js?v=20260918-1510"></script>
+<script src="js/ui-sound.js?v=20260918-1510"></script>
+</body>
+</html>
