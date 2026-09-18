@@ -1,7 +1,7 @@
 import { supabase } from "./app.js";
 import { bootShell } from "./nav.js?v=20260918-1335";
 import { toast } from "./ui.js";
-import { Kiizu2D, buildWorld } from "./game-engine.js";
+import { Kiizu2D, buildWorld, buildWorldFromConfig } from "./game-engine.js";
 
 const params = new URLSearchParams(location.search);
 const gameSlug = params.get("game");
@@ -130,7 +130,7 @@ async function startCountdown() {
 
 function buildGame() {
   engine?.stop();
-  const built = buildWorld(worldType());
+  const built = game?.game_config?.version >= 2 ? buildWorldFromConfig(game.game_config) : buildWorld(worldType());
   const player = {
     user_id: state.session.user.id,
     username: state.profile.username || "Player",
