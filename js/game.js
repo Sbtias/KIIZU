@@ -129,10 +129,45 @@ async function begin() {
     })
     .subscribe(async value => {
       if (value !== "SUBSCRIBED") return;
-      await channel.track({ user_id: state.session.user.id, username: state.profile.username });
+      await channel.track({
+        user_id: state.session.user.id,
+        username: state.profile.username
+      });
+      await syncMatchState();
     });
 
   if (match.status === "starting" || match.status === "playing") startCountdown();
+}
+
+async function syncMatchState() {
+  if (!match?.id) return;
+
+  const [{ data: freshMatch, error: matchError }, { data: rows, error: playersError }] = await Promise.all([
+    supabase.from("matches").select("*").eq("id", match.id).maybeSingle(),
+    supabase.from("match_players").select("user_id,score,placement").eq("match_id", match.id)
+  ]);
+
+  if (matchError) throw matchError;
+  if (playersError) throw playersError;
+
+  if (freshMatch) match = freshMatch;
+  playersEl.textContent = String(rows?.length ?? 0);
+
+  if (match.status === "starting" || match.status === "playing") {
+    if (!running && !finished) startCountdown();
+    return;
+  }
+
+  if (
+    match.status === "waiting" &&
+    match.host_id === state.session.user.id &&
+    rows?.length >= Number(game?.min_players || 1)
+  ) {
+    const started = await supabase.rpc("start_match", { p_match_id: match.id });
+    if (started.error) throw started.error;
+    match = started.data;
+    if (match.status === "starting" && !running && !finished) startCountdown();
+  }
 }
 
 async function startCountdown() {
