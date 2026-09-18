@@ -1,21 +1,20 @@
 import { bootShell, getPublicStats } from "./nav.js";
 
 const state = await bootShell();
+const totalEl = document.querySelector("[data-total-users]");
+const onlineEl = document.querySelector("[data-online-users]");
 
 if (state) {
-  document.querySelector("#welcome-name").textContent = state.profile.username;
-
-  const totalEl = document.querySelector("[data-total-users]");
-
   async function refreshStats() {
     try {
       const stats = await getPublicStats();
-      totalEl.textContent = stats.total.toLocaleString();
+      if (totalEl) totalEl.textContent = stats.total.toLocaleString();
+      if (onlineEl) onlineEl.textContent = stats.online.toLocaleString();
     } catch {
-      totalEl.textContent = "—";
+      if (totalEl) totalEl.textContent = "—";
+      if (onlineEl) onlineEl.textContent = "—";
     }
   }
-
   await refreshStats();
   setInterval(refreshStats, 15000);
 }
