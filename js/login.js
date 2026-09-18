@@ -12,7 +12,7 @@ const email = document.querySelector("#email");
 const emailWrap = document.querySelector("#email-wrap");
 const password = document.querySelector("#password");
 const forgot = document.querySelector("#forgot-password");
-let mode = "login";
+let mode = "login";\nusername.hidden = false;\nusernameWrap.hidden = false;\nemailWrap.hidden = true;\nemail.required = false;\nusername.required = true;
 
 modeButton?.addEventListener("click", () => {
   mode = mode === "login" ? "signup" : "login";
