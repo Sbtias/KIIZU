@@ -1,759 +1,104 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
-
-:root{--bg:#07080b;--panel:#0f1117;--panel2:#131620;--panel3:#181c27;--line:#242936;--line2:#303645;--text:#f5f7fb;--muted:#9299aa;--soft:#686f80;--purple:#8065ff;--green:#b8ff5a;--danger:#ff6577}
-*{box-sizing:border-box}
-html{background:var(--bg);color:var(--text);scroll-behavior:smooth}
-body{margin:0;min-height:100vh;background:radial-gradient(900px 500px at 80% -10%,#2a2059 0%,transparent 55%),radial-gradient(700px 450px at -10% 80%,#17250e 0%,transparent 50%),var(--bg);color:var(--text);font-family:"DM Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.13;background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:72px 72px;mask-image:linear-gradient(to bottom,#000,transparent 80%)}
-a{color:inherit;text-decoration:none}button,input,textarea,select{font:inherit}
-h1,h2,h3,h4,.brand,.eyebrow{font-family:"Space Grotesk",sans-serif}
-button{cursor:pointer}.brand{display:inline-flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.045em;font-size:18px}.brand-mark{display:grid;place-items:center;width:31px;height:31px;border-radius:10px;background:linear-gradient(135deg,#fff,#cfd3dc);color:#090a0e;font-size:14px;box-shadow:0 0 30px #fff1}
-.eyebrow{font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--soft);font-weight:700}.top-status{font-size:10px;letter-spacing:.13em;color:var(--soft)}
-.landing-shell,.app-shell{width:min(1180px,calc(100% - 40px));margin:auto}.landing-shell{padding:24px 0 70px}.app-shell{padding:0 0 70px}
-.topbar,.appbar{height:72px;display:flex;align-items:center;gap:20px;border-bottom:1px solid #ffffff0c}.appbar{position:sticky;top:0;z-index:30;background:#07080bea;backdrop-filter:blur(18px)}
-.main-nav{display:flex;gap:3px;margin:auto;padding:4px;background:#ffffff06;border:1px solid #ffffff0d;border-radius:13px}.main-nav a{padding:8px 12px;border-radius:9px;color:var(--muted);font-size:12px;transition:.18s}.main-nav a:hover,.main-nav .active{background:#ffffff0c;color:#fff}
-.user-pill{position:relative;margin-left:auto}.account-trigger{display:flex;align-items:center;gap:8px;padding:6px 8px;border:1px solid #ffffff12;border-radius:12px;background:#ffffff06;color:#fff}.account-avatar{width:30px;height:30px;border-radius:9px;background:var(--panel3);display:grid;place-items:center;font-weight:800}.account-name{max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.account-menu{position:absolute;right:0;top:calc(100% + 10px);width:235px;padding:8px;background:#11141b;border:1px solid #ffffff14;border-radius:15px;box-shadow:0 25px 70px #000a;opacity:0;pointer-events:none;transform:translateY(-5px);transition:.16s;z-index:50}.user-pill.is-open .account-menu{opacity:1;pointer-events:auto;transform:none}.account-menu a,.account-menu button{display:block;width:100%;padding:10px;border:0;border-radius:9px;background:none;text-align:left;color:var(--muted)}.account-menu a:hover,.account-menu button:hover{background:#ffffff08;color:#fff}.account-menu .danger{color:var(--danger)}
-.button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:10px 15px;border:1px solid transparent;border-radius:11px;background:#f5f7fb;color:#090a0e;font-weight:800;font-size:12px;transition:.18s}.button:hover{transform:translateY(-2px);box-shadow:0 12px 30px #fff1}.button--ghost{background:#ffffff06;color:#f5f7fb;border-color:#ffffff14}.button--ghost:hover{background:#ffffff0c}.button--small{min-height:34px;padding:8px 11px;border-radius:9px}.button--full{width:100%}.text-button{background:none;border:0;color:var(--muted)}
-input,textarea,select{width:100%;padding:12px 13px;background:#080a0f;color:#fff;border:1px solid #ffffff12;border-radius:11px;outline:none}input:focus,textarea:focus,select:focus{border-color:#8065ff99;box-shadow:0 0 0 3px #8065ff18}input::placeholder,textarea::placeholder{color:#5f6675}
-
-.landing-hero{min-height:650px;display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center}.landing-hero h1{font-size:clamp(64px,9vw,116px);line-height:.84;letter-spacing:-.085em;margin:16px 0 25px}.landing-hero h1 em{font-style:normal;color:var(--green)}.landing-hero p{max-width:520px;color:#a0a6b5;font-size:17px;line-height:1.65}.hero-actions{display:flex;gap:10px;margin-top:28px}.landing-panel,.panel{background:linear-gradient(145deg,#11141b,#0d0f14);border:1px solid #ffffff10;border-radius:20px;box-shadow:0 25px 80px #0005}.landing-panel{padding:28px}.landing-panel h2{font-size:28px;letter-spacing:-.05em}.landing-panel p{color:var(--muted);line-height:1.6}.principles{border-top:1px solid #ffffff0d;margin-top:22px}.principles span{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid #ffffff0d;color:var(--muted)}.principles strong{color:#fff}.feature-row{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #ffffff0d;border-radius:18px;overflow:hidden;background:#10131a}.feature-row>div{padding:24px;border-right:1px solid #ffffff0d}.feature-row>div:last-child{border:0}.feature-row strong{font-size:10px;color:var(--soft)}.feature-row h3{margin:13px 0 7px;font-size:18px}.feature-row p{margin:0;color:var(--muted);font-size:12px;line-height:1.6}
-
-.hub-hero{display:flex;align-items:end;justify-content:space-between;padding:72px 0 42px}.hub-hero h1,.page-heading h1{font-size:clamp(48px,7vw,82px);line-height:.9;letter-spacing:-.075em;margin:14px 0}.hub-hero p,.page-heading p{color:var(--muted);line-height:1.6}.section-head{display:flex;align-items:end;justify-content:space-between;margin:45px 0 18px}.section-head h2{font-size:27px;letter-spacing:-.05em;margin:7px 0}
-.home-quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:10px}.home-quick-card,.home-info-panel{position:relative;padding:21px;background:#10131a;border:1px solid #ffffff0d;border-radius:17px;transition:.2s}.home-quick-card{min-height:170px}.home-quick-card:hover{transform:translateY(-3px);border-color:#8065ff55;background:#131721}.home-quick-card h3{font-size:18px;margin:14px 0 7px}.home-quick-card p,.home-info-panel p{color:var(--muted);font-size:12px;line-height:1.6}.home-card-arrow{position:absolute;right:18px;bottom:17px;color:var(--soft)}.home-lower-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:12px;margin-top:12px}.home-info-panel h2{font-size:28px;letter-spacing:-.05em}.home-stat-line{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #ffffff0c;color:var(--muted)}.home-stat-line strong{color:#fff}
-
-.game-grid,.item-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.discover-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.experience,.discover-card,.item-card,.achievement{background:#10131a;border:1px solid #ffffff0d;border-radius:18px;padding:15px;transition:.2s}.experience{min-height:215px;display:flex;flex-direction:column;justify-content:space-between}.experience:hover,.discover-card:hover,.item-card:hover{transform:translateY(-3px);border-color:#8065ff55}.experience--reaction{background:radial-gradient(circle at 80% 20%,#b8ff5a18,transparent 38%),#10151a}.experience--click{background:radial-gradient(circle at 80% 20%,#8065ff22,transparent 38%),#111018}.experience--memory{background:radial-gradient(circle at 80% 20%,#45d9ff18,transparent 38%),#0f1519}.experience h3{font-size:23px;margin:7px 0}.experience p,.discover-card p,.item-card p{color:var(--muted);font-size:12px;line-height:1.5}.game-icon{font-size:27px}.discover-art,.item-art{height:170px;border-radius:13px;display:grid;place-items:center;background:#171b25;border:1px solid #ffffff0c}.item-art{font-size:52px}.discover-art{font:700 22px "Space Grotesk"}.art-neon{background:radial-gradient(circle,#8065ff55,transparent 60%),#171226}.art-arena{background:radial-gradient(circle,#b8ff5a33,transparent 60%),#121911}.art-beach{background:radial-gradient(circle,#45d9ff33,transparent 60%),#10191d}.art-horror{background:radial-gradient(circle,#ff416c2b,transparent 60%),#1a1015}.discover-card h3,.item-card h3{margin:11px 0 6px;font-size:17px}.item-card .button{width:100%;margin-top:10px}.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}.chip{border:1px solid #ffffff12;background:#ffffff06;color:var(--muted);border-radius:99px;padding:8px 13px;font-size:12px}.chip.active,.chip:hover{background:#fff;color:#090a0e;border-color:#fff}.empty-state{grid-column:1/-1;text-align:center;padding:55px 20px;border:1px dashed #ffffff18;border-radius:18px;color:var(--muted)}
-
-.profile-hero{display:grid;grid-template-columns:150px 1fr auto;align-items:center;gap:26px;padding:65px 0 35px}.profile-avatar{width:150px;height:150px;border-radius:30px;background:#11151d;border:1px solid #ffffff10;display:grid;place-items:center}.profile-avatar .avatar{position:relative;transform:scale(.6)}.profile-hero h1{font-size:55px;letter-spacing:-.07em;margin:10px 0}.xpbar{height:7px;max-width:420px;background:#ffffff09;border-radius:99px;overflow:hidden;margin-top:15px}.xpbar i{display:block;height:100%;background:var(--green);width:0;border-radius:99px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stats>div{padding:20px;background:#10131a;border:1px solid #ffffff0d;border-radius:17px}.stats b{font:600 27px "Space Grotesk"}.stats small{display:block;color:var(--muted);margin-top:5px}.profile-creator{margin-top:12px;border:1px solid #ffffff0d;border-radius:19px;background:#10131a;overflow:hidden}.profile-creator-head{display:flex;justify-content:space-between;align-items:center;padding:20px 22px;border-bottom:1px solid #ffffff0d}.profile-creator-head h2{font-size:23px;margin:7px 0}.creator-badge{color:var(--green);font-size:9px;letter-spacing:.15em}.creator-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#ffffff0d}.creator-action{min-height:120px;padding:18px;background:#10131a;display:flex;gap:12px}.creator-action:hover{background:#151923}.creator-action small{display:block;color:var(--muted);margin-top:5px;line-height:1.45}.achievement-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.achievement{display:flex;gap:13px;align-items:center}
-
-.auth{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr}.auth-art{padding:45px;display:flex;flex-direction:column;justify-content:space-between;background:radial-gradient(circle at 50% 55%,#8065ff1f,transparent 45%)}.auth-art h1{font-size:clamp(60px,8vw,100px);line-height:.86;letter-spacing:-.08em}.auth-art p{color:var(--muted);max-width:500px}.auth-card{display:grid;place-items:center;padding:30px;background:#090b0f;border-left:1px solid #ffffff0d}.panel--clean{width:min(460px,100%);padding:30px}.panel--clean h2{font-size:32px;margin:10px 0}.panel--clean>p{color:var(--muted)}.panel label{display:block;color:#9da4b3;font-size:12px;margin:15px 0 7px}.back-link{display:block;margin-top:20px;color:var(--soft);font-size:12px}
-
-.accounts-toolbar{display:flex;align-items:center;gap:15px;padding:16px;margin-bottom:14px}.accounts-search{flex:1}.accounts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.account-card{padding:16px;background:#10131a;border:1px solid #ffffff0d;border-radius:17px}.friends-add{padding:20px}.friends-add-form{display:flex;gap:8px}.friends-add-form input{flex:1}
-.chat-layout{display:grid;grid-template-columns:280px 1fr;min-height:540px;border:1px solid #ffffff0d;border-radius:18px;overflow:hidden;background:#0c0f14}.chat-sidebar,.chat-panel{background:#10131a}.chat-sidebar{border-right:1px solid #ffffff0d}.chat-sidebar-head,.chat-header{padding:17px;border-bottom:1px solid #ffffff0d}.chat-search{padding:12px}.chat-filters{display:flex;gap:5px;padding:0 12px 12px}.chat-filter{border:0;background:#fff0;color:var(--muted);padding:7px 9px;border-radius:8px}.chat-filter.is-active{background:#ffffff0c;color:#fff}.chat-messages{min-height:380px;padding:18px}.chat-composer{padding:12px;border-top:1px solid #ffffff0d}.chat-compose-wrap{display:flex;gap:8px}.chat-compose-wrap textarea{flex:1}
-
-.creator-layout{display:grid;grid-template-columns:310px 1fr;gap:12px}.creator-tools,.creator-canvas,.studio-card,.studio-toolbar,.actions{background:#10131a;border:1px solid #ffffff0d;border-radius:17px}.creator-tools{padding:17px}.tool-row{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.creator-canvas{padding:15px}.canvas-wrap,.studio-canvas-wrap{background:#080b10;border:1px solid #ffffff0d;border-radius:13px}.my-clothes-panel{margin-top:12px}.customizer-layout{display:grid;grid-template-columns:1fr 1fr;gap:14px}.customizer-preview{min-height:500px;background:#10131a;border:1px solid #ffffff0d;border-radius:18px;display:grid;place-items:center}.clothing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-
-.studio{display:grid;grid-template-columns:280px 1fr 300px;gap:10px;padding:10px;background:#0b0e13;border:1px solid #ffffff0d;border-radius:18px}.studio-side,.studio-inspector{display:grid;gap:10px}.studio-card{padding:16px}.tool-tabs{display:flex;gap:4px;margin-bottom:12px}.tool-tab{padding:8px 10px;border:0;border-radius:8px;background:#fff0;color:var(--muted)}.tool-tab.active{background:#ffffff0d;color:#fff}.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.studio-tool{padding:10px;border:1px solid #ffffff0d;border-radius:10px;background:#ffffff04;color:var(--muted)}.studio-tool.active{border-color:#8065ff55;color:#fff;background:#8065ff0d}.fields{display:grid;gap:9px}.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.studio-stage{min-width:0;background:#0a0d12;border:1px solid #ffffff0d;border-radius:15px;padding:10px}.studio-toolbar{display:flex;justify-content:space-between;padding:7px;margin-bottom:8px}.toolbar-group{display:flex;gap:4px}.toolbar-btn{border:0;background:#fff0;color:var(--muted);padding:7px;border-radius:7px}.toolbar-btn.active,.toolbar-btn:hover{background:#ffffff0d;color:#fff}.badges{display:flex;gap:5px}.badge{padding:4px 7px;border-radius:99px;background:#ffffff08;color:var(--muted);font-size:10px}.object-list,.achievement-list{display:grid;gap:7px}.object-list>*{padding:9px;background:#ffffff05;border-radius:8px}
-
-.match-bg{min-height:100vh;background:radial-gradient(circle at 50% 20%,#241c49,transparent 45%),var(--bg)}.match-shell{width:min(1000px,calc(100% - 30px));margin:auto}.matchbar{display:flex;justify-content:space-between;align-items:center;padding:22px 0}.match-card{text-align:center;padding:50px 20px}.match-card h1{font-size:58px;letter-spacing:-.07em}.match-card p{color:var(--muted)}.player-count,.hud-pill{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #ffffff0e;background:#ffffff06;border-radius:99px;font-size:12px}.presence-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}.game-stage{width:min(700px,100%);min-height:270px;margin:30px auto;padding:24px;border:1px solid #ffffff0d;border-radius:22px;background:#0d1015;display:grid;place-items:center}.play-orb{width:150px;height:150px;border-radius:50%;border:1px solid #ffffff18;background:radial-gradient(circle at 35% 30%,#fff,#b8ff5a 4%,#182011 58%,#0a0c0e);color:#fff;font:700 18px "Space Grotesk";box-shadow:0 0 70px #b8ff5a18}.room-social,.room-picker,.results-card{background:#10131a;border:1px solid #ffffff0d;border-radius:17px}.room-chat{background:#0d1015}.toast-root{position:fixed;right:18px;bottom:18px;z-index:100;display:grid;gap:8px}.toast{padding:13px 16px;background:#171b24ee;border:1px solid #ffffff14;border-radius:12px;box-shadow:0 20px 60px #0009}.toast--error{border-color:#ff657744}.toast--success{border-color:#b8ff5a55}.skeleton-card{height:290px;border-radius:18px;background:linear-gradient(90deg,#10131a,#191d27,#10131a);background-size:200% 100%;animation:skeleton 1.4s infinite}@keyframes skeleton{to{background-position:-200% 0}}
-
-.settings-shell,.settings-page,.settings-panel,.settings-card,.settings-section,.preferences,.preferences-panel,.preferences-card,.account-settings,.account-settings-panel{color:var(--text);background:#10131a;border:1px solid #ffffff0d;border-radius:17px;box-shadow:none}.settings-panel,.settings-card,.settings-section,.preferences-panel,.preferences-card,.account-settings-panel{padding:20px}.settings-row,.preference-row,.setting-row,.account-setting-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:15px 0;border-bottom:1px solid #ffffff0d}.settings-row:last-child,.preference-row:last-child,.setting-row:last-child,.account-setting-row:last-child{border-bottom:0}.settings-row strong,.preference-row strong,.setting-row strong,.account-setting-row strong{color:#fff}.settings-row small,.preference-row small,.setting-row small,.account-setting-row small{color:var(--muted)}
-
-.motion-item{opacity:0;transform:translateY(8px)}.motion-item.is-visible{opacity:1;transform:none;transition:.35s}.motion-delay-1{transition-delay:.04s}.motion-delay-2{transition-delay:.08s}.motion-delay-3{transition-delay:.12s}.motion-delay-4{transition-delay:.16s}
-.profile-photo-wrap{position:relative;width:120px;height:120px}.profile-photo{width:120px;height:120px;object-fit:cover;border-radius:20px;background:#11151d}.photo-upload{position:absolute;right:-6px;bottom:-6px;border:1px solid #ffffff18;background:#f5f7fb;color:#090a0e;border-radius:9px;padding:8px;font-weight:800}.profile-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-
-@media(max-width:1000px){.home-quick-grid{grid-template-columns:1fr 1fr}.discover-grid{grid-template-columns:1fr 1fr}.accounts-grid{grid-template-columns:1fr 1fr}.studio{grid-template-columns:240px 1fr}.studio-inspector{grid-column:1/-1}.creator-layout{grid-template-columns:1fr}.creator-tools{order:2}.creator-canvas{order:1}}
-@media(max-width:720px){.landing-shell,.app-shell{width:calc(100% - 24px)}.main-nav{display:none}.landing-hero{grid-template-columns:1fr;min-height:auto;padding:70px 0}.landing-hero h1{font-size:68px}.feature-row,.home-quick-grid,.game-grid,.item-grid,.discover-grid,.accounts-grid,.achievement-grid{grid-template-columns:1fr}.home-lower-grid,.customizer-layout{grid-template-columns:1fr}.auth{grid-template-columns:1fr}.auth-art{min-height:280px}.auth-card{border:0}.profile-hero{grid-template-columns:1fr;text-align:center}.profile-avatar,.profile-photo-wrap{margin:auto}.profile-hero .button{margin:auto}.stats{grid-template-columns:1fr 1fr}.chat-layout{grid-template-columns:1fr}.chat-sidebar{border-right:0;border-bottom:1px solid #ffffff0d}.studio{grid-template-columns:1fr}.studio-side,.studio-inspector{grid-column:auto}.friends-add-form{flex-direction:column}.hero-actions{flex-direction:column}.hero-actions .button{width:100%}.account-name{display:none}}
-@media(max-width:430px){.stats{grid-template-columns:1fr}.topbar,.appbar{height:62px}.landing-hero h1{font-size:57px}.hub-hero{padding:50px 0 30px}.page-heading{padding:50px 0 25px}.section-head{margin-top:30px}.profile-hero h1{font-size:42px}}
-
-
-/* KIIZU mobile system */
-@media (max-width:720px){
-  html,body{overflow-x:hidden}
-  body{font-size:14px}
-  .landing-shell,.app-shell{width:min(100% - 28px,1180px);padding-bottom:42px}
-  .appbar{height:60px;gap:10px}
-  .appbar .brand{font-size:17px}
-  .user-pill{margin-left:auto}
-  .main-nav{display:none}
-  .account-trigger{padding:5px}
-  .account-avatar{width:30px;height:30px}
-  .account-name{display:none}
-  .page-heading{padding:44px 0 22px}
-  .page-heading h1{font-size:clamp(42px,13vw,62px);margin:10px 0}
-  .page-heading h2{font-size:30px}
-  .filter-row{gap:6px;margin-bottom:16px}
-  .chip{padding:8px 11px}
-  .filter-row .button{margin-left:auto}
-  .item-grid,.game-grid,.discover-grid,.accounts-grid,.home-quick-grid,.achievement-grid{grid-template-columns:1fr}
-  .item-card,.discover-card{padding:13px;border-radius:16px}
-  .item-art,.discover-art{height:190px}
-  .landing-hero{display:flex;flex-direction:column;gap:28px;padding:58px 0 44px}
-  .landing-hero h1{font-size:clamp(54px,16vw,78px)}
-  .landing-hero p{font-size:15px}
-  .hero-actions{display:grid;grid-template-columns:1fr;gap:8px}
-  .hero-actions .button{width:100%}
-  .feature-row{grid-template-columns:1fr}
-  .feature-row>div{border-right:0;border-bottom:1px solid #ffffff0d;padding:19px}
-  .feature-row>div:last-child{border-bottom:0}
-  .hub-hero{display:flex;flex-direction:column;align-items:stretch;padding:48px 0 30px;gap:24px}
-  .hub-brand-name{font-size:clamp(62px,20vw,90px)!important}
-  .hub-branding>p{font-size:13px}
-  .hub-brand-stats{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .hub-stat-card{margin:0;padding:0;border-right:0;min-width:0}
-  .hub-stat-card b{font-size:21px}
-  .hub-hero>.button{width:100%}
-  .home-lower-grid,.customizer-layout,.creator-layout{grid-template-columns:1fr}
-  .home-quick-card{min-height:145px}
-  .section-head{align-items:flex-start;gap:12px;margin:32px 0 14px}
-  .section-head h2{font-size:24px}
-  .profile-hero{grid-template-columns:1fr;padding:42px 0 28px;text-align:center;gap:15px}
-  .profile-hero h1{font-size:42px}
-  .profile-actions{justify-content:center}
-  .stats{grid-template-columns:1fr 1fr}
-  .stats>div{padding:15px}
-  .creator-actions{grid-template-columns:1fr}
-  .creator-action{min-height:90px}
-  .friends-add-form{display:grid;grid-template-columns:1fr}
-  .chat-layout{grid-template-columns:1fr;min-height:0;border-radius:15px}
-  .chat-sidebar{border-right:0;border-bottom:1px solid #ffffff0d}
-  .chat-panel{min-width:0}
-  .chat-messages{min-height:300px;padding:14px}
-  .chat-compose-wrap{align-items:flex-end}
-  .chat-compose-wrap textarea{min-height:46px}
-  .creator-tools{order:2}
-  .creator-canvas{order:1}
-  .studio{grid-template-columns:1fr;padding:7px}
-  .studio-side,.studio-inspector{grid-column:auto}
-  .studio-stage{min-height:360px}
-  .tool-grid{grid-template-columns:1fr 1fr}
-  .customizer-preview{min-height:340px}
-  .row2{grid-template-columns:1fr}
-  .auth{grid-template-columns:1fr}
-  .auth-art{min-height:240px;padding:30px 20px}
-  .auth-art h1{font-size:58px}
-  .auth-card{padding:18px}
-  .panel--clean{padding:22px}
-  .match-shell{width:min(100% - 20px,1000px)}
-  .matchbar{padding:14px 0}
-  .match-card{padding:34px 15px}
-  .match-card h1{font-size:clamp(40px,12vw,58px)}
-  .game-stage{min-height:230px;padding:15px}
-  .play-orb{width:125px;height:125px}
-  .settings-card,.results-card{width:100%}
-  .toast-root{left:12px;right:12px;bottom:12px}
-  .toast{width:100%}
-  input,textarea,select{font-size:16px}
-  .button{min-height:44px}
-  .button--small{min-height:40px}
-}
-@media (max-width:430px){
-  .landing-shell,.app-shell{width:calc(100% - 20px)}
-  .appbar{height:56px}
-  .page-heading{padding-top:36px}
-  .page-heading h1{font-size:42px}
-  .hub-brand-stats{grid-template-columns:1fr}
-  .stats{grid-template-columns:1fr}
-  .filter-row .button{width:100%;margin-left:0}
-  .item-art,.discover-art{height:170px}
-  .chat-sidebar{max-height:none}
-  .settings-card{padding:18px}
-}
 
 
 /* =========================================================
-   KIIZU EDGE SAFETY / CONTENT CONTAINMENT
-   Keeps every view comfortably inside its visual frame.
-   ========================================================= */
-html,
-body{
-  max-width:100%;
-  overflow-x:hidden;
-}
-body{
-  overflow-wrap:anywhere;
-}
-.landing-shell,
-.app-shell,
-.match-shell{
-  min-width:0;
-}
-.landing-shell > *,
-.app-shell > *,
-.match-shell > *{
-  min-width:0;
-  max-width:100%;
-}
-.topbar,
-.appbar,
-.hub-hero,
-.section-head,
-.hero-actions,
-.profile-actions,
-.friends-add-form,
-.chat-header,
-.chat-composer,
-.chat-compose-note,
-.settings-head,
-.settings-row,
-.preference-row,
-.setting-row,
-.account-setting-row{
-  min-width:0;
-}
-.topbar > *,
-.appbar > *,
-.hub-hero > *,
-.section-head > *,
-.profile-hero > *,
-.profile-actions > *,
-.hero-actions > *{
-  min-width:0;
-}
-h1,h2,h3,h4,h5,h6,
-p,
-span,
-small,
-strong,
-b,
-label,
-a,
-button{
-  overflow-wrap:anywhere;
-}
-h1,h2,h3,h4,h5,h6,p{
-  max-width:100%;
-}
-img,
-video,
-canvas,
-svg,
-iframe{
-  display:block;
-  max-width:100%;
-}
-canvas{
-  height:auto;
-}
-input,
-textarea,
-select{
-  min-width:0;
-  max-width:100%;
-}
-textarea{
-  overflow:auto;
-}
-.button,
-.chip,
-.text-button{
-  max-width:100%;
-}
-.home-quick-card,
-.home-info-panel,
-.discover-card,
-.item-card,
-.experience,
-.achievement,
-.account-card,
-.creator-action,
-.settings-card,
-.settings-section,
-.results-card,
-.results-stats > div,
-.chat-sidebar,
-.chat-panel,
-.creator-tools,
-.creator-canvas,
-.studio-card,
-.studio-stage,
-.panel,
-.landing-panel,
-.feature-row,
-.game-stage{
-  min-width:0;
-  max-width:100%;
-}
-.home-quick-card h3,
-.home-quick-card p,
-.discover-card h3,
-.discover-card p,
-.item-card h3,
-.item-card p,
-.experience h3,
-.experience p,
-.creator-action strong,
-.creator-action small,
-.account-card *,
-.chat-bubble,
-.chat-friend-copy *,
-.clothing-detail-main *,
-.clothing-comment-body *{
-  min-width:0;
-  overflow-wrap:anywhere;
-}
-.section-head > div,
-.hub-branding,
-.profile-hero > div,
-.chat-header-user,
-.chat-friend-copy,
-.chat-compose-wrap,
-.clothing-detail-main,
-.clothing-comment-body{
-  min-width:0;
-}
-.filter-row{
-  min-width:0;
-}
-.filter-row > *{
-  min-width:0;
-}
-@media(max-width:720px){
-  .landing-shell,
-  .app-shell{
-    width:calc(100% - 20px);
-    padding-inline:6px;
-  }
-  .topbar,
-  .appbar{
-    width:100%;
-  }
-  .page-heading,
-  .hub-hero,
-  .profile-hero{
-    padding-inline:2px;
-  }
-  .section-head{
-    padding-inline:2px;
-  }
-  .feature-row > div,
-  .home-quick-card,
-  .home-info-panel,
-  .discover-card,
-  .item-card,
-  .experience,
-  .achievement,
-  .account-card,
-  .creator-action{
-    overflow:hidden;
-  }
-  .button{
-    white-space:normal;
-    text-align:center;
-  }
-  .main-nav a{
-    white-space:nowrap;
-  }
-}
-@media(max-width:430px){
-  .landing-shell,
-  .app-shell{
-    width:calc(100% - 14px);
-    padding-inline:5px;
-  }
-  .page-heading,
-  .hub-hero,
-  .profile-hero,
-  .section-head{
-    padding-inline:1px;
-  }
-}
-
-
-/* =========================================================
-   KIIZU CORE LAYOUT v2
-   Stable type, spacing and containment across every screen.
-   ========================================================= */
-:root{
-  --content-gutter:clamp(14px,3vw,28px);
-  --content-max:1180px;
-}
-html{
-  width:100%;
-  min-width:0;
-  overflow-x:clip;
-}
-body{
-  width:100%;
-  min-width:0;
-  max-width:100%;
-  overflow-x:clip;
-  overflow-wrap:break-word;
-  word-break:normal;
-}
-main,
-section,
-header,
-footer,
-article,
-aside,
-nav,
-div{
-  min-width:0;
-}
-.landing-shell,
-.app-shell{
-  width:min(var(--content-max),calc(100% - max(20px, var(--content-gutter) * 2)));
-  max-width:var(--content-max);
-  margin-inline:auto;
-}
-.landing-shell{
-  padding-inline:0;
-}
-.app-shell{
-  padding-inline:0;
-}
-.topbar,
-.appbar{
-  width:100%;
-  min-width:0;
-}
-.topbar > *,
-.appbar > *,
-.main-nav > *,
-.user-pill,
-.user-pill > *,
-.account-menu,
-.account-menu-head > *,
-.settings-head > *,
-.settings-info > *,
-.settings-rain > *,
-.settings-section-title,
-.settings-section-title > *,
-.theme-option > *,
-.section-head > *,
-.section-head > div,
-.hub-branding,
-.profile-hero > *,
-.profile-actions > *,
-.hero-actions > *,
-.home-stat-line > *,
-.chat-header > *,
-.chat-header-user > *,
-.chat-compose-wrap > *,
-.creator-action > *,
-.tool-row > *,
-.row2 > *,
-.fields > *,
-.friends-add-form > *{
-  min-width:0;
-}
-h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button{
-  max-width:100%;
-  overflow-wrap:break-word;
-  word-break:normal;
-}
-h1,h2,h3,h4,h5,h6,p{
-  text-wrap:pretty;
-}
-button,
-a{
-  max-width:100%;
-}
-img,video,canvas,svg,iframe{
-  max-width:100%;
-  height:auto;
-}
-input,textarea,select{
-  width:100%;
-  max-width:100%;
-  min-width:0;
-}
-.button{
-  max-width:100%;
-  white-space:normal;
-  text-wrap:balance;
-}
-.top-status{
-  max-width:42vw;
-  text-wrap:balance;
-}
-.principles span,
-.home-stat-line,
-.settings-row,
-.preference-row,
-.setting-row,
-.account-setting-row{
-  min-width:0;
-}
-.principles span > *,
-.home-stat-line > *,
-.settings-row > *,
-.preference-row > *,
-.setting-row > *,
-.account-setting-row > *{
-  min-width:0;
-  overflow-wrap:break-word;
-}
-.empty-state,
-.panel,
-.landing-panel,
-.home-info-panel,
-.home-quick-card,
-.experience,
-.discover-card,
-.item-card,
-.achievement,
-.account-card,
-.creator-tools,
-.creator-canvas,
-.studio-card,
-.studio-stage,
-.feature-row,
-.stats,
-.chat-sidebar,
-.chat-panel,
-.game-stage{
-  min-width:0;
-  max-width:100%;
-}
-
-
-/* =========================================================
-   KIIZU HOME / LANDING COMPOSITION
-   ========================================================= */
-.landing-shell{
-  padding-block:18px 58px;
-}
-.topbar{
-  padding-inline:4px;
-}
-.landing-hero{
-  min-height:clamp(560px,72vh,720px);
-  gap:clamp(34px,5vw,70px);
-}
-.landing-hero > div:first-child{
-  min-width:0;
-  max-width:680px;
-}
-.landing-hero h1{
-  max-width:8ch;
-  text-wrap:balance;
-}
-.landing-hero p{
-  max-width:48ch;
-}
-.landing-panel{
-  width:100%;
-  max-width:540px;
-  justify-self:end;
-  padding:clamp(22px,3vw,30px);
-}
-.landing-panel h2{
-  max-width:14ch;
-  text-wrap:balance;
-  margin-right:auto;
-}
-.landing-panel p{
-  max-width:46ch;
-}
-.principles span{
-  align-items:baseline;
-  gap:14px;
-}
-.principles span small{
-  min-width:0;
-  text-align:right;
-}
-.feature-row{
-  width:100%;
-}
-.feature-row > div{
-  min-width:0;
-}
-.hub-hero{
-  min-width:0;
-}
-.hub-branding > p{
-  text-wrap:balance;
-}
-.home-quick-grid{
-  align-items:stretch;
-}
-.home-quick-card{
-  min-height:184px;
-}
-.home-quick-card h3{
-  max-width:15ch;
-  text-wrap:balance;
-}
-.home-quick-card p{
-  max-width:36ch;
-}
-.home-info-panel h2{
-  max-width:18ch;
-  text-wrap:balance;
-}
-
-
-/* =========================================================
-   KIIZU MOBILE APP SHELL
-   Mobile keeps the important navigation instead of hiding it.
+   MOBILE TOP NAV REFINEMENT
+   Keeps the header compact and proportioned on phones.
    ========================================================= */
 @media(max-width:720px){
-  body{
-    padding-bottom:88px;
-  }
-  .app-shell{
-    width:min(calc(100% - 20px),1180px);
-  }
+  body{padding-bottom:20px}
+  .app-shell{width:calc(100% - 20px)}
   .appbar{
     position:sticky;
-    top:8px;
+    top:6px;
     z-index:80;
+    height:58px;
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr) auto;
+    align-items:center;
+    gap:8px;
+    padding:5px 6px;
     margin-bottom:8px;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:16px;
+    background:rgba(8,10,15,.86);
+    box-shadow:0 12px 35px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.05);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
   }
   .appbar .brand{
-    flex:0 0 auto;
+    min-width:0;
+    font-size:16px;
+    padding:0 3px;
   }
   .main-nav{
-    position:fixed;
-    z-index:120;
-    left:10px;
-    right:10px;
-    bottom:10px;
-    display:grid;
-    grid-template-columns:repeat(5,minmax(0,1fr));
-    gap:4px;
-    padding:6px;
-    border:1px solid rgba(255,255,255,.11);
-    border-radius:18px;
-    background:rgba(12,15,21,.88);
-    box-shadow:0 18px 50px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.08);
-    backdrop-filter:blur(22px) saturate(135%);
-    -webkit-backdrop-filter:blur(22px) saturate(135%);
-  }
-  .main-nav a{
+    position:static;
+    left:auto;
+    right:auto;
+    bottom:auto;
+    z-index:auto;
     min-width:0;
-    min-height:50px;
-    padding:7px 3px;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:2px;
+    margin:0;
+    padding:3px;
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:12px;
+    background:rgba(255,255,255,.035);
+    box-shadow:none;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scrollbar-width:none;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+  }
+  .main-nav::-webkit-scrollbar{display:none}
+  .main-nav a{
+    flex:0 0 auto;
+    min-width:58px;
+    min-height:36px;
+    padding:7px 8px;
     display:flex;
     align-items:center;
     justify-content:center;
-    text-align:center;
-    border-radius:12px;
+    border-radius:9px;
     font-size:8px;
-    line-height:1.15;
-    white-space:normal;
-    overflow-wrap:anywhere;
+    line-height:1;
+    white-space:nowrap;
+    overflow-wrap:normal;
   }
-  .main-nav a::before,
-  .main-nav a::after{
-    display:none;
-  }
-  .main-nav a.active{
-    background:linear-gradient(145deg,rgba(128,101,255,.22),rgba(255,255,255,.06));
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+  .main-nav .studio-link{
+    min-width:66px;
+    padding-inline:10px;
   }
   .user-pill{
-    margin-left:auto;
-    flex:0 0 auto;
+    min-width:0;
+    margin-left:0;
   }
-
-  /* Keep mobile sections readable instead of shrinking desktop layouts. */
-  .page-heading{
-    width:100%;
-    max-width:760px;
+  .account-trigger{
+    width:38px;
+    height:38px;
+    min-width:38px;
+    padding:3px;
+    justify-content:center;
+    border-radius:11px;
   }
-  .section-head{
-    display:flex;
-    flex-wrap:wrap;
-  }
-  .section-head > div{
-    flex:1 1 220px;
-  }
-  .section-head > a{
-    flex:0 0 auto;
-  }
-  .home-quick-grid,
-  .item-grid,
-  .discover-grid,
-  .accounts-grid,
-  .achievement-grid{
-    gap:12px;
-  }
-  .home-quick-card,
-  .item-card,
-  .discover-card,
-  .account-card,
-  .achievement{
-    width:100%;
-  }
-  .home-lower-grid{
-    gap:12px;
-  }
-  .home-info-panel{
-    padding:20px;
-  }
-
-  /* Mobile chat: keep the list useful without consuming the whole screen. */
-  .chat-sidebar{
-    max-height:310px;
-    overflow:auto;
-  }
-  .chat-panel{
-    min-height:470px;
-  }
-
-  /* Mobile Studio: tools remain comfortably tappable. */
-  .studio{
-    gap:10px;
-  }
-  .studio-side,
-  .studio-inspector,
-  .studio-card{
-    width:100%;
-  }
-  .tool-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:7px;
-  }
-  .studio-tool{
-    min-height:58px;
-    padding:9px;
-  }
-  .studio-tool span{
-    display:block;
-  }
-  .studio-stage{
-    height:min(68vh,620px);
-    min-height:430px;
-  }
-  .studio-toolbar{
-    flex-wrap:wrap;
-  }
-  .toolbar-group{
-    width:100%;
-  }
-  .toolbar-btn{
-    flex:1 1 auto;
-    min-height:38px;
-  }
-
-  /* Marketplace / detail views use the full safe width. */
-  .clothing-detail-card,
-  .results-card,
-  .settings-card{
-    max-width:calc(100vw - 20px);
-  }
+  .account-avatar{width:30px;height:30px;border-radius:9px}
+  .account-name{display:none}
 }
 @media(max-width:430px){
-  body{
-    padding-bottom:82px;
-  }
-  .main-nav{
-    left:7px;
-    right:7px;
-    bottom:7px;
-    border-radius:16px;
-  }
-  .main-nav a{
-    min-height:46px;
-    font-size:7px;
-  }
   .appbar{
-    top:5px;
+    height:54px;
+    top:4px;
+    gap:6px;
+    padding:4px 5px;
+    border-radius:14px;
   }
-  .hub-brand-name{
-    font-size:clamp(54px,18vw,76px)!important;
-  }
-  .page-heading h1{
-    font-size:clamp(38px,12vw,48px);
-  }
-  .home-quick-card,
-  .item-card,
-  .discover-card{
-    padding:15px;
-  }
-  .studio-stage{
-    height:520px;
-    min-height:390px;
-  }
+  .appbar .brand{font-size:15px}
+  .main-nav a{min-width:54px;min-height:34px;padding:6px 7px;font-size:7px}
+  .main-nav .studio-link{min-width:62px;padding-inline:8px}
+  .account-trigger{width:35px;height:35px;min-width:35px;border-radius:10px}
+  .account-avatar{width:28px;height:28px}
 }
-
-/* Creator hub */
-.creator-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:24px}
-.creator-choice-card{display:block;min-width:0;padding:30px;border:1px solid rgba(255,255,255,.08);border-radius:22px;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));box-shadow:0 20px 60px rgba(0,0,0,.18);transition:transform .25s ease,border-color .25s ease,background .25s ease}
-.creator-choice-card:hover{transform:translateY(-5px);border-color:rgba(255,255,255,.2);background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025))}
-.creator-choice-icon{font-size:48px;line-height:1;margin:30px 0 18px;opacity:.9}.creator-choice-card h2{margin:0 0 10px;font-size:26px}.creator-choice-card p{max-width:520px;color:#9aa1a9;line-height:1.7}.creator-choice-arrow{display:inline-block;margin-top:20px;font-weight:700;font-size:13px}
-@media(max-width:720px){.creator-choice-grid{grid-template-columns:1fr;gap:12px}.creator-choice-card{padding:22px}.creator-choice-icon{margin:22px 0 14px}}
