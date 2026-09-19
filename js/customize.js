@@ -20,6 +20,14 @@ const CATEGORIES=[
 let allItems=[];
 let equippedMap=new Map();
 let activeCategory="all";
+const body={height:100,width:100,head:100,shoulders:100,legs:100};
+const rig=document.querySelector("#avatar-rig");
+const bodyControls={height:document.querySelector("#body-height"),width:document.querySelector("#body-width"),head:document.querySelector("#body-head"),shoulders:document.querySelector("#body-shoulders"),legs:document.querySelector("#body-legs")};
+const bodyValues={height:document.querySelector("#height-value"),width:document.querySelector("#width-value"),head:document.querySelector("#head-value"),shoulders:document.querySelector("#shoulder-value"),legs:document.querySelector("#leg-value")};
+function applyBody(){if(!rig)return;Object.keys(bodyControls).forEach(k=>{body[k]=Number(bodyControls[k]?.value||100);if(bodyValues[k])bodyValues[k].textContent=body[k]+"%";});rig.style.setProperty("--body-height",body.height/100);rig.style.setProperty("--body-width",body.width/100);rig.style.setProperty("--body-head",body.head/100);rig.style.setProperty("--body-shoulders",body.shoulders/100);rig.style.setProperty("--body-legs",body.legs/100);}
+Object.entries(bodyControls).forEach(([k,input])=>input?.addEventListener("input",applyBody));
+document.querySelector("#body-reset")?.addEventListener("click",()=>{Object.values(bodyControls).forEach(x=>{if(x)x.value=100});applyBody();});
+applyBody();
 
 function safe(v){return String(v??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 function typeOf(item){return String(item?.type||"camiseta").toLowerCase();}
