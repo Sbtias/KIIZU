@@ -762,3 +762,559 @@ html[data-theme="light"] .clothing-card .detail-btn:hover{
     width:100%;
   }
 }
+
+
+/* =========================================================
+   KIIZU LIQUID MOTION / NAVIGATION SYSTEM
+   ========================================================= */
+html{
+  scroll-padding-top:92px;
+}
+body{
+  position:relative;
+  isolation:isolate;
+}
+body::after{
+  content:"";
+  position:fixed;
+  inset:-18vh -12vw;
+  z-index:-1;
+  pointer-events:none;
+  background:
+    radial-gradient(38% 34% at 16% 20%,rgba(128,101,255,.10),transparent 70%),
+    radial-gradient(34% 30% at 82% 24%,rgba(184,255,90,.065),transparent 72%),
+    radial-gradient(42% 34% at 70% 90%,rgba(67,217,255,.055),transparent 72%);
+  filter:blur(42px) saturate(1.18);
+  opacity:.75;
+  animation:kiizuLiquidAmbient 18s ease-in-out infinite alternate;
+}
+.topbar,
+.appbar{
+  position:sticky;
+  top:0;
+  z-index:40;
+  min-height:72px;
+  border-bottom:1px solid rgba(255,255,255,.075);
+  background:
+    linear-gradient(180deg,rgba(9,11,16,.92),rgba(7,8,11,.76));
+  backdrop-filter:blur(22px) saturate(135%);
+  -webkit-backdrop-filter:blur(22px) saturate(135%);
+}
+.topbar{
+  position:relative;
+}
+.topbar::before,
+.appbar::before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-1px;
+  height:1px;
+  pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(128,101,255,.52),rgba(184,255,90,.28),rgba(128,101,255,.52),transparent);
+  background-size:220% 100%;
+  opacity:.55;
+  animation:kiizuLiquidLine 7s linear infinite;
+}
+.main-nav{
+  position:relative;
+  isolation:isolate;
+  gap:3px;
+  padding:5px;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:17px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.025));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.07),
+    0 15px 42px rgba(0,0,0,.20);
+  backdrop-filter:blur(16px) saturate(125%);
+  -webkit-backdrop-filter:blur(16px) saturate(125%);
+}
+.main-nav::before{
+  content:"";
+  position:absolute;
+  width:74px;
+  height:74px;
+  left:4%;
+  top:50%;
+  translate:-50% -50%;
+  border-radius:46% 54% 55% 45%;
+  background:radial-gradient(circle,rgba(128,101,255,.20),rgba(128,101,255,.03) 58%,transparent 72%);
+  filter:blur(8px);
+  pointer-events:none;
+  animation:kiizuLiquidOrb 8s ease-in-out infinite;
+}
+.main-nav a{
+  position:relative;
+  z-index:1;
+  overflow:hidden;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:38px;
+  padding:9px 14px;
+  border:1px solid transparent;
+  border-radius:12px;
+  color:#8c95a6;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.01em;
+  transition:
+    color .22s ease,
+    transform .32s cubic-bezier(.2,.75,.2,1),
+    background .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease;
+}
+.main-nav a::before{
+  content:"";
+  position:absolute;
+  inset:-25%;
+  border-radius:48% 52% 58% 42%;
+  background:
+    radial-gradient(circle at 30% 35%,rgba(255,255,255,.16),transparent 28%),
+    radial-gradient(circle at 65% 65%,rgba(128,101,255,.20),transparent 44%);
+  transform:scale(.25) rotate(-14deg);
+  opacity:0;
+  filter:blur(9px);
+  transition:transform .55s cubic-bezier(.16,.84,.2,1),opacity .32s ease;
+  pointer-events:none;
+}
+.main-nav a::after{
+  content:"";
+  position:absolute;
+  top:-20%;
+  left:-45%;
+  width:30%;
+  height:140%;
+  border-radius:999px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent);
+  transform:skewX(-18deg);
+  opacity:0;
+  pointer-events:none;
+}
+.main-nav a:hover{
+  color:#fff;
+  transform:translateY(-1px);
+  background:rgba(255,255,255,.045);
+  border-color:rgba(255,255,255,.075);
+}
+.main-nav a:hover::before,
+.main-nav .active::before{
+  opacity:1;
+  transform:scale(1) rotate(10deg);
+}
+.main-nav a:hover::after{
+  opacity:1;
+  animation:kiizuLiquidSheen .8s ease forwards;
+}
+.main-nav .active{
+  color:#fff;
+  border-color:rgba(255,255,255,.11);
+  background:
+    linear-gradient(135deg,rgba(128,101,255,.23),rgba(255,255,255,.065));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.10),
+    0 7px 24px rgba(83,64,190,.18);
+}
+.main-nav .active::after{
+  left:-50%;
+  opacity:.7;
+  animation:kiizuLiquidSheen 3.8s ease-in-out infinite;
+}
+.user-pill{
+  position:relative;
+  margin-left:auto;
+  padding:3px;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:17px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.025));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.07),
+    0 10px 30px rgba(0,0,0,.20);
+  backdrop-filter:blur(16px) saturate(125%);
+  -webkit-backdrop-filter:blur(16px) saturate(125%);
+}
+.account-trigger{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  min-height:44px;
+  padding:5px 9px 5px 6px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:13px;
+  background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.025));
+  color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+  transition:
+    transform .28s cubic-bezier(.2,.75,.2,1),
+    border-color .25s ease,
+    background .3s ease,
+    box-shadow .3s ease;
+}
+.account-trigger::before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  width:120px;
+  height:80px;
+  right:-48px;
+  top:50%;
+  translate:0 -50%;
+  border-radius:42% 58% 48% 52%;
+  background:radial-gradient(circle,rgba(128,101,255,.27),rgba(128,101,255,.035) 62%,transparent 74%);
+  filter:blur(9px);
+  animation:kiizuLiquidOrb 7s ease-in-out -2s infinite;
+}
+.account-trigger::after{
+  content:"";
+  position:absolute;
+  z-index:1;
+  top:-24%;
+  left:-55%;
+  width:28%;
+  height:148%;
+  border-radius:999px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent);
+  transform:skewX(-18deg);
+  pointer-events:none;
+}
+.account-trigger:hover{
+  transform:translateY(-1px);
+  border-color:rgba(255,255,255,.15);
+  background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.04));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.10),
+    0 12px 34px rgba(0,0,0,.23);
+}
+.account-trigger:hover::after{
+  animation:kiizuLiquidSheen .9s ease forwards;
+}
+.account-trigger:focus-visible,
+.main-nav a:focus-visible{
+  outline:none;
+  box-shadow:
+    0 0 0 3px rgba(128,101,255,.17),
+    0 12px 30px rgba(0,0,0,.18);
+}
+.account-avatar{
+  position:relative;
+  z-index:2;
+  width:33px;
+  height:33px;
+  border-radius:11px;
+  border:1px solid rgba(255,255,255,.11);
+  background:
+    linear-gradient(145deg,#2a3040,#151922);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10);
+  object-fit:cover;
+}
+.account-name{
+  position:relative;
+  z-index:2;
+  max-width:135px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.01em;
+}
+.account-trigger > span:last-child{
+  position:relative;
+  z-index:2;
+  color:#737d90;
+  font-size:12px;
+  transform:translateY(-1px);
+  transition:transform .3s ease,color .25s ease;
+}
+.user-pill.is-open .account-trigger{
+  border-color:rgba(128,101,255,.34);
+  background:linear-gradient(145deg,rgba(128,101,255,.16),rgba(255,255,255,.045));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.10),
+    0 15px 42px rgba(53,40,135,.18);
+}
+.user-pill.is-open .account-trigger > span:last-child{
+  transform:rotate(180deg) translateY(1px);
+  color:#fff;
+}
+.account-menu{
+  top:calc(100% + 9px);
+  width:270px;
+  padding:8px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:19px;
+  background:
+    linear-gradient(145deg,rgba(20,24,33,.97),rgba(10,12,18,.96));
+  box-shadow:
+    0 30px 90px rgba(0,0,0,.48),
+    inset 0 1px 0 rgba(255,255,255,.07);
+  backdrop-filter:blur(24px) saturate(135%);
+  -webkit-backdrop-filter:blur(24px) saturate(135%);
+  transform:translateY(-8px) scale(.97);
+  transform-origin:top right;
+  transition:
+    opacity .24s ease,
+    transform .42s cubic-bezier(.16,.9,.2,1);
+}
+.account-menu::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border-radius:inherit;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 84% 4%,rgba(128,101,255,.18),transparent 35%),
+    radial-gradient(circle at 14% 95%,rgba(184,255,90,.07),transparent 34%);
+  opacity:.8;
+}
+.user-pill.is-open .account-menu{
+  transform:translateY(0) scale(1);
+}
+.account-menu-head{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  margin:2px 2px 8px;
+  padding:11px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  background:rgba(255,255,255,.035);
+  overflow:hidden;
+}
+.account-menu-head::after{
+  content:"";
+  position:absolute;
+  width:90px;
+  height:90px;
+  right:-32px;
+  top:-40px;
+  border-radius:52% 48% 61% 39%;
+  background:radial-gradient(circle,rgba(128,101,255,.18),transparent 70%);
+  filter:blur(8px);
+  animation:kiizuLiquidOrb 7s ease-in-out infinite;
+}
+.account-menu-head .account-avatar{
+  width:39px;
+  height:39px;
+  border-radius:13px;
+}
+.account-menu-head strong,
+.account-menu-head small{
+  position:relative;
+  z-index:1;
+  display:block;
+}
+.account-menu-head strong{font-size:12px}
+.account-menu-head small{margin-top:3px;color:#80899a;font-size:9px}
+.account-menu a,
+.account-menu button{
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  min-height:41px;
+  padding:10px 11px;
+  border:1px solid transparent;
+  border-radius:11px;
+  color:#919aab;
+  font-size:11px;
+  transition:
+    color .2s ease,
+    background .24s ease,
+    border-color .24s ease,
+    transform .25s ease;
+}
+.account-menu a::after,
+.account-menu button::after{
+  content:"";
+  position:absolute;
+  inset:0 auto 0 -40%;
+  width:28%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.10),transparent);
+  transform:skewX(-18deg);
+  opacity:0;
+}
+.account-menu a:hover,
+.account-menu button:hover{
+  color:#fff;
+  transform:translateX(2px);
+  background:linear-gradient(90deg,rgba(128,101,255,.10),rgba(255,255,255,.03));
+  border-color:rgba(255,255,255,.06);
+}
+.account-menu a:hover::after,
+.account-menu button:hover::after{
+  opacity:1;
+  animation:kiizuLiquidSheen .75s ease forwards;
+}
+.button,
+.chip,
+.home-quick-card,
+.discover-card,
+.item-card,
+.experience,
+.creator-action,
+.theme-option,
+.chat-friend,
+.settings-section,
+.results-stats>div{
+  position:relative;
+  overflow:hidden;
+}
+.button::after,
+.chip::after,
+.home-quick-card::after,
+.discover-card::after,
+.item-card::after,
+.experience::after,
+.creator-action::after,
+.theme-option::after,
+.chat-friend::after,
+.settings-section::after,
+.results-stats>div::after{
+  content:"";
+  position:absolute;
+  top:-45%;
+  left:-34%;
+  width:26%;
+  height:190%;
+  border-radius:999px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.085),transparent);
+  transform:skewX(-18deg);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s ease;
+}
+.button:hover::after,
+.chip:hover::after,
+.home-quick-card:hover::after,
+.discover-card:hover::after,
+.item-card:hover::after,
+.experience:hover::after,
+.creator-action:hover::after,
+.theme-option:hover::after,
+.chat-friend:hover::after,
+.settings-section:hover::after,
+.results-stats>div:hover::after{
+  opacity:1;
+  animation:kiizuLiquidSheen 1.05s ease forwards;
+}
+.button{
+  will-change:transform;
+  transition:
+    transform .34s cubic-bezier(.18,.82,.18,1),
+    box-shadow .3s ease,
+    background .3s ease,
+    border-color .3s ease;
+}
+.button:hover{
+  transform:translateY(-2px) scale(1.008);
+}
+.button:active,
+.main-nav a:active,
+.account-trigger:active{
+  transform:translateY(1px) scale(.985);
+}
+.chip{
+  transition:
+    transform .28s cubic-bezier(.18,.82,.18,1),
+    background .28s ease,
+    color .28s ease,
+    border-color .28s ease;
+}
+.chip:hover{transform:translateY(-1px)}
+.home-quick-card,
+.discover-card,
+.item-card,
+.experience,
+.creator-action,
+.theme-option,
+.chat-friend{
+  will-change:transform;
+  transition:
+    transform .45s cubic-bezier(.16,.82,.2,1),
+    border-color .35s ease,
+    background .35s ease,
+    box-shadow .4s ease;
+}
+.home-quick-card:hover,
+.discover-card:hover,
+.item-card:hover,
+.experience:hover,
+.creator-action:hover,
+.theme-option:hover{
+  box-shadow:0 18px 46px rgba(0,0,0,.16);
+}
+.motion-item{
+  opacity:0;
+  transform:translateY(14px) scale(.992);
+  filter:blur(2px);
+}
+.motion-item.is-visible{
+  opacity:1;
+  transform:none;
+  filter:none;
+  transition:
+    opacity .55s ease,
+    transform .65s cubic-bezier(.16,.82,.2,1),
+    filter .6s ease;
+}
+@keyframes kiizuLiquidAmbient{
+  0%{transform:translate3d(-2%,0,0) scale(1)}
+  45%{transform:translate3d(3%,2%,0) scale(1.04)}
+  100%{transform:translate3d(-2%,-2%,0) scale(1.08)}
+}
+@keyframes kiizuLiquidLine{
+  0%{background-position:0 50%}
+  100%{background-position:220% 50%}
+}
+@keyframes kiizuLiquidOrb{
+  0%,100%{border-radius:46% 54% 55% 45%;transform:translate3d(-5px,0,0) rotate(-5deg) scale(.96)}
+  33%{border-radius:61% 39% 44% 56%;transform:translate3d(8px,-4px,0) rotate(8deg) scale(1.03)}
+  66%{border-radius:39% 61% 57% 43%;transform:translate3d(2px,6px,0) rotate(-3deg) scale(1.08)}
+}
+@keyframes kiizuLiquidSheen{
+  0%{left:-44%;opacity:0}
+  16%{opacity:.8}
+  100%{left:130%;opacity:0}
+}
+@media(max-width:720px){
+  .topbar,
+  .appbar{
+    min-height:60px;
+    padding-top:env(safe-area-inset-top,0);
+  }
+  .main-nav{
+    overflow:auto;
+    scrollbar-width:none;
+  }
+  .main-nav::-webkit-scrollbar{display:none}
+  .account-trigger{min-height:42px}
+  .account-menu{
+    width:min(280px,calc(100vw - 24px));
+    right:0;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  body::after,
+  .topbar::before,
+  .appbar::before,
+  .main-nav::before,
+  .main-nav a::after,
+  .account-trigger::after,
+  .account-menu-head::after,
+  .button::after,
+  .chip::after,
+  .home-quick-card::after,
+  .discover-card::after,
+  .item-card::after,
+  .experience::after,
+  .creator-action::after,
+  .theme-option::after,
+  .chat-friend::after,
+  .settings-section::after,
+  .results-stats>div::after{animation:none!important}
+}
