@@ -74,3 +74,10 @@ html[data-theme="light"] .creator-hero{background:radial-gradient(520px 220px at
 
 @media(max-width:900px){.clothing-editor{grid-template-columns:1fr}.clothing-sidebar{order:2}.clothing-stage{order:1}.clothing-canvas-wrap{min-height:500px}}
 @media(max-width:560px){.creator-hero{padding:22px 18px;display:block}.creator-hero h1{font-size:31px}.creator-hero-badge{display:none}.clothing-sidebar,.clothing-stage,.my-clothes-panel{padding:15px}.tool-grid{grid-template-columns:repeat(3,1fr)}.creator-tool{min-height:52px}.clothing-canvas-wrap{min-height:350px;border-radius:16px}.stage-bottom{align-items:flex-start}.stage-bottom>span{max-width:190px}.creator-save-row{grid-template-columns:1fr}.my-clothing-row{align-items:flex-start}.my-clothing-row>.button{flex:none}}
+
+
+.color-swatches button.is-selected{outline:2px solid rgba(169,154,255,.95);outline-offset:2px;transform:translateY(-2px);box-shadow:0 0 0 4px rgba(124,92,255,.12),0 7px 18px rgba(0,0,0,.22)}
+.creator-field input[type=color]{appearance:none;-webkit-appearance:none;overflow:hidden;background:transparent;cursor:pointer}
+.creator-field input[type=color]::-webkit-color-swatch-wrapper{padding:0}
+.creator-field input[type=color]::-webkit-color-swatch{border:0;border-radius:7px}
+.creator-field input[type=color]::-moz-color-swatch{border:0;border-radius:7px}
