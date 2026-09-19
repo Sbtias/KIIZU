@@ -195,7 +195,7 @@ function move(e) {
     artCtx.strokeStyle="rgba(0,0,0,1)";
   } else {
     artCtx.globalCompositeOperation="source-over";
-    artCtx.strokeStyle=activeColor;
+    artCtx.strokeStyle=activeBrushColor;
   }
   artCtx.lineTo(p.x,p.y);
   artCtx.stroke();
