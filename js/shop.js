@@ -80,11 +80,11 @@ async function load() {
     const [{ data: allLikes, error: likesError }, { data: mineLikes, error: mineLikesError }, { data: myClothing, error: myClothingError }] = await Promise.all([
       supabase.from("clothing_likes").select("clothing_id"),
       supabase.from("clothing_likes").select("clothing_id").eq("user_id", state.session.user.id),
-      supabase.from("clothing_purchases").select("clothing_id").eq("user_id", state.session.user.id)
+      supabase.from("clothing_purchases").select("clothing_id").eq("buyer_id", state.session.user.id)
     ]);
     if (likesError) throw likesError;
     if (mineLikesError) throw mineLikesError;
-    if (myClothingError) throw myClothingError;
+    if (myClothingError) console.warn("No se pudieron marcar las compras de ropa:", myClothingError);
 
     for (const row of allLikes || []) {
       const current = likes.get(row.clothing_id) || { count: 0, mine: false };
