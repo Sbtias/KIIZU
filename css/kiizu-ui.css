@@ -2063,3 +2063,21 @@ html[data-theme="light"] .public-profile-photo{
 .friend-avatar img{display:block;width:100%;height:100%;max-width:none;object-fit:cover;border-radius:inherit}
 html[data-theme="light"] .friend-avatar{border-color:rgba(22,28,40,.08);background:linear-gradient(145deg,#f4f6f9,#e7ebf0);color:#202631;box-shadow:0 8px 24px rgba(35,43,60,.08)}
 @media(max-width:560px){.friend-avatar{width:44px;height:44px;min-width:44px;border-radius:13px}}
+
+
+/* FRIENDS OPTIONS MENU */
+.friend-profile-head{position:relative}
+.friend-menu-wrap{position:relative;margin-left:auto;align-self:flex-start}
+.friend-more{width:34px;height:34px;padding:0;border:1px solid rgba(255,255,255,.08);border-radius:10px;background:rgba(255,255,255,.035);color:#8e96a6;font-weight:800;letter-spacing:2px;cursor:pointer}
+.friend-more:hover,.friend-more[aria-expanded="true"]{color:#fff;background:rgba(255,255,255,.07);border-color:rgba(128,101,255,.25)}
+.friend-menu{position:absolute;right:0;top:calc(100% + 7px);z-index:50;width:190px;padding:6px;border:1px solid rgba(255,255,255,.10);border-radius:13px;background:#11141b;box-shadow:0 18px 45px rgba(0,0,0,.45)}
+.friend-menu[hidden]{display:none}
+.friend-menu a,.friend-menu button{display:block;width:100%;padding:10px 11px;border:0;border-radius:8px;background:transparent;color:#c5cad4;text-align:left;font:inherit;font-size:11px;text-decoration:none;cursor:pointer}
+.friend-menu a:hover,.friend-menu button:hover{background:rgba(255,255,255,.06);color:#fff}
+.friend-menu .remove-friend,.friend-menu .cancel-request{color:#ff7887}
+html[data-theme="light"] .friend-more{background:#1b223006;border-color:#1b223012;color:#687181}
+html[data-theme="light"] .friend-more:hover,html[data-theme="light"] .friend-more[aria-expanded="true"]{background:#1b22300c;color:#202631;border-color:#6652df30}
+html[data-theme="light"] .friend-menu{background:#fff;border-color:#1b223016;box-shadow:0 18px 45px #28344a1c}
+html[data-theme="light"] .friend-menu a,html[data-theme="light"] .friend-menu button{color:#4e5868}
+html[data-theme="light"] .friend-menu a:hover,html[data-theme="light"] .friend-menu button:hover{background:#1b223008;color:#202631}
+@media(max-width:560px){.friend-more{width:32px;height:32px}.friend-menu{width:185px}}
