@@ -868,3 +868,28 @@ input,textarea,select{
 html[data-theme="light"] .clothing-card .clothing-preview{background-color:#f3f4f7}html[data-theme="light"] .clothing-detail-modal{background:rgba(20,25,34,.38)}html[data-theme="light"] .clothing-detail-card{background:linear-gradient(145deg,#fff,#f5f6f9);border-color:rgba(20,28,40,.09);box-shadow:0 35px 100px rgba(35,43,60,.2)}html[data-theme="light"] .clothing-detail-close{background:rgba(20,28,40,.045);border-color:rgba(20,28,40,.1);color:#202631}html[data-theme="light"] .clothing-detail-preview{background-color:#f3f4f7;border-color:rgba(20,28,40,.08)}html[data-theme="light"] .clothing-detail-description{color:#687386}html[data-theme="light"] .clothing-detail-stats span{background:rgba(20,28,40,.025);border-color:rgba(20,28,40,.08)}html[data-theme="light"] .clothing-comments{border-color:rgba(20,28,40,.08)}html[data-theme="light"] .clothing-comment{background:rgba(20,28,40,.025);border-color:rgba(20,28,40,.08)}html[data-theme="light"] .clothing-comment-avatar{background:#eceef3;color:#6652df}html[data-theme="light"] .clothing-comment-form textarea{background:#fff;color:#202631;border-color:rgba(20,28,40,.1)}html[data-theme="light"] .clothing-comments-empty{border-color:rgba(20,28,40,.1)}
 @media(max-width:700px){.clothing-detail-modal{padding:10px}.clothing-detail-card{padding:16px;border-radius:20px;max-height:94vh}.clothing-detail-layout{grid-template-columns:1fr;gap:16px}.clothing-detail-preview{min-height:240px;background-size:205px 205px}.clothing-detail-main h2{font-size:25px}}
 @media(max-width:500px){.clothing-card .tool-row{grid-template-columns:1fr 46px 1fr}.clothing-card .tool-row .button{font-size:9px;padding-inline:6px}.clothing-detail-actions{display:grid;grid-template-columns:1fr 1fr}.clothing-detail-actions .button{min-width:0}.clothing-comment-form-bottom{align-items:flex-start;flex-direction:column}}
+
+/* MARKETPLACE COMMENT PROFILES */
+.clothing-comment-avatar{
+  width:38px;height:38px;min-width:38px;flex:none;display:grid;place-items:center;
+  overflow:hidden;border-radius:12px;background:#202632;color:#b5abff;
+  border:1px solid rgba(255,255,255,.08);font-size:12px;font-weight:800
+}
+.clothing-comment-avatar img{display:block;width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.clothing-comment-author{display:flex!important;align-items:flex-start;justify-content:space-between;gap:10px}
+.clothing-comment-author>div{display:flex;align-items:center;gap:9px;min-width:0;flex-wrap:wrap}
+.clothing-comment-author strong{font-size:11px;color:#eef1f6}
+.comment-profile-link{
+  display:inline-flex;align-items:center;padding:4px 7px;border:1px solid rgba(128,101,255,.22);
+  border-radius:7px;background:rgba(128,101,255,.08);color:#b9adff;font-size:9px;font-weight:700;
+  transition:.18s
+}
+.comment-profile-link:hover{background:rgba(128,101,255,.16);border-color:rgba(128,101,255,.38);transform:translateY(-1px)}
+html[data-theme="light"] .clothing-comment-avatar{background:#eceef3;color:#6652df;border-color:rgba(20,28,40,.08)}
+html[data-theme="light"] .clothing-comment-author strong{color:#202631}
+html[data-theme="light"] .comment-profile-link{color:#5d4bc8;background:rgba(93,75,200,.07);border-color:rgba(93,75,200,.16)}
+@media(max-width:500px){
+  .clothing-comment-author{align-items:flex-start}
+  .clothing-comment-author>div{gap:6px}
+  .comment-profile-link{font-size:8px;padding:3px 6px}
+}
