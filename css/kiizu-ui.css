@@ -1452,3 +1452,61 @@ body::after{
   width:min(460px,100%);
   max-width:100%;
 }
+
+
+/* Final responsive cleanup */
+@media(max-width:620px){
+  .settings-section{
+    padding:18px 0;
+  }
+  .settings-info,
+  .settings-rain{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:center;
+    gap:14px;
+  }
+  .settings-rain-copy,
+  .settings-info > div{
+    min-width:0;
+  }
+  .settings-toggle{
+    justify-self:end;
+  }
+  .rain-volume{
+    grid-template-columns:auto minmax(0,1fr) auto;
+  }
+  .theme-grid{
+    grid-template-columns:1fr;
+  }
+  .settings-head{
+    align-items:flex-start;
+  }
+  .settings-close{
+    flex:none;
+  }
+}
+@media(max-width:430px){
+  .settings-modal{
+    padding:8px;
+  }
+  .settings-card{
+    width:calc(100vw - 16px);
+    max-height:calc(100dvh - 16px);
+    padding:17px;
+    border-radius:20px;
+  }
+  .settings-head{
+    gap:12px;
+    padding-bottom:18px;
+  }
+  .settings-head h2{
+    font-size:26px;
+  }
+  .settings-section-title span,
+  .settings-info span,
+  .settings-rain-copy span{
+    font-size:11px;
+    line-height:1.55;
+  }
+}
