@@ -774,11 +774,15 @@ body{
   position:relative;
   isolation:isolate;
 }
+body > main{
+  position:relative;
+  z-index:1;
+}
 body::after{
   content:"";
   position:fixed;
   inset:-18vh -12vw;
-  z-index:-1;
+  z-index:0;
   pointer-events:none;
   background:
     radial-gradient(38% 34% at 16% 20%,rgba(128,101,255,.10),transparent 70%),
