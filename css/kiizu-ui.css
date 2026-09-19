@@ -637,3 +637,79 @@ html[data-theme="aurora"] .clothing-detail-card{
   .clothing-comments-list{max-height:220px}
   .clothing-comment-form-bottom{align-items:flex-start;flex-direction:column}
 }
+
+
+/* Marketplace card actions + detail CTA */
+.clothing-card .tool-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto auto;
+  gap:8px;
+  margin-top:14px;
+}
+.clothing-card .detail-btn{
+  min-width:0;
+  border-color:#ffffff18;
+  background:linear-gradient(135deg,#ffffff0a,#ffffff04);
+  color:var(--text);
+  box-shadow:none;
+}
+.clothing-card .detail-btn:hover{
+  transform:translateY(-1px);
+  border-color:#8b7dff55;
+  background:linear-gradient(135deg,#8b7dff18,#ffffff08);
+}
+.clothing-card .like-btn{
+  width:42px;
+  padding-left:0;
+  padding-right:0;
+  font-size:14px;
+}
+.clothing-card .buy-btn{
+  min-width:92px;
+}
+.clothing-card .tool-row .button{
+  min-height:38px;
+  border-radius:11px;
+}
+.clothing-detail-actions .button{
+  min-height:44px;
+  padding:11px 16px;
+  border-radius:12px;
+}
+.clothing-detail-actions .like-detail-btn{
+  background:linear-gradient(135deg,#8b7dff,#6d5be8);
+  border-color:#8b7dff88;
+  box-shadow:0 12px 30px #6d5be82a;
+}
+.clothing-detail-actions .like-detail-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 16px 38px #6d5be83a;
+}
+.clothing-detail-actions .buy-detail-btn{
+  min-width:110px;
+}
+.clothing-detail-card::-webkit-scrollbar,
+.clothing-comments-list::-webkit-scrollbar{width:6px}
+.clothing-detail-card::-webkit-scrollbar-thumb,
+.clothing-comments-list::-webkit-scrollbar-thumb{
+  background:#ffffff18;
+  border-radius:999px;
+}
+html[data-theme="light"] .clothing-card .detail-btn{
+  background:#00000003;
+  border-color:#00000010;
+  color:#171b23;
+}
+html[data-theme="light"] .clothing-card .detail-btn:hover{
+  border-color:#6652df55;
+  background:#6652df0b;
+}
+@media(max-width:520px){
+  .clothing-card .tool-row{
+    grid-template-columns:1fr 42px;
+  }
+  .clothing-card .detail-btn{grid-column:1}
+  .clothing-card .buy-btn{grid-column:1}
+  .clothing-card .like-btn{grid-column:2;grid-row:1}
+  .clothing-card .buy-btn{grid-row:2}
+}
