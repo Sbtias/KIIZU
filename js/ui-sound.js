@@ -57,7 +57,6 @@
   };
 
   const rainCSS =
-  const rainCSS =
     ".kiizu-rain{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden;background:transparent;isolation:isolate}" +
     ".kiizu-rain::after{content:\"\";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 18% 12%,rgba(220,235,248,.035),transparent 32%),radial-gradient(circle at 82% 72%,rgba(170,205,232,.025),transparent 34%);box-shadow:inset 0 0 120px rgba(0,0,0,.10)}" +
     ".kiizu-rain-drop{position:absolute;top:-12vh;width:1.2px;height:30px;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(216,232,245,.52) 30%,rgba(238,247,253,.82) 68%,rgba(255,255,255,.08));box-shadow:0 0 7px rgba(210,232,248,.16);animation:kiizuRainDrop linear infinite;will-change:transform,opacity;transform:rotate(10deg)}" +
@@ -95,9 +94,11 @@
       const drop = document.createElement("i");
       drop.className = "kiizu-rain-drop";
       drop.style.left = (Math.random() * 110 - 5) + "%";
-      drop.style.animationDuration = (3.1 + Math.random() * 3.8) + "s";
+      drop.style.height = (20 + Math.random() * 28).toFixed(1) + "px";
+      drop.style.width = (0.9 + Math.random() * 0.8).toFixed(1) + "px";
+      drop.style.animationDuration = (3.8 + Math.random() * 4.4) + "s";
       drop.style.animationDelay = (-Math.random() * 6.5) + "s";
-      drop.style.opacity = (0.18 + Math.random() * 0.45).toFixed(2);
+      drop.style.opacity = (0.42 + Math.random() * 0.35).toFixed(2);
       el.appendChild(drop);
     }
 
