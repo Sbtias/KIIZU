@@ -1,7 +1,7 @@
-/* KIIZU visual system - organized reference layout. Visual-only layer. */
+/* KIIZU visual system - dark edition. Layout preserved, palette restored. */
 :root{
-  --k-bg:#f5f5f2;--k-surface:#ffffff;--k-surface-2:#eeeeea;--k-line:#deded8;
-  --k-text:#161615;--k-muted:#777772;--k-soft:#a2a29c;--k-dark:#1b1b1a;
+  --k-bg:#070809;--k-surface:#101214;--k-surface-2:#15181b;--k-line:#292d32;
+  --k-text:#f2f3f4;--k-muted:#949aa3;--k-soft:#686f78;--k-dark:#e6e8eb;
   --k-max:1120px;--k-radius:10px;
 }
 html{background:var(--k-bg)!important}
@@ -24,12 +24,12 @@ button,input,textarea,select{font:inherit}
 .brand{font:700 19px/1 "Space Grotesk",sans-serif!important;letter-spacing:-.08em!important}
 .main-nav{display:flex!important;justify-content:center!important;align-items:center!important;gap:4px!important}
 .main-nav a{
-  padding:8px 10px!important;border-radius:5px!important;color:#8a8a85!important;
+  padding:8px 10px!important;border-radius:5px!important;color:#949aa3!important;
   font-size:11px!important;font-weight:600!important;letter-spacing:.01em!important
 }
 .main-nav a:hover{color:var(--k-text)!important;background:transparent!important}
-.main-nav a.active{color:var(--k-text)!important;background:#e5e5e0!important}
-.top-status{font-size:9px!important;letter-spacing:.17em!important;color:#999994!important}
+.main-nav a.active{color:var(--k-text)!important;background:#1b1e22!important}
+.top-status{font-size:9px!important;letter-spacing:.17em!important;color:#949aa3!important}
 .user-pill{margin-left:auto!important}
 .account-trigger{border:0!important;background:transparent!important;color:var(--k-text)!important;padding:5px!important;border-radius:7px!important}
 .account-trigger:hover{background:#e8e8e3!important}
@@ -89,7 +89,7 @@ input:focus,textarea:focus,select:focus{border-color:#8a8a84!important;box-shado
   border:1px solid var(--k-line)!important;background:var(--k-line)!important;border-radius:var(--k-radius)!important;overflow:hidden!important
 }
 .feature-row>div{min-height:140px!important;padding:22px!important;background:#fff!important}
-.feature-row strong{font:700 9px "Space Grotesk"!important;color:#999994!important}
+.feature-row strong{font:700 9px "Space Grotesk"!important;color:#949aa3!important}
 .feature-row h3{font-size:16px!important;letter-spacing:-.035em!important;margin:13px 0 7px!important}
 .feature-row p{font-size:10px!important;line-height:1.55!important;color:var(--k-muted)!important;margin:0!important}
 
@@ -126,7 +126,7 @@ input:focus,textarea:focus,select:focus{border-color:#8a8a84!important;box-shado
 .home-info-panel{padding:26px!important;background:#fff!important;border:0!important;border-radius:0!important;box-shadow:none!important}
 .home-info-panel h2{font:700 28px/1 "Space Grotesk",sans-serif!important;letter-spacing:-.07em!important;margin:11px 0!important}
 .home-info-panel p{font-size:11px!important;line-height:1.7!important;color:var(--k-muted)!important;max-width:520px!important}
-.home-info-panel--compact{background:#fafaf7!important}
+.home-info-panel--compact{background:#101214!important}
 .home-stat-line{display:flex!important;justify-content:space-between!important;gap:12px!important;padding:13px 0!important;border-bottom:1px solid var(--k-line)!important;font-size:10px!important;color:#777!important}
 .home-stat-line strong{font-size:16px!important;color:var(--k-text)!important}
 
@@ -186,7 +186,7 @@ input:focus,textarea:focus,select:focus{border-color:#8a8a84!important;box-shado
 .studio-card,.studio-toolbar,.actions{background:#fff!important;border:0!important;border-radius:0!important;box-shadow:none!important}
 .chat-layout{overflow:hidden!important;background:var(--k-line)!important;gap:1px!important}
 .chat-sidebar,.chat-panel{background:#fff!important;border:0!important;border-radius:0!important;box-shadow:none!important}
-.chat-sidebar{background:#fafaf7!important}
+.chat-sidebar{background:#101214!important}
 
 /* Auth */
 .auth{background:var(--k-bg)!important}
