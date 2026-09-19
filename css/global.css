@@ -893,3 +893,42 @@ html[data-theme="light"] .comment-profile-link{color:#5d4bc8;background:rgba(93,
   .clothing-comment-author>div{gap:6px}
   .comment-profile-link{font-size:8px;padding:3px 6px}
 }
+
+/* GLOBAL AVATAR SYSTEM: profile photos are always compact and round */
+.account-avatar,
+.friend-avatar,
+.public-profile-photo,
+.public-profile-photo img,
+.clothing-comment-avatar,
+.clothing-comment-avatar img,
+.profile-avatar,
+.profile-photo,
+.user-avatar,
+.avatar,
+.avatar img{
+  border-radius:50%!important;
+}
+.public-profile-photo{
+  width:112px!important;
+  height:112px!important;
+  min-width:112px;
+  min-height:112px;
+  overflow:hidden!important;
+  display:grid!important;
+  place-items:center;
+  margin-inline:auto;
+}
+.public-profile-photo img{
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  object-fit:cover!important;
+  display:block;
+}
+.friend-avatar{width:48px!important;height:48px!important;min-width:48px!important}
+.friend-avatar img{width:100%!important;height:100%!important;object-fit:cover!important}
+.clothing-comment-avatar{border-radius:50%!important}
+.clothing-comment-avatar img{border-radius:50%!important}
+@media(max-width:560px){
+  .public-profile-photo{width:88px!important;height:88px!important;min-width:88px;min-height:88px}
+}
