@@ -59,7 +59,7 @@
   const rainCSS =
     ".kiizu-rain{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden;background:transparent;isolation:isolate}" +
     ".kiizu-rain::after{content:\"\";position:absolute;inset:0;background:radial-gradient(circle at 20% 20%,rgba(255,255,255,.025),transparent 32%),radial-gradient(circle at 80% 70%,rgba(180,210,235,.018),transparent 35%);box-shadow:inset 0 0 120px rgba(0,0,0,.12);}" +
-    ".kiizu-rain-drop{position:absolute;top:-6vh;width:3px;height:3px;border-radius:50%;background:rgba(235,243,250,.52);box-shadow:0 0 9px rgba(220,235,245,.17);animation:kiizuRainDot linear infinite;will-change:transform,opacity}" +
+    ".kiizu-rain-drop{position:absolute;top:-8vh;width:1px;height:28px;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(224,236,247,.40) 38%,rgba(238,246,252,.58) 72%,rgba(255,255,255,.04));box-shadow:0 0 5px rgba(220,235,245,.08);animation:kiizuRainDrop linear infinite;will-change:transform,opacity;transform:rotate(12deg)}" +
     ".kiizu-glass-bead{position:absolute;width:clamp(18px,2.3vw,34px);height:clamp(24px,3.5vw,48px);border-radius:48% 52% 55% 45%;background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.25) 0 4%,rgba(255,255,255,.07) 8%,transparent 24%),radial-gradient(ellipse at 52% 58%,rgba(190,215,235,.045),transparent 68%);border:1px solid rgba(225,238,248,.09);box-shadow:inset 3px 3px 8px rgba(255,255,255,.06),inset -4px -5px 9px rgba(0,0,0,.12);animation:kiizuGlassPulse 4.6s ease-in-out infinite}" +
     ".kiizu-glass-bead::before{content:\"\";position:absolute;left:22%;top:13%;width:26%;height:17%;border-radius:50%;background:rgba(255,255,255,.2);filter:blur(1px);transform:rotate(-20deg)}" +
     "@keyframes kiizuRainDot{0%{transform:translate3d(0,-8vh,0);opacity:0}12%{opacity:.7}82%{opacity:.55}100%{transform:translate3d(5vw,108vh,0);opacity:0}}" +
@@ -67,7 +67,7 @@
     ".settings-rain{display:flex;align-items:center;justify-content:space-between;gap:18px}.settings-rain-copy strong,.settings-rain-copy span{display:block}.settings-rain-copy span{margin-top:4px;color:var(--muted);font-size:9px}" +
     ".settings-toggle{position:relative;width:44px;height:24px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.055);cursor:pointer;padding:0;flex:none}.settings-toggle i{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#777f87;transition:transform .2s,background .2s}.settings-toggle.is-on i{transform:translateX(20px);background:#e0e4e8}" +
     ".rain-volume{margin-top:13px;display:flex;align-items:center;gap:10px;color:#737b84;font-size:9px}.rain-volume input{flex:1;accent-color:#c9ced3}.rain-volume b{min-width:32px;text-align:right;color:#aeb4bb;font-size:8px}" +
-    "@media(prefers-reduced-motion:reduce){.kiizu-rain-drop,.kiizu-glass-bead{animation:none}.kiizu-rain-drop{display:none}}";
+    "@media(prefers-reduced-motion:reduce){.kiizu-rain-drop{animation:none;display:none}}";
 
   const injectRainVisual = () => {
     let el = document.querySelector(".kiizu-rain");
@@ -91,7 +91,7 @@
     el.setAttribute("aria-hidden", "true");
 
     const compact = window.matchMedia?.("(max-width:700px)").matches;
-    const count = compact ? 18 : 34;
+    const count = compact ? 14 : 28;
 
     for (let i = 0; i < count; i++) {
       const drop = document.createElement("i");
@@ -103,17 +103,7 @@
       el.appendChild(drop);
     }
 
-    const beads = compact ? 4 : 8;
-    for (let i = 0; i < beads; i++) {
-      const bead = document.createElement("span");
-      bead.className = "kiizu-glass-bead";
-      bead.style.left = (5 + Math.random() * 90) + "%";
-      bead.style.top = (6 + Math.random() * 86) + "%";
-      bead.style.animationDelay = (-Math.random() * 4.6) + "s";
-      bead.style.opacity = (0.22 + Math.random() * 0.28).toFixed(2);
-      el.appendChild(bead);
-    }
-
+    
     document.body.prepend(el);
     document.body.classList.add("kiizu-rain-active");
   };
