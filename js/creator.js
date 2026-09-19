@@ -44,7 +44,7 @@ function garmentPath(c, kind = type.value) {
   } else if (kind === "gorra") {
     c.moveTo(205,310); c.quadraticCurveTo(205,165,320,145); c.quadraticCurveTo(435,165,435,310); c.quadraticCurveTo(325,350,205,310); c.closePath();
   } else if (kind === "accesorio") {
-    c.roundRect(185,185,270,270,55);
+    c.moveTo(240,185); c.lineTo(400,185); c.quadraticCurveTo(455,185,455,240); c.lineTo(455,400); c.quadraticCurveTo(455,455,400,455); c.lineTo(240,455); c.quadraticCurveTo(185,455,185,400); c.lineTo(185,240); c.quadraticCurveTo(185,185,240,185); c.closePath();
   } else if (kind === "sudadera") {
     c.moveTo(235,125); c.lineTo(180,165); c.lineTo(95,270); c.lineTo(145,330); c.lineTo(205,275); c.lineTo(205,535); c.lineTo(435,535); c.lineTo(435,275); c.lineTo(495,330); c.lineTo(545,270); c.lineTo(460,165); c.lineTo(405,125); c.quadraticCurveTo(320,175,235,125); c.closePath();
   } else {
