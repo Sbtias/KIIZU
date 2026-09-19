@@ -6,8 +6,24 @@ const state = await bootShell();
 const grid = document.querySelector("#shop-grid");
 const gamesGrid = document.querySelector("#market-games");
 const filters = [...document.querySelectorAll(".filter-row .chip")];
+const detailModal = document.querySelector("#clothing-detail");
+const detailPreview = document.querySelector("#clothing-detail-preview");
+const detailType = document.querySelector("#clothing-detail-type");
+const detailCreator = document.querySelector("#clothing-detail-creator");
+const detailTitle = document.querySelector("#clothing-detail-title");
+const detailDescription = document.querySelector("#clothing-detail-description");
+const detailPrice = document.querySelector("#clothing-detail-price");
+const detailLikes = document.querySelector("#clothing-detail-likes");
+const detailCommentCount = document.querySelector("#clothing-detail-comment-count");
+const detailActions = document.querySelector("#clothing-detail-actions");
+const commentsList = document.querySelector("#clothing-comments-list");
+const commentForm = document.querySelector("#clothing-comment-form");
+const commentInput = document.querySelector("#clothing-comment-input");
+const commentStatus = document.querySelector("#clothing-comments-status");
 let filter = "all";
 let catalog = { official: [], clothing: [] };
+let activeClothing = null;
+let commentCache = new Map();
 
 filters.forEach(chip => chip.addEventListener("click", () => {
   filters.forEach(c => c.classList.remove("active"));
@@ -31,20 +47,28 @@ async function load() {
 
   grid.innerHTML = '<div class="empty-state"><h3>Cargando marketplace...</h3><p>Estamos buscando artículos disponibles.</p></div>';
 
-  const [{ data: items, error: itemError }, { data: clothing, error: clothingError }, { data: inventory, error: inventoryError }] = await Promise.all([
+  const [{ data: items, error: itemError }, { data: clothing, error: clothingError }, { data: inventory, error: inventoryError }, { data: comments, error: commentsError }] = await Promise.all([
     supabase.from("items").select("id,slug,name,category,price,metadata,created_at").order("created_at", { ascending: false }),
     supabase.from("clothing_items")
       .select("id,creator_id,name,description,type,price,design_data,thumbnail,created_at,profiles!clothing_items_creator_id_fkey(username)")
       .eq("is_published", true)
       .order("created_at", { ascending: false }),
-    supabase.from("inventory").select("item_id").eq("user_id", state.session.user.id)
+    supabase.from("inventory").select("item_id").eq("user_id", state.session.user.id),
+    supabase.from("clothing_comments").select("id,clothing_id,user_id,body,created_at,profiles(username,avatar_url)").order("created_at", { ascending: false })
   ]);
 
   if (clothingError) throw clothingError;
   // El catálogo oficial puede estar vacío o tener RLS sin afectar las creaciones de la comunidad.
   // La sesión autenticada debe poder leer el inventario propio para marcar lo comprado.
   if (inventoryError) throw inventoryError;
+  if (commentsError) throw commentsError;
   if (itemError) console.warn("No se pudo cargar el catálogo oficial:", itemError);
+
+  commentCache = new Map();
+  for (const row of comments || []) {
+    if (!commentCache.has(row.clothing_id)) commentCache.set(row.clothing_id, []);
+    commentCache.get(row.clothing_id).push(row);
+  }
 
   const clothingIds = (clothing || []).map(c => c.id);
   const likes = new Map();
@@ -76,7 +100,8 @@ async function load() {
     })),
     clothing: (clothing || []).map(item => ({
       ...item,
-      like: likes.get(item.id) || { count: 0, mine: false }
+      like: likes.get(item.id) || { count: 0, mine: false },
+      commentCount: (commentCache.get(item.id) || []).length
     }))
   };
 
@@ -155,6 +180,7 @@ function clothingCard(item) {
   const image = item.thumbnail || item.design_data?.layers?.find(layer => layer?.data)?.data;
   if (image) preview.style.backgroundImage = "url(" + image + ")";
 
+  card.querySelector(".detail-btn").addEventListener("click", () => openClothingDetail(item));
   card.querySelector(".like-btn").addEventListener("click", async event => {
     const button = event.currentTarget;
     setBusy(button, true, "...");
@@ -190,6 +216,162 @@ function clothingCard(item) {
 
   return card;
 }
+
+function openClothingDetail(item) {
+  if (!detailModal) return;
+  activeClothing = item;
+  const like = item.like || { count: 0, mine: false };
+  if (detailType) detailType.textContent = String(item.type || "ropa").toUpperCase();
+  if (detailCreator) detailCreator.textContent = "por " + (item.profiles?.username || "Usuario");
+  if (detailTitle) detailTitle.textContent = item.name || "Creación";
+  if (detailDescription) detailDescription.textContent = item.description || "Esta creación todavía no tiene una descripción.";
+  if (detailPrice) detailPrice.textContent = Number(item.price || 0).toLocaleString();
+  if (detailLikes) detailLikes.textContent = Number(like.count || 0);
+  if (detailCommentCount) detailCommentCount.textContent = String((commentCache.get(item.id) || []).length);
+  if (detailPreview) {
+    detailPreview.style.backgroundImage = "";
+    const image = item.thumbnail || item.design_data?.layers?.find(layer => layer?.data)?.data;
+    detailPreview.innerHTML = image ? "" : '<span>KIIZU</span>';
+    if (image) detailPreview.style.backgroundImage = "url(" + image + ")";
+  }
+  if (detailActions) {
+    const mine = item.creator_id === state.session.user.id;
+    detailActions.innerHTML =
+      '<button class="button like-detail-btn" type="button">' + (like.mine ? "♥ Me gusta" : "♡ Me gusta") + '</button>' +
+      '<button class="button button--ghost buy-detail-btn" type="button"' + (mine ? " disabled" : "") + '>' + (mine ? "Tu creación" : "Comprar") + '</button>';
+    detailActions.querySelector(".like-detail-btn")?.addEventListener("click", async event => {
+      const button = event.currentTarget;
+      setBusy(button, true, "...");
+      try {
+        const { data, error } = await supabase.rpc("toggle_clothing_like", { p_clothing_id: item.id });
+        if (error) throw error;
+        like.mine = data;
+        like.count = Math.max(0, like.count + (data ? 1 : -1));
+        if (detailLikes) detailLikes.textContent = like.count;
+        button.textContent = data ? "♥ Me gusta" : "♡ Me gusta";
+        const cardLike = [...grid.querySelectorAll(".clothing-card")].find(card => card.querySelector(".detail-btn") && card.querySelector("h3")?.textContent === item.name);
+        if (cardLike) {
+          cardLike.querySelector(".like-btn").textContent = data ? "♥" : "♡";
+          cardLike.querySelector(".like-count").textContent = like.count;
+        }
+      } catch (error) {
+        toast(readableError(error), "error");
+      } finally {
+        setBusy(button, false);
+      }
+    });
+    detailActions.querySelector(".buy-detail-btn")?.addEventListener("click", async event => {
+      const button = event.currentTarget;
+      setBusy(button, true, "Comprando...");
+      try {
+        const { error } = await supabase.rpc("purchase_clothing", { p_clothing_id: item.id });
+        if (error) throw error;
+        toast(item.name + " añadido a tu inventario.", "success");
+        closeClothingDetail();
+        await load();
+      } catch (error) {
+        toast(readableError(error), "error");
+        setBusy(button, false);
+      }
+    });
+  }
+  renderComments(item.id);
+  detailModal.hidden = false;
+  document.body.classList.add("marketplace-detail-open");
+  requestAnimationFrame(() => detailModal.classList.add("is-open"));
+}
+
+function closeClothingDetail() {
+  if (!detailModal) return;
+  detailModal.classList.remove("is-open");
+  document.body.classList.remove("marketplace-detail-open");
+  window.setTimeout(() => {
+    if (!detailModal.classList.contains("is-open")) detailModal.hidden = true;
+  }, 180);
+  activeClothing = null;
+}
+
+function renderComments(clothingId) {
+  if (!commentsList) return;
+  const comments = commentCache.get(clothingId) || [];
+  if (commentStatus) commentStatus.textContent = comments.length ? comments.length + (comments.length === 1 ? " comentario" : " comentarios") : "";
+  if (!comments.length) {
+    commentsList.innerHTML = '<div class="clothing-comments-empty"><strong>Sé el primero en comentar.</strong><span>Comparte qué te parece esta creación.</span></div>';
+    return;
+  }
+  commentsList.innerHTML = comments.map(comment => {
+    const name = escapeHtml(comment.profiles?.username || "Usuario");
+    const body = escapeHtml(comment.body);
+    const date = formatCommentDate(comment.created_at);
+    const mine = comment.user_id === state.session.user.id;
+    return '<article class="clothing-comment">' +
+      '<div class="clothing-comment-avatar">' + escapeHtml((comment.profiles?.username || "U").slice(0,1).toUpperCase()) + '</div>' +
+      '<div class="clothing-comment-body"><div><strong>' + name + '</strong><time>' + date + '</time></div><p>' + body + '</p>' +
+      (mine ? '<button class="comment-delete" type="button" data-comment-id="' + escapeHtml(comment.id) + '">Eliminar</button>' : '') +
+      '</div></article>';
+  }).join("");
+}
+
+function formatCommentDate(value) {
+  try {
+    return new Intl.DateTimeFormat("es-PR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+  } catch {
+    return "";
+  }
+}
+
+commentForm?.addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!activeClothing || !commentInput) return;
+  const body = commentInput.value.trim();
+  if (!body) return;
+  const submit = commentForm.querySelector("button[type=submit]");
+  setBusy(submit, true, "Publicando...");
+  try {
+    const { data, error } = await supabase.from("clothing_comments").insert({
+      clothing_id: activeClothing.id,
+      user_id: state.session.user.id,
+      body
+    }).select("id,clothing_id,user_id,body,created_at,profiles(username,avatar_url)").single();
+    if (error) throw error;
+    if (!commentCache.has(activeClothing.id)) commentCache.set(activeClothing.id, []);
+    commentCache.get(activeClothing.id).unshift(data);
+    activeClothing.commentCount = commentCache.get(activeClothing.id).length;
+    if (detailCommentCount) detailCommentCount.textContent = String(activeClothing.commentCount);
+    commentInput.value = "";
+    renderComments(activeClothing.id);
+    toast("Comentario publicado.", "success");
+  } catch (error) {
+    toast(readableError(error), "error");
+  } finally {
+    setBusy(submit, false);
+  }
+});
+
+commentsList?.addEventListener("click", async event => {
+  const button = event.target.closest("[data-comment-id]");
+  if (!button || !activeClothing) return;
+  const id = button.dataset.commentId;
+  setBusy(button, true, "...");
+  try {
+    const { error } = await supabase.from("clothing_comments").delete().eq("id", id).eq("user_id", state.session.user.id);
+    if (error) throw error;
+    commentCache.set(activeClothing.id, (commentCache.get(activeClothing.id) || []).filter(comment => comment.id !== id));
+    activeClothing.commentCount = commentCache.get(activeClothing.id).length;
+    if (detailCommentCount) detailCommentCount.textContent = String(activeClothing.commentCount);
+    renderComments(activeClothing.id);
+  } catch (error) {
+    toast(readableError(error), "error");
+  }
+});
+
+detailModal?.addEventListener("click", event => {
+  if (event.target.closest("[data-detail-close]")) closeClothingDetail();
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && detailModal && !detailModal.hidden) closeClothingDetail();
+});
 
 function normalizeCategory(value) {
   const v = String(value || "").trim().toLowerCase();
