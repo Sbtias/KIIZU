@@ -23,9 +23,9 @@
   const getVolume = () => {
     try {
       const n = Number(localStorage.getItem(RAIN_VOLUME_KEY));
-      return Number.isFinite(n) ? Math.max(0, Math.min(1, n)) : 0.28;
+      return Number.isFinite(n) ? Math.max(0, Math.min(1, n)) : 0.62;
     } catch {
-      return 0.28;
+      return 0.62;
     }
   };
 
@@ -59,12 +59,12 @@
   const rainCSS =
     ".kiizu-rain{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden;background:transparent;isolation:isolate}" +
     ".kiizu-rain::after{content:\"\";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 18% 12%,rgba(220,235,248,.035),transparent 32%),radial-gradient(circle at 82% 72%,rgba(170,205,232,.025),transparent 34%);box-shadow:inset 0 0 120px rgba(0,0,0,.10)}" +
-    ".kiizu-rain-drop{position:absolute;top:-12vh;width:1.2px;height:30px;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(216,232,245,.52) 30%,rgba(238,247,253,.82) 68%,rgba(255,255,255,.08));box-shadow:0 0 7px rgba(210,232,248,.16);animation:kiizuRainDrop linear infinite;will-change:transform,opacity;transform:rotate(10deg)}" +
-    "@keyframes kiizuRainDrop{0%{transform:translate3d(0,-12vh,0) rotate(10deg);opacity:0}8%{opacity:.78}55%{opacity:.62}88%{opacity:.42}100%{transform:translate3d(5vw,116vh,0) rotate(10deg);opacity:0}}" +
-    ".settings-rain{display:flex;align-items:center;justify-content:space-between;gap:18px}.settings-rain-copy strong,.settings-rain-copy span{display:block}.settings-rain-copy span{margin-top:4px;color:var(--muted);font-size:9px}" +
+    ".kiizu-rain-drop{position:absolute;top:-14vh;width:1.5px;height:42px;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(208,229,248,.62) 24%,rgba(239,248,255,.96) 63%,rgba(255,255,255,.10));box-shadow:0 0 9px rgba(210,232,248,.28);animation:kiizuRainDrop linear infinite;will-change:transform,opacity;transform:rotate(11deg)}" +
+    "@keyframes kiizuRainDrop{0%{transform:translate3d(0,-14vh,0) rotate(11deg);opacity:0}7%{opacity:.95}52%{opacity:.74}86%{opacity:.50}100%{transform:translate3d(7vw,120vh,0) rotate(11deg);opacity:0}}" +
+    ".kiizu-rain::before{content:"";position:absolute;inset:0;background:linear-gradient(108deg,transparent 0 22%,rgba(205,226,244,.035) 44%,transparent 58%);mix-blend-mode:screen;opacity:.9;animation:kiizuRainSweep 8s linear infinite}" + ".settings-rain{display:flex;align-items:center;justify-content:space-between;gap:18px}.settings-rain-copy strong,.settings-rain-copy span{display:block}.settings-rain-copy span{margin-top:4px;color:var(--muted);font-size:9px}" +
     ".settings-toggle{position:relative;width:44px;height:24px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.055);cursor:pointer;padding:0;flex:none}.settings-toggle i{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#777f87;transition:transform .2s,background .2s}.settings-toggle.is-on i{transform:translateX(20px);background:#e0e4e8}" +
     ".rain-volume{margin-top:13px;display:flex;align-items:center;gap:10px;color:#737b84;font-size:9px}.rain-volume input{flex:1;accent-color:#c9ced3}.rain-volume b{min-width:32px;text-align:right;color:#aeb4bb;font-size:8px}" +
-    "@media(prefers-reduced-motion:reduce){.kiizu-rain-drop{animation:none;display:none}}";
+    "@keyframes kiizuRainSweep{0%{transform:translateX(-24%);opacity:.2}50%{opacity:.55}100%{transform:translateX(24%);opacity:.2}}@media(prefers-reduced-motion:reduce){.kiizu-rain-drop,.kiizu-rain::before{animation:none;display:none}}";
 
   const injectRainVisual = () => {
     let el = document.querySelector(".kiizu-rain");
@@ -88,17 +88,17 @@
     el.setAttribute("aria-hidden", "true");
 
     const compact = window.matchMedia?.("(max-width:700px)").matches;
-    const count = compact ? 14 : 28;
+    const count = compact ? 34 : 58;
 
     for (let i = 0; i < count; i++) {
       const drop = document.createElement("i");
       drop.className = "kiizu-rain-drop";
       drop.style.left = (Math.random() * 110 - 5) + "%";
-      drop.style.height = (20 + Math.random() * 28).toFixed(1) + "px";
-      drop.style.width = (0.9 + Math.random() * 0.8).toFixed(1) + "px";
-      drop.style.animationDuration = (3.8 + Math.random() * 4.4) + "s";
-      drop.style.animationDelay = (-Math.random() * 6.5) + "s";
-      drop.style.opacity = (0.42 + Math.random() * 0.35).toFixed(2);
+      drop.style.height = (28 + Math.random() * 30).toFixed(1) + "px";
+      drop.style.width = (1.1 + Math.random() * 0.9).toFixed(1) + "px";
+      drop.style.animationDuration = (1.9 + Math.random() * 2.4) + "s";
+      drop.style.animationDelay = (-Math.random() * 4.5) + "s";
+      drop.style.opacity = (0.55 + Math.random() * 0.38).toFixed(2);
       el.appendChild(drop);
     }
 
@@ -123,9 +123,9 @@
 
       source.buffer = buffer;
       filter.type = "bandpass";
-      filter.frequency.value = 2800 + Math.random() * 1600;
+      filter.frequency.value = 3000 + Math.random() * 1800;
       filter.Q.value = 1.6;
-      gain.gain.value = .12 * getVolume() * (.55 + Math.random() * .45);
+      gain.gain.value = .22 * getVolume() * (.58 + Math.random() * .42);
 
       source.connect(filter).connect(gain).connect(rain.master);
       source.start();
@@ -138,33 +138,50 @@
 
     try {
       const master = ac.createGain();
+      const compressor = ac.createDynamicsCompressor();
       master.gain.value = 0;
-      master.connect(ac.destination);
 
-      const buffer = ac.createBuffer(1, Math.floor(ac.sampleRate * 3), ac.sampleRate);
+      compressor.threshold.value = -28;
+      compressor.knee.value = 18;
+      compressor.ratio.value = 7;
+      compressor.attack.value = .004;
+      compressor.release.value = .24;
+
+      master.connect(compressor).connect(ac.destination);
+
+      const buffer = ac.createBuffer(1, Math.floor(ac.sampleRate * 4), ac.sampleRate);
       const data = buffer.getChannelData(0);
       for (let i = 0; i < data.length; i++) {
-        const low = Math.sin(i / 31) * .04;
-        data[i] = (Math.random() * 2 - 1) * (.17 + Math.random() * .06) + low;
+        const swell = Math.sin(i / 43) * .055 + Math.sin(i / 97) * .025;
+        data[i] = (Math.random() * 2 - 1) * (.22 + Math.random() * .10) + swell;
       }
 
       const source = ac.createBufferSource();
       const filter = ac.createBiquadFilter();
       const gain = ac.createGain();
+      const airFilter = ac.createBiquadFilter();
+      const airGain = ac.createGain();
 
       source.buffer = buffer;
       source.loop = true;
+
       filter.type = "lowpass";
-      filter.frequency.value = 1500;
-      filter.Q.value = .42;
-      gain.gain.value = .18;
+      filter.frequency.value = 1850;
+      filter.Q.value = .52;
+      gain.gain.value = .30;
+
+      airFilter.type = "bandpass";
+      airFilter.frequency.value = 3400;
+      airFilter.Q.value = .72;
+      airGain.gain.value = .085;
 
       source.connect(filter).connect(gain).connect(master);
+      source.connect(airFilter).connect(airGain).connect(master);
       source.start();
 
-      master.gain.setTargetAtTime(Math.max(.06, .52 * getVolume()), ac.currentTime, .22);
+      master.gain.setTargetAtTime(Math.max(.12, .92 * getVolume()), ac.currentTime, .20);
       rain = { master, source };
-      rainTimer = window.setInterval(playDrop, 420);
+      rainTimer = window.setInterval(playDrop, 290);
     } catch (_) {
       startingRain = false;
       return;
@@ -227,7 +244,7 @@
       const volume = Math.max(0, Math.min(1, Number(value) || 0));
       try { localStorage.setItem(RAIN_VOLUME_KEY, String(volume)); } catch (_) {}
       if (rain && ctx) {
-        rain.master.gain.setTargetAtTime(Math.max(.06, .52 * volume), ctx.currentTime, .08);
+        rain.master.gain.setTargetAtTime(Math.max(.06, .92 * volume), ctx.currentTime, .08);
       }
     }
   };
