@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Studio · KIIZU</title>
 <link rel="stylesheet" href="css/global.css?v=20260919-0422">
-<link rel="stylesheet" href="css/kiizu-ui.css?v=20260919-1428">
+<link rel="stylesheet" href="css/kiizu-ui.css?v=20260919-1429">
 </head>
 <body>
 <main class="app-shell">
@@ -20,28 +20,87 @@
   <div class="user-pill"></div>
 </header>
 
-<section class="hub-hero studio-landing-hero">
-  <div class="hub-branding">
-    <div class="hub-kicker"><span class="eyebrow">CREAR</span></div>
-    <h1 class="hub-brand-name">STUDIO</h1>
-    <p>Tu espacio para construir juegos y diseñar ropa dentro de KIIZU.</p>
+<section class="studio-header">
+  <div class="studio-header-copy">
+    <span class="eyebrow">KIIZU / CREATOR TOOLS</span>
+    <h1>Studio</h1>
+    <p>Un espacio directo para construir. Elige una herramienta y empieza a trabajar.</p>
+  </div>
+  <div class="studio-header-mark" aria-hidden="true">
+    <span>ST</span>
   </div>
 </section>
 
-<section class="home-quick-grid studio-choice-grid">
-  <a class="home-quick-card" href="game-creator.html">
-    <span class="eyebrow">01 · JUEGOS</span>
-    <h3>Crear juego</h3>
-    <p>Construye un mundo, configura tu partida y publícala en KIIZU.</p>
-    <span class="home-card-arrow">→</span>
-  </a>
-  <a class="home-quick-card" href="clothing-creator.html">
-    <span class="eyebrow">02 · ROPA</span>
-    <h3>Crear ropa</h3>
-    <p>Diseña prendas y prepara tus creaciones para compartirlas.</p>
-    <span class="home-card-arrow">→</span>
-  </a>
+<section class="studio-workspace">
+  <div class="studio-section-label">
+    <div>
+      <span class="eyebrow">HERRAMIENTAS</span>
+      <h2>¿Qué vas a crear?</h2>
+    </div>
+    <span class="studio-count">02 herramientas</span>
+  </div>
+
+  <div class="studio-tool-grid">
+    <a class="studio-tool studio-tool--game" href="game-creator.html">
+      <div class="studio-tool-top">
+        <span class="studio-tool-number">01</span>
+        <span class="studio-tool-arrow">↗</span>
+      </div>
+      <div class="studio-tool-icon" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path d="M9.2 9.5h13.6a5 5 0 0 1 4.7 6.7l-2.3 6.1a3.4 3.4 0 0 1-5.9.8L17 21.2h-2l-2.3 1.9a3.4 3.4 0 0 1-5.9-.8l-2.3-6.1A5 5 0 0 1 9.2 9.5Z" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M9.5 14.8v4M7.5 16.8h4M22 16.1h.1M25 14.4h.1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="studio-tool-copy">
+        <span class="eyebrow">GAME CREATOR</span>
+        <h3>Crear juego</h3>
+        <p>Diseña el mapa, define las reglas y publica tu propia experiencia.</p>
+      </div>
+      <div class="studio-tool-footer">
+        <span>Editor de mundos</span>
+        <span class="studio-tool-cta">Abrir editor</span>
+      </div>
+    </a>
+
+    <a class="studio-tool studio-tool--clothing" href="clothing-creator.html">
+      <div class="studio-tool-top">
+        <span class="studio-tool-number">02</span>
+        <span class="studio-tool-arrow">↗</span>
+      </div>
+      <div class="studio-tool-icon" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path d="m12.1 8.8 3.1-2.1a5 5 0 0 0 5.6 0l3.1 2.1 4.3 3.6-3.1 4.2-2.4-1.7v9.7H9.3v-9.7L6.9 16.6l-3.1-4.2 4.3-3.6 4-2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+          <path d="M15.2 7.1c.6.7 1.4 1.1 2.8 1.1s2.2-.4 2.8-1.1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="studio-tool-copy">
+        <span class="eyebrow">CLOTHING CREATOR</span>
+        <h3>Crear ropa</h3>
+        <p>Dibuja prendas, guarda tus diseños y prepáralos para la comunidad.</p>
+      </div>
+      <div class="studio-tool-footer">
+        <span>Editor de prendas</span>
+        <span class="studio-tool-cta">Abrir editor</span>
+      </div>
+    </a>
+  </div>
 </section>
+
+<section class="studio-bottom">
+  <div class="studio-note">
+    <span class="studio-note-dot"></span>
+    <div>
+      <strong>Tu espacio de creación</strong>
+      <p>Todo lo que construyas desde aquí queda dentro de tu cuenta de KIIZU.</p>
+    </div>
+  </div>
+  <div class="studio-shortcuts">
+    <a href="profile.html">Perfil <span>↗</span></a>
+    <a href="inventory.html">Inventario <span>↗</span></a>
+  </div>
+</section>
+
 </main>
 <script type="module">import { bootShell } from "./js/nav.js?v=20260919-1426"; bootShell();</script>
 <script src="js/ui-sound.js?v=20260919-0310"></script>
