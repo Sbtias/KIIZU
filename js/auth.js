@@ -1,5 +1,11 @@
 import { supabase } from "./app.js";
 
+const legacyCreatorPath = /(^|\\/)creator\\.html$/i.test(window.location.pathname);
+if (legacyCreatorPath && !window.__kiizuLegacyCreatorRedirect) {
+  window.__kiizuLegacyCreatorRedirect = true;
+  window.location.replace("clothing-creator.html?v=20260919-1419");
+}
+
 export async function getSession() {
   if (!supabase) return { session:null, error:new Error("Supabase no está configurado.") };
   return supabase.auth.getSession();
