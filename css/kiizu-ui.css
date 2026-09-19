@@ -360,3 +360,280 @@ html[data-theme="aurora"] .hub-stat-card{background:transparent}
   .hub-brand-stats{display:grid;grid-template-columns:1fr 1fr;gap:0}
   .hub-stat-card{margin-right:18px;padding-right:18px}
 }
+
+
+/* Marketplace detail experience */
+.item-card{
+  position:relative;
+  overflow:hidden;
+}
+.clothing-card .clothing-preview{
+  min-height:190px;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+}
+.clothing-card .tool-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  gap:8px;
+  margin:12px 0 0;
+}
+.clothing-card .detail-btn{
+  background:#ffffff08;
+  border-color:#ffffff12;
+  color:#fff;
+}
+.clothing-card .detail-btn:hover{
+  background:#ffffff10;
+  border-color:#ffffff1d;
+}
+.clothing-detail-modal{
+  position:fixed;
+  inset:0;
+  z-index:1200;
+  display:grid;
+  place-items:center;
+  padding:18px;
+  background:#030509c7;
+  backdrop-filter:blur(20px);
+  opacity:0;
+  visibility:hidden;
+  transition:.2s ease;
+}
+.clothing-detail-modal[hidden]{display:grid!important}
+.clothing-detail-modal.is-open{opacity:1;visibility:visible}
+.clothing-detail-backdrop{
+  position:absolute;
+  inset:0;
+}
+.clothing-detail-card{
+  position:relative;
+  width:min(980px,100%);
+  max-height:min(900px,calc(100vh - 36px));
+  overflow:auto;
+  padding:22px;
+  border:1px solid #ffffff17;
+  border-radius:26px;
+  background:linear-gradient(145deg,#171b24f7,#0b0e14f8);
+  box-shadow:0 45px 130px #000c;
+  transform:translateY(16px) scale(.985);
+  transition:.22s ease;
+}
+.clothing-detail-modal.is-open .clothing-detail-card{
+  transform:none;
+}
+.clothing-detail-close{
+  position:absolute;
+  top:14px;
+  right:14px;
+  z-index:2;
+  width:38px;
+  height:38px;
+  border:1px solid #ffffff16;
+  border-radius:12px;
+  background:#ffffff08;
+  color:#9ca5b5;
+  font-size:23px;
+}
+.clothing-detail-close:hover{background:#ffffff10;color:#fff}
+.clothing-detail-layout{
+  display:grid;
+  grid-template-columns:minmax(300px,.95fr) minmax(320px,1.05fr);
+  gap:24px;
+}
+.clothing-detail-preview{
+  min-height:430px;
+  border:1px solid #ffffff10;
+  border-radius:20px;
+  background:
+    radial-gradient(circle at 50% 35%,#8065ff16,transparent 45%),
+    linear-gradient(145deg,#11151d,#080b10);
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  color:#747d8d;
+  font:700 11px "Space Grotesk";
+  letter-spacing:.17em;
+}
+.clothing-detail-meta{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#697284;
+  font-size:10px;
+}
+.clothing-detail-meta .eyebrow{color:#858fa1}
+.clothing-detail-main h2{
+  margin:12px 0 10px;
+  font-size:clamp(32px,4vw,48px);
+  line-height:.95;
+  letter-spacing:-.07em;
+}
+.clothing-detail-description{
+  max-width:580px;
+  margin:0;
+  color:#a1a9b8;
+  font-size:13px;
+  line-height:1.7;
+}
+.clothing-detail-stats{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:24px 0 14px;
+}
+.clothing-detail-stats span{
+  padding:9px 11px;
+  border:1px solid #ffffff10;
+  border-radius:11px;
+  background:#ffffff04;
+  color:#818a9b;
+  font-size:10px;
+}
+.clothing-detail-stats b{color:#fff}
+.clothing-detail-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.clothing-comments{
+  margin-top:24px;
+  padding-top:22px;
+  border-top:1px solid #ffffff0e;
+}
+.clothing-comments-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  gap:12px;
+  margin-bottom:12px;
+}
+.clothing-comments-head h3{
+  margin:5px 0 0;
+  font-size:22px;
+  letter-spacing:-.04em;
+}
+#clothing-comments-status{color:#687284;font-size:10px}
+.clothing-comments-list{
+  display:grid;
+  gap:8px;
+  max-height:270px;
+  overflow:auto;
+  padding-right:2px;
+}
+.clothing-comment{
+  display:flex;
+  gap:10px;
+  padding:12px;
+  border:1px solid #ffffff0d;
+  border-radius:14px;
+  background:#ffffff03;
+}
+.clothing-comment-avatar{
+  width:34px;
+  height:34px;
+  flex:none;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  background:#171c26;
+  color:#c1c8d4;
+  font:700 10px "Space Grotesk";
+}
+.clothing-comment-body{min-width:0;flex:1}
+.clothing-comment-body>div{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.clothing-comment-body strong{font-size:11px}
+.clothing-comment-body time{color:#626b7b;font-size:9px}
+.clothing-comment-body p{
+  margin:6px 0 0;
+  color:#a1a9b8;
+  font-size:11px;
+  line-height:1.55;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+.comment-delete{
+  margin-top:7px;
+  padding:0;
+  border:0;
+  background:transparent;
+  color:#7b8392;
+  font-size:9px;
+}
+.comment-delete:hover{color:#ff7b8b}
+.clothing-comments-empty{
+  display:grid;
+  gap:4px;
+  padding:28px 12px;
+  text-align:center;
+  border:1px dashed #ffffff12;
+  border-radius:14px;
+}
+.clothing-comments-empty strong{font-size:11px}
+.clothing-comments-empty span{font-size:10px;color:#687284}
+.clothing-comment-form{
+  display:grid;
+  gap:8px;
+  margin-top:10px;
+}
+.clothing-comment-form textarea{
+  resize:vertical;
+  min-height:72px;
+  background:#ffffff04;
+}
+.clothing-comment-form-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  color:#5f6878;
+  font-size:9px;
+}
+body.marketplace-detail-open{overflow:hidden}
+html[data-theme="light"] .clothing-detail-modal{background:#12172266}
+html[data-theme="light"] .clothing-detail-card{
+  background:linear-gradient(145deg,#fff,#f5f7fa);
+  border-color:#00000012;
+  box-shadow:0 45px 130px #24304424;
+}
+html[data-theme="light"] .clothing-detail-preview{
+  background:radial-gradient(circle at 50% 35%,#6652df0d,transparent 45%),linear-gradient(145deg,#eef1f5,#e7ebf0);
+  border-color:#0000000d;
+}
+html[data-theme="light"] .clothing-detail-description,
+html[data-theme="light"] .clothing-comment-body p{color:#596272}
+html[data-theme="light"] .clothing-detail-stats span,
+html[data-theme="light"] .clothing-comment{
+  background:#00000003;
+  border-color:#0000000d;
+}
+html[data-theme="light"] .clothing-detail-stats b,
+html[data-theme="light"] .clothing-comment-body strong{color:#171b23}
+html[data-theme="light"] .clothing-comment-avatar{background:#edf0f4;color:#4f5868}
+html[data-theme="light"] .clothing-detail-close{background:#00000004;border-color:#0000000d;color:#687283}
+html[data-theme="aurora"] .clothing-detail-card{
+  background:linear-gradient(145deg,#121b2bf7,#090f17f8);
+  border-color:#8b7dff22;
+}
+@media(max-width:760px){
+  .clothing-detail-card{padding:16px;border-radius:21px}
+  .clothing-detail-layout{grid-template-columns:1fr;gap:16px}
+  .clothing-detail-preview{min-height:300px}
+  .clothing-detail-main h2{font-size:34px}
+}
+@media(max-width:520px){
+  .clothing-card .tool-row{grid-template-columns:1fr}
+  .clothing-detail-modal{padding:10px}
+  .clothing-detail-card{max-height:calc(100vh - 20px)}
+  .clothing-comments-list{max-height:220px}
+  .clothing-comment-form-bottom{align-items:flex-start;flex-direction:column}
+}
