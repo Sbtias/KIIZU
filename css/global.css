@@ -932,3 +932,46 @@ html[data-theme="light"] .comment-profile-link{color:#5d4bc8;background:rgba(93,
 @media(max-width:560px){
   .public-profile-photo{width:88px!important;height:88px!important;min-width:88px;min-height:88px}
 }
+
+/* CUSTOMIZER AVATAR 2.0 */
+.customize-heading{align-items:end}
+.customizer-layout{grid-template-columns:minmax(340px,430px) minmax(0,1fr);gap:18px;align-items:start}
+.customizer-preview{min-height:680px;padding:18px;display:flex;flex-direction:column;justify-content:flex-start;overflow:hidden}
+.preview-top{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:2px 3px 12px}
+.preview-top h2{margin:5px 0 0;font-size:22px;letter-spacing:-.04em}
+.preview-live{padding:6px 8px;border-radius:99px;background:rgba(184,255,90,.07);color:#b8ff5a;font:700 8px "Space Grotesk";letter-spacing:.08em}
+.avatar-preview{position:relative;width:100%;height:500px;min-height:500px;display:grid;place-items:center;overflow:hidden;border:1px solid rgba(255,255,255,.06);border-radius:20px;background:radial-gradient(circle at 50% 28%,rgba(128,101,255,.15),transparent 35%),linear-gradient(180deg,#111621,#080b10)}
+.avatar-preview:before{content:"";position:absolute;inset:0;opacity:.3;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:28px 28px}
+.avatar-rig{position:relative;width:250px;height:430px;z-index:1;filter:drop-shadow(0 24px 35px rgba(0,0,0,.35))}
+.avatar-head{position:absolute;z-index:3;left:77px;top:18px;width:96px;height:96px;border-radius:34px;background:linear-gradient(145deg,#f2c7a8,#c88766);border:3px solid rgba(255,255,255,.1);display:grid;place-items:center;box-shadow:inset 0 -10px 20px rgba(72,34,24,.12)}
+.avatar-face{font:700 20px "Space Grotesk";color:#56392f;letter-spacing:-.15em;transform:translateX(-1px)}
+.avatar-neck{position:absolute;z-index:1;left:106px;top:100px;width:38px;height:34px;border-radius:8px;background:#d79a79}
+.avatar-torso{position:absolute;z-index:2;left:58px;top:112px;width:134px;height:150px;border-radius:38px 38px 25px 25px;background:linear-gradient(145deg,#59616e,#272d38);border:2px solid rgba(255,255,255,.07)}
+.avatar-arm{position:absolute;z-index:1;top:124px;width:39px;height:138px;border-radius:20px;background:linear-gradient(145deg,#d99b7b,#a96550)}
+.avatar-arm-left{left:27px;transform:rotate(6deg)}.avatar-arm-right{right:27px;transform:rotate(-6deg)}
+.avatar-leg{position:absolute;z-index:1;top:248px;width:54px;height:138px;border-radius:17px;background:linear-gradient(145deg,#343b49,#181c25)}
+.avatar-leg-left{left:66px}.avatar-leg-right{right:66px}
+.avatar-shoe{position:absolute;z-index:2;top:370px;width:67px;height:30px;border-radius:18px 18px 10px 10px;background:#0a0c10;border:2px solid rgba(255,255,255,.08)}
+.avatar-shoe-left{left:58px}.avatar-shoe-right{right:58px}
+.avatar-shadow{position:absolute;z-index:0;left:42px;bottom:4px;width:166px;height:28px;border-radius:50%;background:rgba(0,0,0,.45);filter:blur(9px)}
+.avatar-layers{position:absolute;inset:0;z-index:5;pointer-events:none}
+.avatar-clothing-layer{position:absolute;display:block;width:250px;height:250px;object-fit:contain;pointer-events:none;filter:drop-shadow(0 7px 9px rgba(0,0,0,.2))}
+.avatar-layer-pantalon{left:0;top:177px;z-index:4}
+.avatar-layer-camiseta,.avatar-layer-camisa,.avatar-layer-sudadera{left:0;top:74px;z-index:6}
+.avatar-layer-accesorio{left:0;top:74px;z-index:7}
+.avatar-layer-gorra{left:0;top:-7px;width:250px;height:190px;z-index:8}
+.preview-note{display:flex;justify-content:space-between;gap:12px;padding:12px 4px 4px;color:#9ba3b2;font-size:10px}.preview-note small{color:#687181;text-align:right;max-width:230px}
+.form-status{margin-top:8px;display:grid;gap:3px;color:#9ca4b3;font-size:10px}.form-status small{color:#687181;line-height:1.5}
+.closet-head{margin:0 0 14px}.closet-head p{margin:5px 0 0;color:var(--muted);font-size:12px}
+.clothing-tabs{display:flex;gap:7px;flex-wrap:wrap;padding:7px;margin-bottom:12px;border:1px solid #ffffff0d;border-radius:15px;background:#10131a}
+.clothing-tab{border:0;border-radius:10px;padding:9px 12px;background:transparent;color:#7f8796;font:700 10px "Space Grotesk";cursor:pointer;transition:.16s}
+.clothing-tab:hover{color:#fff;background:#ffffff08}.clothing-tab.is-active{color:#fff;background:linear-gradient(145deg,rgba(128,101,255,.22),rgba(128,101,255,.08));box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.customize-grid{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+.customize-clothing-card{display:grid;grid-template-columns:92px minmax(0,1fr);gap:12px;padding:11px;min-width:0}
+.customize-clothing-card .customize-item-preview{width:92px;height:92px;border-radius:13px;display:grid;place-items:center;overflow:hidden;background:#080c12;border:1px solid #ffffff0c}
+.customize-item-preview img{display:block;width:100%;height:100%;object-fit:contain}
+.customize-item-preview span{font:700 10px "Space Grotesk";color:#596273}
+.customize-item-copy{min-width:0;align-self:center}.customize-item-copy h3{margin:4px 0;font-size:14px}.customize-item-copy small{display:block;color:#70798a;font-size:9px;line-height:1.45}
+.customize-clothing-card .button{grid-column:1/-1;width:100%;margin:0}.customize-clothing-card.is-equipped{border-color:rgba(184,255,90,.2);box-shadow:inset 0 1px 0 rgba(184,255,90,.05)}
+@media(max-width:980px){.customizer-layout{grid-template-columns:1fr}.customizer-preview{min-height:auto}.avatar-preview{height:520px}.customize-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.customizer-layout{grid-template-columns:1fr}.customizer-preview{padding:13px}.avatar-preview{height:470px;min-height:470px}.customize-grid{grid-template-columns:1fr}.clothing-tabs{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}.clothing-tab{white-space:nowrap}.preview-note{display:grid;gap:5px}.preview-note small{text-align:left;max-width:none}.customize-clothing-card{grid-template-columns:82px minmax(0,1fr)}.customize-clothing-card .customize-item-preview{width:82px;height:82px}}
