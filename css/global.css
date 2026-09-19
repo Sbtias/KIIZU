@@ -750,3 +750,10 @@ input,textarea,select{
     min-height:390px;
   }
 }
+
+/* Creator hub */
+.creator-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:24px}
+.creator-choice-card{display:block;min-width:0;padding:30px;border:1px solid rgba(255,255,255,.08);border-radius:22px;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));box-shadow:0 20px 60px rgba(0,0,0,.18);transition:transform .25s ease,border-color .25s ease,background .25s ease}
+.creator-choice-card:hover{transform:translateY(-5px);border-color:rgba(255,255,255,.2);background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025))}
+.creator-choice-icon{font-size:48px;line-height:1;margin:30px 0 18px;opacity:.9}.creator-choice-card h2{margin:0 0 10px;font-size:26px}.creator-choice-card p{max-width:520px;color:#9aa1a9;line-height:1.7}.creator-choice-arrow{display:inline-block;margin-top:20px;font-weight:700;font-size:13px}
+@media(max-width:720px){.creator-choice-grid{grid-template-columns:1fr;gap:12px}.creator-choice-card{padding:22px}.creator-choice-icon{margin:22px 0 14px}}
