@@ -310,3 +310,53 @@ html[data-theme="light"] .hub-stat-icon{background:#00000004;border-color:#00000
   .hub-brand-name{font-size:63px!important}
   .hub-stat-card{padding:11px 12px}
 }
+
+
+/* Cleaner home stats */
+.hub-kicker{margin-bottom:18px}
+.hub-kicker .eyebrow{
+  display:inline-block;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+}
+.hub-branding>p{margin:20px 0 26px}
+.hub-brand-stats{display:flex;gap:0;margin-top:0}
+.hub-stat-card{
+  min-width:178px;
+  padding:0 28px 0 0;
+  margin-right:28px;
+  border:0;
+  border-right:1px solid #ffffff12;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  backdrop-filter:none;
+}
+.hub-stat-card:last-child{
+  margin-right:0;
+  padding-right:0;
+  border-right:0;
+}
+.hub-stat-card b{
+  font-size:24px;
+  line-height:1;
+}
+.hub-stat-card small{
+  margin-top:6px;
+  font-size:10px;
+  color:#788193;
+  letter-spacing:.01em;
+}
+html[data-theme="light"] .hub-stat-card{background:transparent;border-right-color:#00000010}
+html[data-theme="light"] .hub-stat-card:last-child{border-right:0}
+html[data-theme="aurora"] .hub-stat-card{background:transparent}
+@media(max-width:720px){
+  .hub-brand-stats{display:flex}
+  .hub-stat-card{min-width:0;flex:1}
+}
+@media(max-width:460px){
+  .hub-brand-stats{display:grid;grid-template-columns:1fr 1fr;gap:0}
+  .hub-stat-card{margin-right:18px;padding-right:18px}
+}
