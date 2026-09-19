@@ -993,3 +993,19 @@ img{max-width:100%}
  .section-head .button{width:100%}
  .main-nav a{min-width:0}
 }
+
+/* AVATAR BODY PROPORTIONS + CLOTHING FIT */
+.avatar-rig{--body-height:1;--body-width:1;--body-head:1;--body-shoulders:1;--body-legs:1;transform:scaleX(var(--body-width)) scaleY(var(--body-height));transform-origin:50% 100%;transition:transform .18s ease}
+.avatar-head{transform:translateX(calc((1 - var(--body-width))*-18px)) scale(var(--body-head))}
+.avatar-torso{transform:scaleX(var(--body-shoulders));transform-origin:50% 0}
+.avatar-arm-left{transform:translateX(calc((var(--body-shoulders) - 1)*-10px)) rotate(6deg)}.avatar-arm-right{transform:translateX(calc((var(--body-shoulders) - 1)*10px)) rotate(-6deg)}
+.avatar-leg-left{transform:scaleY(var(--body-legs));transform-origin:50% 0}.avatar-leg-right{transform:scaleY(var(--body-legs));transform-origin:50% 0}
+.avatar-clothing-layer{width:250px;height:250px;left:0!important;transform-origin:50% 50%;transition:transform .18s ease}
+.avatar-layer-pantalon{top:177px!important;transform:scaleX(var(--body-width)) scaleY(var(--body-height))}
+.avatar-layer-camiseta,.avatar-layer-camisa,.avatar-layer-sudadera{top:74px!important;transform:scaleX(var(--body-shoulders)) scaleY(var(--body-height))}
+.avatar-layer-accesorio{top:74px!important;transform:scaleX(var(--body-shoulders)) scaleY(var(--body-height))}
+.avatar-layer-gorra{top:-7px!important;transform:translateX(calc((1 - var(--body-width))*-18px)) scale(var(--body-head))}
+.body-controls{margin-top:14px;padding:14px;border:1px solid #ffffff0b;border-radius:16px;background:rgba(255,255,255,.025);display:grid;gap:10px}
+.body-control-head{display:flex;align-items:center;justify-content:space-between}.body-control-head .text-button{border:0;background:none;color:#9a8cff;font-size:10px;cursor:pointer}
+.body-controls label{display:grid;grid-template-columns:1fr auto;gap:5px;color:#a7afbd;font:600 10px "Space Grotesk"}.body-controls output{color:#777f8f;font-size:9px}.body-controls input{grid-column:1/-1;width:100%;accent-color:#8065ff}
+@media(max-width:650px){.body-controls{padding:12px}.avatar-rig{transform:scale(calc(var(--body-width)*.88),calc(var(--body-height)*.88));transform-origin:50% 100%}}
