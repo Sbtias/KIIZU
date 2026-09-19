@@ -27,6 +27,7 @@ let history = [];
 let redoStack = [];
 let drawing = false;
 let startPoint = null;
+let activeColor = "#171b24";
 
 const GARMENTS = {
   camiseta: "Camiseta",
@@ -81,7 +82,7 @@ function render() {
   ctx.fillStyle = "rgba(255,255,255,.025)";
   ctx.fillRect(0,0,640,640);
   garmentPath(ctx);
-  ctx.fillStyle = color.value;
+  ctx.fillStyle = activeColor;
   ctx.shadowColor = "rgba(0,0,0,.32)";
   ctx.shadowBlur = 28;
   ctx.shadowOffsetY = 16;
@@ -123,7 +124,7 @@ function pointer(e) {
 function applyShape(p) {
   const x=Math.min(startPoint.x,p.x), y=Math.min(startPoint.y,p.y);
   const w=Math.abs(p.x-startPoint.x), h=Math.abs(p.y-startPoint.y);
-  artCtx.strokeStyle=color.value;
+  artCtx.strokeStyle=activeColor;
   artCtx.lineWidth=10;
   artCtx.lineCap="round";
   if(tool==="rect") artCtx.strokeRect(x,y,w,h);
@@ -132,7 +133,7 @@ function applyShape(p) {
 
 function fillAt(sx,sy) {
   const img=artCtx.getImageData(0,0,640,640), d=img.data;
-  const i=(sy*640+sx)*4, base=[d[i],d[i+1],d[i+2],d[i+3]], target=[...hexToRgba(color.value)];
+  const i=(sy*640+sx)*4, base=[d[i],d[i+1],d[i+2],d[i+3]], target=hexToRgba(activeColor);
   if(base.every((v,k)=>Math.abs(v-target[k])<5)) return;
   const stack=[[sx,sy]], seen=new Uint8Array(640*640);
   while(stack.length){
@@ -158,7 +159,7 @@ function start(e) {
     const value=textValue?.value.trim();
     if(!value){toast("Escribe el texto primero.","info");return;}
     snapshot();
-    artCtx.fillStyle=color.value;
+    artCtx.fillStyle=activeColor;
     artCtx.font="800 38px 'Space Grotesk',sans-serif";
     artCtx.textAlign="center";
     artCtx.textBaseline="middle";
@@ -193,7 +194,7 @@ function move(e) {
     artCtx.strokeStyle="rgba(0,0,0,1)";
   } else {
     artCtx.globalCompositeOperation="source-over";
-    artCtx.strokeStyle=color.value;
+    artCtx.strokeStyle=activeColor;
   }
   artCtx.lineTo(p.x,p.y);
   artCtx.stroke();
@@ -220,7 +221,7 @@ function hexToRgba(hex){
 }
 
 function data(){
-  return {version:2,canvas:{width:640,height:640},garment:type.value,baseColor:color.value,layers:[{id:"art",type:"raster",data:art.toDataURL("image/png")}]};
+  return {version:2,canvas:{width:640,height:640},garment:type.value,baseColor:activeColor,layers:[{id:"art",type:"raster",data:art.toDataURL("image/png")}]};
 }
 
 function thumbnail(){return canvas.toDataURL("image/png");}
@@ -291,8 +292,18 @@ async function save(publish=false){
 }
 
 document.querySelectorAll(".creator-tool").forEach(btn=>btn.addEventListener("click",()=>setTool(btn.dataset.tool)));
-document.querySelectorAll("[data-color]").forEach(btn=>btn.addEventListener("click",()=>{color.value=btn.dataset.color;render();}));
-color?.addEventListener("input",render);
+function setColor(value){
+  const next=String(value||"").trim().toLowerCase();
+  if(!/^#[0-9a-f]{6}$/.test(next)) return;
+  activeColor=next;
+  if(color) color.value=next;
+  document.querySelectorAll("[data-color]").forEach(btn=>btn.classList.toggle("is-selected",btn.dataset.color.toLowerCase()===next));
+  render();
+}
+document.querySelectorAll("[data-color]").forEach(btn=>btn.addEventListener("click",()=>setColor(btn.dataset.color)));
+color?.addEventListener("input",e=>setColor(e.target.value));
+color?.addEventListener("change",e=>setColor(e.target.value));
+setColor(color?.value||activeColor);
 type?.addEventListener("change",()=>{previewTitle.textContent=GARMENTS[type.value]||type.value;resetArt();});
 canvas?.addEventListener("pointerdown",start);
 canvas?.addEventListener("pointermove",move);
