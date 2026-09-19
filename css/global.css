@@ -487,3 +487,80 @@ input,textarea,select{
   min-width:0;
   max-width:100%;
 }
+
+
+/* =========================================================
+   KIIZU HOME / LANDING COMPOSITION
+   ========================================================= */
+.landing-shell{
+  padding-block:18px 58px;
+}
+.topbar{
+  padding-inline:4px;
+}
+.landing-hero{
+  min-height:clamp(560px,72vh,720px);
+  gap:clamp(34px,5vw,70px);
+}
+.landing-hero > div:first-child{
+  min-width:0;
+  max-width:680px;
+}
+.landing-hero h1{
+  max-width:8ch;
+  text-wrap:balance;
+}
+.landing-hero p{
+  max-width:48ch;
+}
+.landing-panel{
+  width:100%;
+  max-width:540px;
+  justify-self:end;
+  padding:clamp(22px,3vw,30px);
+}
+.landing-panel h2{
+  max-width:14ch;
+  text-wrap:balance;
+  margin-right:auto;
+}
+.landing-panel p{
+  max-width:46ch;
+}
+.principles span{
+  align-items:baseline;
+  gap:14px;
+}
+.principles span small{
+  min-width:0;
+  text-align:right;
+}
+.feature-row{
+  width:100%;
+}
+.feature-row > div{
+  min-width:0;
+}
+.hub-hero{
+  min-width:0;
+}
+.hub-branding > p{
+  text-wrap:balance;
+}
+.home-quick-grid{
+  align-items:stretch;
+}
+.home-quick-card{
+  min-height:184px;
+}
+.home-quick-card h3{
+  max-width:15ch;
+  text-wrap:balance;
+}
+.home-quick-card p{
+  max-width:36ch;
+}
+.home-info-panel h2{
+  max-width:18ch;
+  text-wrap:balance;
+}
