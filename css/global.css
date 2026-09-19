@@ -2,80 +2,45 @@
 
 /* =========================================================
    MOBILE TOP NAV REFINEMENT
-   Keeps the header compact and proportioned on phones.
+   Two clean rows on phones so the header does not fight
+   the tiny human rectangle it lives inside.
    ========================================================= */
 @media(max-width:720px){
   body{padding-bottom:20px}
-  .app-shell{width:calc(100% - 20px)}
+  .app-shell{width:calc(100% - 16px);max-width:none}
   .appbar{
     position:sticky;
-    top:6px;
+    top:5px;
     z-index:80;
-    height:58px;
+    min-height:94px;
+    height:auto;
     display:grid;
-    grid-template-columns:auto minmax(0,1fr) auto;
+    grid-template-columns:minmax(0,1fr) auto;
+    grid-template-rows:42px 38px;
     align-items:center;
-    gap:8px;
-    padding:5px 6px;
-    margin-bottom:8px;
+    gap:4px 8px;
+    padding:5px;
+    margin-bottom:10px;
     border:1px solid rgba(255,255,255,.08);
-    border-radius:16px;
-    background:rgba(8,10,15,.86);
+    border-radius:17px;
+    background:rgba(8,10,15,.9);
     box-shadow:0 12px 35px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.05);
     backdrop-filter:blur(18px);
     -webkit-backdrop-filter:blur(18px);
   }
   .appbar .brand{
     min-width:0;
-    font-size:16px;
-    padding:0 3px;
-  }
-  .main-nav{
-    position:static;
-    left:auto;
-    right:auto;
-    bottom:auto;
-    z-index:auto;
-    min-width:0;
-    width:100%;
-    display:flex;
-    align-items:center;
-    justify-content:flex-start;
-    gap:2px;
-    margin:0;
-    padding:3px;
-    border:1px solid rgba(255,255,255,.07);
-    border-radius:12px;
-    background:rgba(255,255,255,.035);
-    box-shadow:none;
-    overflow-x:auto;
-    overflow-y:hidden;
-    scrollbar-width:none;
-    backdrop-filter:none;
-    -webkit-backdrop-filter:none;
-  }
-  .main-nav::-webkit-scrollbar{display:none}
-  .main-nav a{
-    flex:0 0 auto;
-    min-width:58px;
-    min-height:36px;
-    padding:7px 8px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:9px;
-    font-size:8px;
+    font-size:17px;
     line-height:1;
-    white-space:nowrap;
-    overflow-wrap:normal;
-  }
-  .main-nav .studio-link{
-    min-width:66px;
-    padding-inline:10px;
+    padding:0 8px;
+    align-self:center;
   }
   .user-pill{
     min-width:0;
-    margin-left:0;
+    margin:0;
+    justify-self:end;
+    grid-column:2;
+    grid-row:1;
   }
   .account-trigger{
     width:38px;
@@ -87,18 +52,59 @@
   }
   .account-avatar{width:30px;height:30px;border-radius:9px}
   .account-name{display:none}
+  .main-nav{
+    position:static;
+    grid-column:1 / -1;
+    grid-row:2;
+    min-width:0;
+    width:100%;
+    height:38px;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    align-items:stretch;
+    gap:3px;
+    margin:0;
+    padding:3px;
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:12px;
+    background:rgba(255,255,255,.035);
+    box-shadow:none;
+    overflow:hidden;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+  }
+  .main-nav a,
+  .main-nav .studio-link{
+    min-width:0;
+    min-height:0;
+    width:100%;
+    height:30px;
+    padding:0 4px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:8px;
+    font-size:8px;
+    line-height:1;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
 }
 @media(max-width:430px){
+  .app-shell{width:calc(100% - 12px)}
   .appbar{
-    height:54px;
+    min-height:90px;
+    grid-template-rows:40px 36px;
+    gap:4px 6px;
+    padding:4px;
     top:4px;
-    gap:6px;
-    padding:4px 5px;
-    border-radius:14px;
+    border-radius:15px;
   }
-  .appbar .brand{font-size:15px}
-  .main-nav a{min-width:54px;min-height:34px;padding:6px 7px;font-size:7px}
-  .main-nav .studio-link{min-width:62px;padding-inline:8px}
-  .account-trigger{width:35px;height:35px;min-width:35px;border-radius:10px}
+  .appbar .brand{font-size:16px;padding-inline:7px}
+  .account-trigger{width:36px;height:36px;min-width:36px;border-radius:10px}
   .account-avatar{width:28px;height:28px}
+  .main-nav{height:36px;padding:3px;gap:2px}
+  .main-nav a,
+  .main-nav .studio-link{height:28px;font-size:7px;padding-inline:2px}
 }
