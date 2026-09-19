@@ -54,7 +54,7 @@ async function load() {
       .eq("is_published", true)
       .order("created_at", { ascending: false }),
     supabase.from("inventory").select("item_id").eq("user_id", state.session.user.id),
-    supabase.from("clothing_comments").select("id,clothing_id,user_id,body,created_at,profiles(username,avatar_url)").order("created_at", { ascending: false })
+    supabase.from("clothing_comments").select("id,clothing_id,user_id,body,created_at").order("created_at", { ascending: false })
   ]);
 
   if (clothingError) throw clothingError;
@@ -180,7 +180,8 @@ function clothingCard(item) {
   const image = item.thumbnail || item.design_data?.layers?.find(layer => layer?.data)?.data;
   if (image) preview.style.backgroundImage = "url(" + image + ")";
 
-  card.querySelector(".detail-btn").addEventListener("click", () => openClothingDetail(item));
+  const detailButton = card.querySelector(".detail-btn");
+  if (detailButton) detailButton.addEventListener("click", () => openClothingDetail(item));
   card.querySelector(".like-btn").addEventListener("click", async event => {
     const button = event.currentTarget;
     setBusy(button, true, "...");
@@ -332,7 +333,7 @@ commentForm?.addEventListener("submit", async event => {
       clothing_id: activeClothing.id,
       user_id: state.session.user.id,
       body
-    }).select("id,clothing_id,user_id,body,created_at,profiles(username,avatar_url)").single();
+    }).select("id,clothing_id,user_id,body,created_at").single();
     if (error) throw error;
     if (!commentCache.has(activeClothing.id)) commentCache.set(activeClothing.id, []);
     commentCache.get(activeClothing.id).unshift(data);
