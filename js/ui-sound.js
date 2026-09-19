@@ -22,7 +22,13 @@
 
   const getVolume = () => {
     try {
-      const n = Number(localStorage.getItem(RAIN_VOLUME_KEY));
+      const raw = localStorage.getItem(RAIN_VOLUME_KEY);
+      // Migrate the previous built-in 28% default to the new stronger 62% baseline.
+      if (raw === "0.28") {
+        localStorage.setItem(RAIN_VOLUME_KEY, "0.62");
+        return 0.62;
+      }
+      const n = Number(raw);
       return Number.isFinite(n) ? Math.max(0, Math.min(1, n)) : 0.62;
     } catch {
       return 0.62;
