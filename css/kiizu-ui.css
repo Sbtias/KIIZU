@@ -2102,3 +2102,13 @@ html[data-theme="light"] .friend-menu a:hover,html[data-theme="light"] .friend-m
   max-height:none;
   overflow:visible;
 }
+
+
+/* IN-APP CONFIRM DIALOGS */
+.kiizu-confirm-backdrop{position:fixed;inset:0;z-index:9990;display:grid;place-items:center;padding:20px;background:rgba(4,6,10,.64);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.kiizu-confirm{width:min(420px,calc(100vw - 32px));padding:22px;border:1px solid rgba(255,255,255,.11);border-radius:20px;background:linear-gradient(145deg,#171b24,#0e1117);box-shadow:0 30px 90px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,255,255,.05);animation:kiizuConfirmIn .22s cubic-bezier(.18,.82,.18,1)}
+.kiizu-confirm-icon{width:42px;height:42px;display:grid;place-items:center;margin-bottom:15px;border-radius:13px;background:rgba(255,82,99,.10);border:1px solid rgba(255,82,99,.18);color:#ff7887;font-size:18px}
+.kiizu-confirm h3{margin:0;color:#f3f5f8;font-size:18px;letter-spacing:-.035em}.kiizu-confirm p{margin:8px 0 20px;color:#8e96a6;font-size:12px;line-height:1.6}.kiizu-confirm-actions{display:flex;justify-content:flex-end;gap:8px}.kiizu-confirm-actions button{min-width:96px;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.09);cursor:pointer;font:inherit;font-size:11px;font-weight:700}.kiizu-confirm-cancel{background:rgba(255,255,255,.04);color:#b7beca}.kiizu-confirm-danger{background:#ff5363;color:#fff;border-color:#ff5363!important}.kiizu-confirm-cancel:hover{background:rgba(255,255,255,.07)}.kiizu-confirm-danger:hover{filter:brightness(1.06)}
+@keyframes kiizuConfirmIn{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
+html[data-theme="light"] .kiizu-confirm-backdrop{background:rgba(25,31,43,.32)}html[data-theme="light"] .kiizu-confirm{background:linear-gradient(145deg,#fff,#f5f7fa);border-color:#1b223016;box-shadow:0 30px 90px #28344a24}.kiizu-confirm h3{color:#f3f5f8}html[data-theme="light"] .kiizu-confirm h3{color:#171c25}html[data-theme="light"] .kiizu-confirm p{color:#657084}html[data-theme="light"] .kiizu-confirm-cancel{background:#1b223006;color:#4e5868}
+@media(max-width:560px){.kiizu-confirm-actions{display:grid;grid-template-columns:1fr 1fr}.kiizu-confirm-actions button{width:100%}}
