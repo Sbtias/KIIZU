@@ -2081,3 +2081,24 @@ html[data-theme="light"] .friend-menu{background:#fff;border-color:#1b223016;box
 html[data-theme="light"] .friend-menu a,html[data-theme="light"] .friend-menu button{color:#4e5868}
 html[data-theme="light"] .friend-menu a:hover,html[data-theme="light"] .friend-menu button:hover{background:#1b223008;color:#202631}
 @media(max-width:560px){.friend-more{width:32px;height:32px}.friend-menu{width:185px}}
+
+
+/* FRIENDS MENU VISIBILITY FIX */
+#friends .discover-card{
+  overflow:visible;
+  z-index:1;
+}
+#friends .discover-card:has(.friend-menu-wrap){
+  overflow:visible;
+}
+#friends .discover-card:focus-within,
+#friends .discover-card:has(.friend-more[aria-expanded="true"]){
+  z-index:30;
+}
+#friends .friend-menu-wrap{z-index:40}
+#friends .friend-menu{
+  z-index:100;
+  min-height:0;
+  max-height:none;
+  overflow:visible;
+}
