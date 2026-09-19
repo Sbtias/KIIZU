@@ -8,7 +8,8 @@ const ctx = canvas?.getContext("2d");
 const art = document.createElement("canvas");
 art.width = 640; art.height = 640;
 const artCtx = art.getContext("2d");
-const color = document.querySelector("#color");
+const baseColor = document.querySelector("#base-color");
+const brushColor = document.querySelector("#brush-color");
 const type = document.querySelector("#type");
 const name = document.querySelector("#name");
 const description = document.querySelector("#description");
@@ -27,7 +28,7 @@ let history = [];
 let redoStack = [];
 let drawing = false;
 let startPoint = null;
-let activeColor = "#171b24";
+let activeBrushColor = "#7c5cff";
 
 const GARMENTS = {
   camiseta: "Camiseta",
@@ -82,7 +83,7 @@ function render() {
   ctx.fillStyle = "rgba(255,255,255,.025)";
   ctx.fillRect(0,0,640,640);
   garmentPath(ctx);
-  ctx.fillStyle = activeColor;
+  ctx.fillStyle = baseColor?.value || "#171b24";
   ctx.shadowColor = "rgba(0,0,0,.32)";
   ctx.shadowBlur = 28;
   ctx.shadowOffsetY = 16;
@@ -124,7 +125,7 @@ function pointer(e) {
 function applyShape(p) {
   const x=Math.min(startPoint.x,p.x), y=Math.min(startPoint.y,p.y);
   const w=Math.abs(p.x-startPoint.x), h=Math.abs(p.y-startPoint.y);
-  artCtx.strokeStyle=activeColor;
+  artCtx.strokeStyle=activeBrushColor;
   artCtx.lineWidth=10;
   artCtx.lineCap="round";
   if(tool==="rect") artCtx.strokeRect(x,y,w,h);
@@ -133,7 +134,7 @@ function applyShape(p) {
 
 function fillAt(sx,sy) {
   const img=artCtx.getImageData(0,0,640,640), d=img.data;
-  const i=(sy*640+sx)*4, base=[d[i],d[i+1],d[i+2],d[i+3]], target=hexToRgba(activeColor);
+  const i=(sy*640+sx)*4, base=[d[i],d[i+1],d[i+2],d[i+3]], target=hexToRgba(activeBrushColor);
   if(base.every((v,k)=>Math.abs(v-target[k])<5)) return;
   const stack=[[sx,sy]], seen=new Uint8Array(640*640);
   while(stack.length){
@@ -159,7 +160,7 @@ function start(e) {
     const value=textValue?.value.trim();
     if(!value){toast("Escribe el texto primero.","info");return;}
     snapshot();
-    artCtx.fillStyle=activeColor;
+    artCtx.fillStyle=activeBrushColor;
     artCtx.font="800 38px 'Space Grotesk',sans-serif";
     artCtx.textAlign="center";
     artCtx.textBaseline="middle";
@@ -221,7 +222,7 @@ function hexToRgba(hex){
 }
 
 function data(){
-  return {version:2,canvas:{width:640,height:640},garment:type.value,baseColor:activeColor,layers:[{id:"art",type:"raster",data:art.toDataURL("image/png")}]};
+  return {version:2,canvas:{width:640,height:640},garment:type.value,baseColor:baseColor?.value || "#171b24",layers:[{id:"art",type:"raster",data:art.toDataURL("image/png")}]};
 }
 
 function thumbnail(){return canvas.toDataURL("image/png");}
@@ -292,18 +293,19 @@ async function save(publish=false){
 }
 
 document.querySelectorAll(".creator-tool").forEach(btn=>btn.addEventListener("click",()=>setTool(btn.dataset.tool)));
-function setColor(value){
+function setBrushColor(value){
   const next=String(value||"").trim().toLowerCase();
   if(!/^#[0-9a-f]{6}$/.test(next)) return;
-  activeColor=next;
-  if(color) color.value=next;
+  activeBrushColor=next;
+  if(brushColor) brushColor.value=next;
   document.querySelectorAll("[data-color]").forEach(btn=>btn.classList.toggle("is-selected",btn.dataset.color.toLowerCase()===next));
-  render();
 }
-document.querySelectorAll("[data-color]").forEach(btn=>btn.addEventListener("click",()=>setColor(btn.dataset.color)));
-color?.addEventListener("input",e=>setColor(e.target.value));
-color?.addEventListener("change",e=>setColor(e.target.value));
-setColor(color?.value||activeColor);
+document.querySelectorAll("[data-color]").forEach(btn=>btn.addEventListener("click",()=>{setBrushColor(btn.dataset.color);render();}));
+brushColor?.addEventListener("input",e=>{setBrushColor(e.target.value);render();});
+brushColor?.addEventListener("change",e=>{setBrushColor(e.target.value);render();});
+baseColor?.addEventListener("input",render);
+baseColor?.addEventListener("change",render);
+setBrushColor(brushColor?.value||activeBrushColor);
 type?.addEventListener("change",()=>{previewTitle.textContent=GARMENTS[type.value]||type.value;resetArt();});
 canvas?.addEventListener("pointerdown",start);
 canvas?.addEventListener("pointermove",move);
