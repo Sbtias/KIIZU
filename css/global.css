@@ -338,3 +338,152 @@ textarea{
     padding-inline:1px;
   }
 }
+
+
+/* =========================================================
+   KIIZU CORE LAYOUT v2
+   Stable type, spacing and containment across every screen.
+   ========================================================= */
+:root{
+  --content-gutter:clamp(14px,3vw,28px);
+  --content-max:1180px;
+}
+html{
+  width:100%;
+  min-width:0;
+  overflow-x:clip;
+}
+body{
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  overflow-x:clip;
+  overflow-wrap:break-word;
+  word-break:normal;
+}
+main,
+section,
+header,
+footer,
+article,
+aside,
+nav,
+div{
+  min-width:0;
+}
+.landing-shell,
+.app-shell{
+  width:min(var(--content-max),calc(100% - max(20px, var(--content-gutter) * 2)));
+  max-width:var(--content-max);
+  margin-inline:auto;
+}
+.landing-shell{
+  padding-inline:0;
+}
+.app-shell{
+  padding-inline:0;
+}
+.topbar,
+.appbar{
+  width:100%;
+  min-width:0;
+}
+.topbar > *,
+.appbar > *,
+.main-nav > *,
+.user-pill,
+.user-pill > *,
+.account-menu,
+.account-menu-head > *,
+.settings-head > *,
+.settings-info > *,
+.settings-rain > *,
+.settings-section-title,
+.settings-section-title > *,
+.theme-option > *,
+.section-head > *,
+.section-head > div,
+.hub-branding,
+.profile-hero > *,
+.profile-actions > *,
+.hero-actions > *,
+.home-stat-line > *,
+.chat-header > *,
+.chat-header-user > *,
+.chat-compose-wrap > *,
+.creator-action > *,
+.tool-row > *,
+.row2 > *,
+.fields > *,
+.friends-add-form > *{
+  min-width:0;
+}
+h1,h2,h3,h4,h5,h6,p,span,small,strong,b,label,a,button{
+  max-width:100%;
+  overflow-wrap:break-word;
+  word-break:normal;
+}
+h1,h2,h3,h4,h5,h6,p{
+  text-wrap:pretty;
+}
+button,
+a{
+  max-width:100%;
+}
+img,video,canvas,svg,iframe{
+  max-width:100%;
+  height:auto;
+}
+input,textarea,select{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+}
+.button{
+  max-width:100%;
+  white-space:normal;
+  text-wrap:balance;
+}
+.top-status{
+  max-width:42vw;
+  text-wrap:balance;
+}
+.principles span,
+.home-stat-line,
+.settings-row,
+.preference-row,
+.setting-row,
+.account-setting-row{
+  min-width:0;
+}
+.principles span > *,
+.home-stat-line > *,
+.settings-row > *,
+.preference-row > *,
+.setting-row > *,
+.account-setting-row > *{
+  min-width:0;
+  overflow-wrap:break-word;
+}
+.empty-state,
+.panel,
+.landing-panel,
+.home-info-panel,
+.home-quick-card,
+.experience,
+.discover-card,
+.item-card,
+.achievement,
+.account-card,
+.creator-tools,
+.creator-canvas,
+.studio-card,
+.studio-stage,
+.feature-row,
+.stats,
+.chat-sidebar,
+.chat-panel,
+.game-stage{
+  min-width:0;
+  max-width:100%;
+}
