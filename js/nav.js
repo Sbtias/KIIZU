@@ -95,18 +95,6 @@ function setupAccount(profile) {
   });
 }
 
-function normalizeCreatorNavigation() {
-  document.querySelectorAll('a[href="creator.html"], a[href^="creator.html?"]').forEach(link => {
-    const label = (link.textContent || "").trim().toLowerCase();
-    link.href = /crear juego|juego/.test(label) ? "game-creator.html?v=20260919-1419" : "clothing-creator.html?v=20260919-1419";
-  });
-  document.querySelectorAll('a').forEach(link => {
-    const label = (link.textContent || "").trim().toLowerCase();
-    if (label === "crear juego") link.href = "game-creator.html?v=20260919-1419";
-    if (label === "creador" || label === "ropa" || label === "crear ropa") link.href = "clothing-creator.html?v=20260919-1419";
-  });
-}
-
 export async function bootShell() {
   const session = await requireAuth();
   if (!session || !supabase) return null;
@@ -130,7 +118,6 @@ export async function bootShell() {
     el.textContent = Number(profile.coins ?? 0).toLocaleString();
   });
 
-  normalizeCreatorNavigation();
   setupAccount(profile);
   await startPresence();
   try { await supabase.rpc("track_activity"); } catch {}
