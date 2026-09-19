@@ -3,6 +3,11 @@
 (() => {
   const RAIN_ENABLED_KEY = "kiizu-rain-enabled";
   const RAIN_VOLUME_KEY = "kiizu-rain-volume";
+  const THEME_KEY = "kiizu-theme";
+  try {
+    const savedTheme = localStorage.getItem(THEME_KEY);
+    if (["dark", "aurora", "light"].includes(savedTheme)) document.documentElement.dataset.theme = savedTheme;
+  } catch (_) {}
 
   let ctx = null;
   let rain = null;
@@ -186,9 +191,10 @@
 
     injectRainVisual();
 
-    const resume = ac.state === "suspended" ? ac.resume().catch(() => {}) : Promise.resolve();
+    const resume = ac.state === "suspended" ? ac.resume().catch(() => null) : Promise.resolve(true);
     resume.then(() => {
-      if (getEnabled()) createRainAudio(ac);
+      if (ac.state !== "running" || !getEnabled()) return;
+      createRainAudio(ac);
     });
   };
 
