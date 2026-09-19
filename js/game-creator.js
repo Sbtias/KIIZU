@@ -71,6 +71,44 @@ async function loadAchievements(){
  if(error){achievementList.innerHTML=""; return;}
  achievementList.innerHTML=data?.length?data.map(a=>`<div class="achievement-row"><span>${a.icon||"🏆"}</span><div><strong>${escapeHtml(a.name)}</strong><small>${escapeHtml(a.description||"")}</small></div><b>+${Number(a.xp_reward||0)} XP</b></div>`).join(""):`<div class="status">Todavía no hay logros creados.</div>`;
 }
+
+async function loadGameById(id){
+  if(!state?.session?.user?.id || !id) return;
+  const {data,error}=await supabase.from("games")
+    .select("id,name,description,max_players,game_config,thumbnail_url,is_published")
+    .eq("id",id)
+    .eq("creator_id",state.session.user.id)
+    .maybeSingle();
+  if(error) throw error;
+  if(!data) throw new Error("No se encontró el juego.");
+  const config=data.game_config||{};
+  gameId=data.id;
+  world.width=clamp(Number(config.world?.width)||3600,1200,10000);
+  world.height=clamp(Number(config.world?.height)||900,600,2500);
+  world.gravity=clamp(Number(config.world?.gravity)||.72,.2,1.5);
+  world.background=config.world?.background||"night";
+  entities=Array.isArray(config.entities)?config.entities.map(e=>({...e})): [];
+  hasBuilt=entities.length>0;
+  selected=null;
+  zoom=.8;
+  pan={x:0,y:0};
+  $("#name").value=data.name||"";
+  $("#description").value=data.description||"";
+  $("#max").value=clamp(Number(data.max_players)||8,1,8);
+  $("#time").value=clamp(Number(config.time_limit)||180,20,900);
+  $("#objective").value=config.objective||"Llega a la meta";
+  $("#world-width").value=world.width;
+  $("#world-height").value=world.height;
+  $("#gravity").value=world.gravity;
+  $("#background").value=world.background;
+  deleteGameButton?.removeAttribute("hidden");
+  renderList();
+  draw();
+  await loadAchievements();
+  $("#status").textContent=data.is_published?"Juego publicado cargado.":"Borrador cargado.";
+  toast("Proyecto cargado en KIIZU Studio.","success");
+}
+
 function escapeHtml(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 document.querySelector("#create-achievement")?.addEventListener("click",async()=>{
  if(!gameId){toast("Guarda el juego primero para crear logros.","error");return;}
@@ -82,4 +120,35 @@ document.querySelector("#create-achievement")?.addEventListener("click",async()=
 });
 renderList();resize(); loadAchievements();
 async function deleteGame(){if(!gameId)return;if(!confirm("¿Eliminar este juego? Esta acción no se puede deshacer."))return;const code=prompt("Para confirmar la eliminación, escribe ELIMINAR");if(code!=="ELIMINAR"){toast("Eliminación cancelada.","info");return}setBusy(deleteGameButton,true,"Eliminando...");try{const{error}=await supabase.rpc("delete_own_game",{p_game_id:gameId,p_confirmation:code});if(error)throw error;toast("Juego eliminado.","success");location.reload()}catch(e){toast(e.message||"No se pudo eliminar.","error");setBusy(deleteGameButton,false)}}deleteGameButton?.addEventListener("click",deleteGame);
-async function loadMyGames(){const box=document.querySelector("#my-games");if(!box||!state?.session?.user?.id)return;const{data,error}=await supabase.from("games").select("id,name,is_published").eq("creator_id",state.session.user.id).order("created_at",{ascending:false});if(error){box.innerHTML='<span class="status">No se pudieron cargar tus juegos.</span>';return}box.innerHTML=(data||[]).map(g=>'<div class="my-game-row"><div><strong>'+escapeHtml(g.name)+'</strong><small>'+(g.is_published?"Publicado":"Borrador")+'</small></div><button class="button button--small button--ghost danger" data-game-id="'+g.id+'">Eliminar</button></div>').join("")||'<span class="status">Todavía no tienes juegos guardados.</span>';box.querySelectorAll("[data-game-id]").forEach(b=>b.onclick=async()=>{if(!confirm("¿Eliminar este juego? Esta acción no se puede deshacer."))return;const code=prompt("Para confirmar la eliminación, escribe ELIMINAR");if(code!=="ELIMINAR"){toast("Eliminación cancelada.","info");return}setBusy(b,true,"Eliminando...");try{const{error}=await supabase.rpc("delete_own_game",{p_game_id:b.dataset.gameId,p_confirmation:code});if(error)throw error;toast("Juego eliminado.","success");await loadMyGames()}catch(e){toast(e.message||"No se pudo eliminar.","error");setBusy(b,false)}})}loadMyGames();
+async function loadMyGames(){
+  const box=document.querySelector("#my-games");
+  if(!box||!state?.session?.user?.id)return;
+  const{data,error}=await supabase.from("games")
+    .select("id,name,is_published,created_at")
+    .eq("creator_id",state.session.user.id)
+    .order("created_at",{ascending:false});
+  if(error){
+    box.innerHTML='<span class="status">No se pudieron cargar tus juegos.</span>';
+    return;
+  }
+  box.innerHTML=(data||[]).map(g=>'<div class="my-game-row"><div><strong>'+escapeHtml(g.name)+'</strong><small>'+(g.is_published?"Publicado":"Borrador")+'</small></div><div class="my-game-actions"><button class="button button--small button--ghost" type="button" data-edit-game="'+g.id+'">Editar</button><button class="button button--small button--ghost danger" type="button" data-game-id="'+g.id+'">Eliminar</button></div></div>').join("")||'<span class="status">Todavía no tienes juegos guardados.</span>';
+  box.querySelectorAll("[data-edit-game]").forEach(b=>b.onclick=async()=>{
+    setBusy(b,true,"Cargando...");
+    try{await loadGameById(b.dataset.editGame);}
+    catch(e){toast(e.message||"No se pudo cargar el juego.","error");}
+    finally{setBusy(b,false)}
+  });
+  box.querySelectorAll("[data-game-id]").forEach(b=>b.onclick=async()=>{
+    if(!confirm("¿Eliminar este juego? Esta acción no se puede deshacer."))return;
+    const code=prompt("Para confirmar la eliminación, escribe ELIMINAR");
+    if(code!=="ELIMINAR"){toast("Eliminación cancelada.","info");return}
+    setBusy(b,true,"Eliminando...");
+    try{
+      const{error}=await supabase.rpc("delete_own_game",{p_game_id:b.dataset.gameId,p_confirmation:code});
+      if(error)throw error;
+      if(gameId===b.dataset.gameId){gameId=null;entities=[];selected=null;hasBuilt=false;deleteGameButton?.setAttribute("hidden","");renderList();draw();}
+      toast("Juego eliminado.","success");
+      await loadMyGames();
+    }catch(e){toast(e.message||"No se pudo eliminar.","error");setBusy(b,false)}
+  });
+}
