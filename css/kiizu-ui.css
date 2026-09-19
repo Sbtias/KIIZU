@@ -1322,3 +1322,133 @@ body::after{
   .settings-section::after,
   .results-stats>div::after{animation:none!important}
 }
+
+
+/* =========================================================
+   KIIZU POLISH PASS
+   Clean edge spacing, readable text blocks and responsive UI.
+   ========================================================= */
+.page-heading,
+.hub-hero,
+.profile-hero,
+.section-head,
+.home-section,
+.home-lower-grid,
+.creator-layout,
+.customizer-layout,
+.studio,
+.accounts-toolbar,
+.chat-layout{
+  width:100%;
+  min-width:0;
+}
+.page-heading p,
+.hub-branding > p,
+.home-info-panel p,
+.landing-panel p,
+.auth-art p{
+  max-width:62ch;
+}
+.hub-branding{
+  width:min(100%,760px);
+}
+.hub-brand-name{
+  max-width:100%;
+  overflow:visible;
+}
+.home-quick-card h3,
+.home-quick-card p,
+.discover-card h3,
+.discover-card p,
+.item-card h3,
+.item-card p,
+.experience h3,
+.experience p,
+.creator-action strong,
+.creator-action small{
+  max-width:100%;
+}
+.home-stat-line{
+  gap:18px;
+}
+.home-stat-line span{
+  text-align:right;
+}
+.settings-modal{
+  padding:
+    max(12px,env(safe-area-inset-top))
+    max(12px,env(safe-area-inset-right))
+    max(12px,env(safe-area-inset-bottom))
+    max(12px,env(safe-area-inset-left));
+  overflow:auto;
+}
+.settings-card{
+  width:min(680px,calc(100vw - 24px));
+  max-width:680px;
+  max-height:calc(100dvh - 24px);
+  padding:clamp(18px,3vw,28px);
+}
+.settings-head,
+.settings-info,
+.settings-rain{
+  min-width:0;
+}
+.settings-head > div,
+.settings-info > div,
+.settings-rain-copy{
+  min-width:0;
+  flex:1 1 auto;
+}
+.settings-head h2,
+.settings-section-title strong,
+.settings-section-title span,
+.settings-info strong,
+.settings-info span,
+.settings-rain-copy strong,
+.settings-rain-copy span{
+  max-width:100%;
+  overflow-wrap:break-word;
+  word-break:normal;
+}
+.settings-section-title span,
+.settings-info span,
+.settings-rain-copy span{
+  display:block;
+}
+.settings-row,
+.preference-row,
+.setting-row,
+.account-setting-row{
+  min-width:0;
+}
+.settings-row > div,
+.preference-row > div,
+.setting-row > div,
+.account-setting-row > div{
+  min-width:0;
+}
+.theme-option{
+  min-width:0;
+}
+.theme-option span:last-child{
+  min-width:0;
+}
+.results-card{
+  min-width:0;
+  max-width:100%;
+}
+.chat-message{
+  min-width:0;
+}
+.chat-bubble{
+  max-width:100%;
+  overflow-wrap:anywhere;
+}
+.auth-card,
+.auth-art{
+  min-width:0;
+}
+.panel--clean{
+  width:min(460px,100%);
+  max-width:100%;
+}
