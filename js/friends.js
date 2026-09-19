@@ -9,6 +9,23 @@ const esc = v => String(v ?? "").replace(/[&<>"]/g, m => ({
 
 let state = null;
 
+function confirmInApp(title, message, dangerText = "Eliminar") {
+  return new Promise(resolve => {
+    const wrap = document.createElement("div");
+    wrap.className = "kiizu-confirm-backdrop";
+    wrap.innerHTML = '<div class="kiizu-confirm" role="dialog" aria-modal="true">' +
+      '<div class="kiizu-confirm-icon">!</div>' +
+      '<h3>' + esc(title) + '</h3>' +
+      '<p>' + esc(message) + '</p>' +
+      '<div class="kiizu-confirm-actions"><button type="button" class="kiizu-confirm-cancel">Cancelar</button><button type="button" class="kiizu-confirm-danger">' + esc(dangerText) + '</button></div></div>';
+    document.body.appendChild(wrap);
+    const finish = value => { wrap.remove(); resolve(value); };
+    wrap.querySelector(".kiizu-confirm-cancel").onclick = () => finish(false);
+    wrap.querySelector(".kiizu-confirm-danger").onclick = () => finish(true);
+    wrap.addEventListener("click", e => { if (e.target === wrap) finish(false); });
+  });
+}
+
 function closeFriendMenus() {
   document.querySelectorAll(".friend-menu").forEach(menu => { menu.hidden = true; });
   document.querySelectorAll(".friend-more").forEach(button => {
@@ -120,7 +137,7 @@ async function respond(id, accept) {
 }
 
 async function cancelRequest(friendship, btn) {
-  if (!confirm("¿Quitar la solicitud de amistad?")) return;
+  if (!await confirmInApp("Quitar solicitud", "La solicitud se eliminará y podrás enviar otra más adelante.", "Quitar solicitud")) return;
   setBusy(btn, true, "Quitando...");
   try {
     const { error } = await supabase
@@ -138,7 +155,7 @@ async function cancelRequest(friendship, btn) {
 }
 
 async function removeFriend(friendship, btn) {
-  if (!confirm("¿Quitar a esta persona de tus amigos?")) return;
+  if (!await confirmInApp("Eliminar amigo", "Esta persona dejará de aparecer en tu lista de amigos.", "Eliminar amigo")) return;
   setBusy(btn, true, "Quitando...");
   try {
     const { error } = await supabase
