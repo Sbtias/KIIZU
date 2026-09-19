@@ -54,7 +54,7 @@ async function load() {
       .eq("is_published", true)
       .order("created_at", { ascending: false }),
     supabase.from("inventory").select("item_id").eq("user_id", state.session.user.id),
-    supabase.from("clothing_comments").select("id,clothing_id,user_id,body,created_at").order("created_at", { ascending: false })
+    supabase.from("clothing_comments").select("id,clothing_id,user_id,body,created_at,profiles!clothing_comments_user_id_fkey(username,avatar_url)").order("created_at", { ascending: false })
   ]);
 
   if (clothingError) throw clothingError;
@@ -309,13 +309,16 @@ function renderComments(clothingId) {
     return;
   }
   commentsList.innerHTML = comments.map(comment => {
-    const name = escapeHtml(comment.profiles?.username || "Usuario");
+    const username = comment.profiles?.username || "Usuario";
+    const name = escapeHtml(username);
+    const profileId = encodeURIComponent(comment.user_id || "");
+    const avatarUrl = comment.profiles?.avatar_url || "";
     const body = escapeHtml(comment.body);
     const date = formatCommentDate(comment.created_at);
     const mine = comment.user_id === state.session.user.id;
     return '<article class="clothing-comment">' +
-      '<div class="clothing-comment-avatar">' + escapeHtml((comment.profiles?.username || "U").slice(0,1).toUpperCase()) + '</div>' +
-      '<div class="clothing-comment-body"><div><strong>' + name + '</strong><time>' + date + '</time></div><p>' + body + '</p>' +
+      '<div class="clothing-comment-avatar">' + (avatarUrl ? '<img src="' + escapeHtml(avatarUrl) + '" alt="Foto de perfil de ' + name + '">' : escapeHtml(username.slice(0,1).toUpperCase())) + '</div>' +
+      '<div class="clothing-comment-body"><div class="clothing-comment-author"><div><strong>' + name + '</strong><a href="public-profile.html?user=' + profileId + '" class="comment-profile-link">Ver perfil</a></div><time>' + date + '</time></div><p>' + body + '</p>' +
       (mine ? '<button class="comment-delete" type="button" data-comment-id="' + escapeHtml(comment.id) + '">Eliminar</button>' : '') +
       '</div></article>';
   }).join("");
@@ -341,7 +344,7 @@ commentForm?.addEventListener("submit", async event => {
       clothing_id: activeClothing.id,
       user_id: state.session.user.id,
       body
-    }).select("id,clothing_id,user_id,body,created_at").single();
+    }).select("id,clothing_id,user_id,body,created_at,profiles!clothing_comments_user_id_fkey(username,avatar_url)").single();
     if (error) throw error;
     if (!commentCache.has(activeClothing.id)) commentCache.set(activeClothing.id, []);
     commentCache.get(activeClothing.id).unshift(data);
