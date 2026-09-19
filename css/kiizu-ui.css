@@ -1510,3 +1510,78 @@ body::after{
     line-height:1.55;
   }
 }
+
+
+/* LIGHT THEME REFINEMENT v2 */
+html[data-theme="light"] body{
+  background:
+    radial-gradient(850px 520px at 90% -8%,rgba(112,91,230,.10),transparent 60%),
+    radial-gradient(760px 520px at -10% 92%,rgba(47,141,101,.08),transparent 58%),
+    linear-gradient(145deg,#f8f9fc,#eef1f6 58%,#f7f8fb);
+}
+html[data-theme="light"] body::after{
+  background:
+    radial-gradient(38% 34% at 16% 20%,rgba(112,91,230,.055),transparent 70%),
+    radial-gradient(34% 30% at 82% 24%,rgba(47,141,101,.045),transparent 72%);
+  opacity:.9;
+}
+html[data-theme="light"] .appbar,
+html[data-theme="light"] .topbar{
+  background:rgba(248,249,252,.88);
+  border-bottom-color:rgba(22,28,40,.08);
+  box-shadow:0 8px 28px rgba(30,38,55,.05);
+}
+html[data-theme="light"] .main-nav{
+  background:rgba(255,255,255,.78);
+  border-color:rgba(22,28,40,.09);
+  box-shadow:0 10px 28px rgba(30,38,55,.07),inset 0 1px 0 rgba(255,255,255,.9);
+}
+html[data-theme="light"] .main-nav a{
+  color:#667085;
+}
+html[data-theme="light"] .main-nav a:hover{
+  color:#1d2430;
+  background:rgba(112,91,230,.06);
+  border-color:rgba(112,91,230,.10);
+}
+html[data-theme="light"] .main-nav .active{
+  color:#27233d;
+  background:linear-gradient(135deg,rgba(112,91,230,.13),rgba(112,91,230,.045));
+  border-color:rgba(112,91,230,.18);
+  box-shadow:0 8px 22px rgba(112,91,230,.10),inset 0 1px 0 rgba(255,255,255,.9);
+}
+html[data-theme="light"] .user-pill{
+  background:rgba(255,255,255,.78);
+  border-color:rgba(22,28,40,.09);
+  box-shadow:0 10px 28px rgba(30,38,55,.07);
+}
+html[data-theme="light"] .account-trigger{
+  color:#202632;
+  background:linear-gradient(145deg,#fff,#f5f6f9);
+  border-color:rgba(22,28,40,.08);
+}
+html[data-theme="light"] .account-menu{
+  background:rgba(255,255,255,.97);
+  color:#202632;
+}
+html[data-theme="light"] .button:not(.button--ghost){
+  box-shadow:0 10px 24px rgba(50,42,120,.12);
+}
+html[data-theme="light"] .hub-brand-name{
+  text-shadow:0 8px 30px rgba(40,48,70,.08);
+}
+html[data-theme="light"] .settings-card,
+html[data-theme="light"] .results-card,
+html[data-theme="light"] .clothing-detail-card{
+  background:linear-gradient(145deg,#fff,#f7f8fb);
+}
+html[data-theme="light"] .clothing-detail-backdrop{
+  background:rgba(20,25,35,.34);
+}
+html[data-theme="light"] .clothing-detail-preview{
+  background-color:#eef1f6;
+}
+html[data-theme="light"] .clothing-comments-list,
+html[data-theme="light"] .clothing-comment{
+  border-color:rgba(22,28,40,.08);
+}
