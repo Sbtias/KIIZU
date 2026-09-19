@@ -81,3 +81,5 @@ html[data-theme="light"] .creator-hero{background:radial-gradient(520px 220px at
 .creator-field input[type=color]::-webkit-color-swatch-wrapper{padding:0}
 .creator-field input[type=color]::-webkit-color-swatch{border:0;border-radius:7px}
 .creator-field input[type=color]::-moz-color-swatch{border:0;border-radius:7px}
+.creator-color-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.creator-color-fields .creator-field{margin-bottom:13px}
+@media(max-width:560px){.creator-color-fields{gap:8px}}
