@@ -72,7 +72,7 @@ function setHeader(friend){
   header.innerHTML='<div class="chat-header-user">'+
     '<span class="chat-header-avatar">'+esc(initials(friend.username))+'<i class="chat-online '+(online?"is-online":"")+'"></i></span>'+
     '<div><h2>'+esc(friend.username||"Usuario")+'</h2><p class="chat-presence">'+(online?"En línea":"Fuera de línea")+'</p></div>'+
-    '</div><a class="chat-profile-link" href="public-profile.html?user='+encodeURIComponent(friend.id)+'">Ver perfil</a>';
+    '</div><div class="chat-header-actions"><a class="chat-profile-link" href="public-profile.html?user='+encodeURIComponent(friend.id)+'">Ver perfil</a><div class="chat-more-wrap"><button class="chat-more" id="chat-more-button" type="button" aria-label="Más opciones" aria-expanded="false">•••</button><div class="chat-more-menu" id="chat-more-menu" hidden><button type="button" data-chat-action="clear">Eliminar chat</button><button type="button" data-chat-action="remove" class="is-danger">Eliminar amigo</button></div></div></div></div>';
 }
 
 function setComposer(enabled){
@@ -138,12 +138,64 @@ async function deleteMessage(id){
   }catch(error){toast(error.message||"No se pudo borrar el mensaje.","error")}
 }
 
+async function clearChat(){
+  if(!activeFriend)return;
+  const friend=activeFriend;
+  if(!confirm("¿Eliminar todos los mensajes de este chat? Esta acción no se puede deshacer."))return;
+  try{
+    const a=state.session.user.id,b=friend.id;
+    const{error}=await supabase.from("messages").delete()
+      .eq("channel","friend")
+      .or("and(sender_id.eq."+a+",recipient_id.eq."+b+"),and(sender_id.eq."+b+",recipient_id.eq."+a+")");
+    if(error)throw error;
+    await loadMessages();
+    toast("Chat eliminado.","success");
+  }catch(error){toast(error.message||"No se pudo eliminar el chat.","error")}
+}
+
+async function removeFriend(){
+  if(!activeFriend)return;
+  const friend=activeFriend;
+  if(!confirm("¿Eliminar a "+(friend.username||"este amigo")+" de tus amigos?"))return;
+  try{
+    const{error}=await supabase.rpc("remove_friend",{p_user_id:friend.id});
+    if(error)throw error;
+    if(activeChannel)await supabase.removeChannel(activeChannel);
+    activeChannel=null;
+    activeFriend=null;
+    setComposer(false);
+    header.innerHTML='<div class="chat-header-empty"><div><h2>Selecciona un chat</h2><p>Elige un amigo para ver los mensajes.</p></div></div>';
+    messagesEl.innerHTML='<div class="chat-welcome"><div class="chat-welcome-icon">✦</div><h3>Tu espacio privado</h3><p>Selecciona una conversación para empezar a hablar.</p></div>';
+    updateStorage([]);
+    await loadFriends();
+    toast("Amigo eliminado.","success");
+  }catch(error){toast(error.message||"No se pudo eliminar al amigo.","error")}
+}
+
+function bindChatActions(){
+  const more=document.querySelector("#chat-more-button");
+  const menu=document.querySelector("#chat-more-menu");
+  if(!more||!menu)return;
+  more.addEventListener("click",e=>{
+    e.stopPropagation();
+    const open=!menu.hidden;
+    menu.hidden=open;
+    more.setAttribute("aria-expanded",String(!open));
+  });
+  menu.querySelector('[data-chat-action="clear"]')?.addEventListener("click",()=>{menu.hidden=true;clearChat()});
+  menu.querySelector('[data-chat-action="remove"]')?.addEventListener("click",()=>{menu.hidden=true;removeFriend()});
+  document.addEventListener("click",e=>{
+    if(!menu.contains(e.target)&&e.target!==more){menu.hidden=true;more.setAttribute("aria-expanded","false")}
+  },{once:true});
+}
+
 async function selectFriend(friend){
   activeFriend=friend;
   unread.delete(friend.id);
   renderFriends();
   setHeader(friend);
   setComposer(true);
+  bindChatActions();
   try{await loadMessages()}catch(error){toast(error.message||"No se pudieron cargar los mensajes.","error")}
   if(activeChannel)await supabase.removeChannel(activeChannel);
   activeChannel=supabase.channel("private-chat-"+state.session.user.id+"-"+friend.id)
