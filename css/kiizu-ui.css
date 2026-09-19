@@ -88,3 +88,19 @@ html[data-theme="light"] .creator-hero{background:radial-gradient(520px 220px at
 .account-avatar,.friend-avatar,.public-profile-photo,.public-profile-photo img,.clothing-comment-avatar,.clothing-comment-avatar img,.profile-avatar,.profile-photo,.user-avatar,.avatar,.avatar img{border-radius:50%!important}
 .public-profile-photo{width:112px!important;height:112px!important;min-width:112px;min-height:112px;overflow:hidden!important;display:grid!important;place-items:center;margin-inline:auto}
 .public-profile-photo img{width:100%!important;height:100%!important;object-fit:cover!important;display:block}
+
+/* PUBLIC PROFILE: compact left-aligned identity card */
+.public-profile{width:100%;max-width:980px;margin:0 auto}
+.public-profile>.text-button{display:inline-flex;align-items:center;margin:28px 0 14px}
+.public-profile-card{display:flex;align-items:center;justify-content:flex-start;gap:22px;width:100%;padding:22px 24px;text-align:left;overflow:hidden}
+.public-profile-card .public-profile-photo{flex:0 0 112px;margin:0!important}
+.public-profile-card>div:last-child{min-width:0;display:grid;gap:4px}
+.public-profile-card h1{margin:2px 0 0;font-size:clamp(30px,4vw,46px);line-height:.98;letter-spacing:-.06em;overflow-wrap:anywhere}
+.public-profile-card #public-level{margin:2px 0 0;color:var(--muted);font-size:12px}
+.public-profile-stats{margin-top:12px}
+.public-achievements{margin-top:12px}
+@media(max-width:560px){
+  .public-profile-card{gap:15px;padding:17px}
+  .public-profile-card .public-profile-photo{flex-basis:88px}
+  .public-profile-card h1{font-size:28px}
+}
