@@ -1,5 +1,5 @@
 import { supabase } from "./app.js";
-import { bootShell } from "./nav.js?v=20260918-1335";
+import { bootShell } from "./nav.js?v=20260919-1426";
 import { toast } from "./ui.js";
 import { Kiizu2D, buildWorld, buildWorldFromConfig } from "./game-engine.js";
 
