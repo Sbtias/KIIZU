@@ -74,14 +74,17 @@ async function load() {
 
   const clothingIds = (clothing || []).map(c => c.id);
   const likes = new Map();
+  const purchasedClothing = new Set();
 
   if (clothingIds.length) {
-    const [{ data: allLikes, error: likesError }, { data: mineLikes, error: mineLikesError }] = await Promise.all([
+    const [{ data: allLikes, error: likesError }, { data: mineLikes, error: mineLikesError }, { data: myClothing, error: myClothingError }] = await Promise.all([
       supabase.from("clothing_likes").select("clothing_id"),
-      supabase.from("clothing_likes").select("clothing_id").eq("user_id", state.session.user.id)
+      supabase.from("clothing_likes").select("clothing_id").eq("user_id", state.session.user.id),
+      supabase.from("clothing_purchases").select("clothing_id").eq("user_id", state.session.user.id)
     ]);
     if (likesError) throw likesError;
     if (mineLikesError) throw mineLikesError;
+    if (myClothingError) throw myClothingError;
 
     for (const row of allLikes || []) {
       const current = likes.get(row.clothing_id) || { count: 0, mine: false };
@@ -93,6 +96,7 @@ async function load() {
       current.mine = true;
       likes.set(row.clothing_id, current);
     }
+    for (const row of myClothing || []) purchasedClothing.add(row.clothing_id);
   }
 
   catalog = {
@@ -103,7 +107,8 @@ async function load() {
     clothing: (clothing || []).map(item => ({
       ...item,
       like: likes.get(item.id) || { count: 0, mine: false },
-      commentCount: (commentCache.get(item.id) || []).length
+      commentCount: (commentCache.get(item.id) || []).length,
+      purchased: purchasedClothing.has(item.id)
     }))
   };
 
@@ -176,7 +181,7 @@ function clothingCard(item) {
     '<div class="tool-row">' +
       '<button class="button button--small detail-btn" type="button">Ver más</button>' +
       '<button class="button button--small like-btn" type="button" aria-label="Me gusta">' + (like.mine ? "♥" : "♡") + '</button>' +
-      '<button class="button button--small buy-btn" type="button" ' + (mine ? "disabled" : "") + '>' + (mine ? "Tu creación" : "Comprar") + '</button>' +
+      '<button class="button button--small buy-btn ' + (item.purchased ? "is-purchased" : "") + '" type="button" ' + (mine || item.purchased ? "disabled" : "") + '>' + (mine ? "Tu creación" : item.purchased ? "YA COMPRADO" : "Comprar") + '</button>' +
     '</div>';
 
   const preview = card.querySelector(".clothing-preview");
