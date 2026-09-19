@@ -139,3 +139,202 @@ input,textarea,select{width:100%;padding:12px 13px;background:#080a0f;color:#fff
   .chat-sidebar{max-height:none}
   .settings-card{padding:18px}
 }
+
+
+/* =========================================================
+   KIIZU EDGE SAFETY / CONTENT CONTAINMENT
+   Keeps every view comfortably inside its visual frame.
+   ========================================================= */
+html,
+body{
+  max-width:100%;
+  overflow-x:hidden;
+}
+body{
+  overflow-wrap:anywhere;
+}
+.landing-shell,
+.app-shell,
+.match-shell{
+  min-width:0;
+}
+.landing-shell > *,
+.app-shell > *,
+.match-shell > *{
+  min-width:0;
+  max-width:100%;
+}
+.topbar,
+.appbar,
+.hub-hero,
+.section-head,
+.hero-actions,
+.profile-actions,
+.friends-add-form,
+.chat-header,
+.chat-composer,
+.chat-compose-note,
+.settings-head,
+.settings-row,
+.preference-row,
+.setting-row,
+.account-setting-row{
+  min-width:0;
+}
+.topbar > *,
+.appbar > *,
+.hub-hero > *,
+.section-head > *,
+.profile-hero > *,
+.profile-actions > *,
+.hero-actions > *{
+  min-width:0;
+}
+h1,h2,h3,h4,h5,h6,
+p,
+span,
+small,
+strong,
+b,
+label,
+a,
+button{
+  overflow-wrap:anywhere;
+}
+h1,h2,h3,h4,h5,h6,p{
+  max-width:100%;
+}
+img,
+video,
+canvas,
+svg,
+iframe{
+  display:block;
+  max-width:100%;
+}
+canvas{
+  height:auto;
+}
+input,
+textarea,
+select{
+  min-width:0;
+  max-width:100%;
+}
+textarea{
+  overflow:auto;
+}
+.button,
+.chip,
+.text-button{
+  max-width:100%;
+}
+.home-quick-card,
+.home-info-panel,
+.discover-card,
+.item-card,
+.experience,
+.achievement,
+.account-card,
+.creator-action,
+.settings-card,
+.settings-section,
+.results-card,
+.results-stats > div,
+.chat-sidebar,
+.chat-panel,
+.creator-tools,
+.creator-canvas,
+.studio-card,
+.studio-stage,
+.panel,
+.landing-panel,
+.feature-row,
+.game-stage{
+  min-width:0;
+  max-width:100%;
+}
+.home-quick-card h3,
+.home-quick-card p,
+.discover-card h3,
+.discover-card p,
+.item-card h3,
+.item-card p,
+.experience h3,
+.experience p,
+.creator-action strong,
+.creator-action small,
+.account-card *,
+.chat-bubble,
+.chat-friend-copy *,
+.clothing-detail-main *,
+.clothing-comment-body *{
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+.section-head > div,
+.hub-branding,
+.profile-hero > div,
+.chat-header-user,
+.chat-friend-copy,
+.chat-compose-wrap,
+.clothing-detail-main,
+.clothing-comment-body{
+  min-width:0;
+}
+.filter-row{
+  min-width:0;
+}
+.filter-row > *{
+  min-width:0;
+}
+@media(max-width:720px){
+  .landing-shell,
+  .app-shell{
+    width:calc(100% - 20px);
+    padding-inline:6px;
+  }
+  .topbar,
+  .appbar{
+    width:100%;
+  }
+  .page-heading,
+  .hub-hero,
+  .profile-hero{
+    padding-inline:2px;
+  }
+  .section-head{
+    padding-inline:2px;
+  }
+  .feature-row > div,
+  .home-quick-card,
+  .home-info-panel,
+  .discover-card,
+  .item-card,
+  .experience,
+  .achievement,
+  .account-card,
+  .creator-action{
+    overflow:hidden;
+  }
+  .button{
+    white-space:normal;
+    text-align:center;
+  }
+  .main-nav a{
+    white-space:nowrap;
+  }
+}
+@media(max-width:430px){
+  .landing-shell,
+  .app-shell{
+    width:calc(100% - 14px);
+    padding-inline:5px;
+  }
+  .page-heading,
+  .hub-hero,
+  .profile-hero,
+  .section-head{
+    padding-inline:1px;
+  }
+}
