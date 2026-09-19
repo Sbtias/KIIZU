@@ -713,3 +713,52 @@ html[data-theme="light"] .clothing-card .detail-btn:hover{
   .clothing-card .like-btn{grid-column:2;grid-row:1}
   .clothing-card .buy-btn{grid-row:2}
 }
+
+
+/* Purchased state */
+.clothing-card .buy-btn.is-purchased,
+.clothing-detail-actions .buy-detail-btn.is-purchased{
+  background:#ffffff08;
+  border-color:#ffffff12;
+  color:#7f899a;
+  cursor:default;
+  box-shadow:none;
+}
+.clothing-card .buy-btn.is-purchased:hover,
+.clothing-detail-actions .buy-detail-btn.is-purchased:hover{
+  transform:none;
+  background:#ffffff08;
+  border-color:#ffffff12;
+}
+@media (max-width:700px){
+  .clothing-card .tool-row{
+    grid-template-columns:1fr 44px;
+    gap:7px;
+  }
+  .clothing-card .detail-btn{
+    grid-column:1;
+    min-height:40px;
+  }
+  .clothing-card .like-btn{
+    grid-column:2;
+    grid-row:1;
+    min-height:40px;
+  }
+  .clothing-card .buy-btn{
+    grid-column:1 / -1;
+    grid-row:2;
+    width:100%;
+    min-height:42px;
+  }
+  .clothing-card .buy-btn.is-purchased{
+    letter-spacing:.08em;
+    font-size:9px;
+  }
+  .clothing-detail-actions{
+    display:grid;
+    grid-template-columns:1fr;
+  }
+  .clothing-detail-actions .button{
+    width:100%;
+  }
+}
