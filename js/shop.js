@@ -61,13 +61,15 @@ async function load() {
   // El catálogo oficial puede estar vacío o tener RLS sin afectar las creaciones de la comunidad.
   // La sesión autenticada debe poder leer el inventario propio para marcar lo comprado.
   if (inventoryError) throw inventoryError;
-  if (commentsError) throw commentsError;
+  if (commentsError) console.warn("No se pudieron cargar los comentarios:", commentsError);
   if (itemError) console.warn("No se pudo cargar el catálogo oficial:", itemError);
 
   commentCache = new Map();
-  for (const row of comments || []) {
-    if (!commentCache.has(row.clothing_id)) commentCache.set(row.clothing_id, []);
-    commentCache.get(row.clothing_id).push(row);
+  if (!commentsError) {
+    for (const row of comments || []) {
+      if (!commentCache.has(row.clothing_id)) commentCache.set(row.clothing_id, []);
+      commentCache.get(row.clothing_id).push(row);
+    }
   }
 
   const clothingIds = (clothing || []).map(c => c.id);
@@ -172,6 +174,7 @@ function clothingCard(item) {
     '<h3>' + escapeHtml(item.name) + '</h3>' +
     '<p>' + Number(item.price || 0).toLocaleString() + ' 🪙 · <span class="like-count">' + like.count + '</span> likes</p></div>' +
     '<div class="tool-row">' +
+      '<button class="button button--small detail-btn" type="button">Ver más</button>' +
       '<button class="button button--small like-btn" type="button" aria-label="Me gusta">' + (like.mine ? "♥" : "♡") + '</button>' +
       '<button class="button button--small buy-btn" type="button" ' + (mine ? "disabled" : "") + '>' + (mine ? "Tu creación" : "Comprar") + '</button>' +
     '</div>';
