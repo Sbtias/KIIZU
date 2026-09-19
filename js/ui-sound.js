@@ -59,7 +59,7 @@
   const rainCSS =
     ".kiizu-rain{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden;background:transparent;isolation:isolate}" +
     ".kiizu-rain::after{content:\"\";position:absolute;inset:0;background:radial-gradient(circle at 20% 20%,rgba(255,255,255,.025),transparent 32%),radial-gradient(circle at 80% 70%,rgba(180,210,235,.018),transparent 35%);box-shadow:inset 0 0 120px rgba(0,0,0,.12);}" +
-    ".kiizu-rain-drop{position:absolute;top:-8vh;width:1px;height:28px;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(224,236,247,.40) 38%,rgba(238,246,252,.58) 72%,rgba(255,255,255,.04));box-shadow:0 0 5px rgba(220,235,245,.08);animation:kiizuRainDrop linear infinite;will-change:transform,opacity;transform:rotate(12deg)}" +
+    ".kiizu-rain-drop{position:absolute;top:-8vh;width:1px;height:28px;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(224,236,247,.55) 34%,rgba(238,246,252,.78) 72%,rgba(255,255,255,.10));box-shadow:0 0 7px rgba(220,235,245,.13);animation:kiizuRainDrop linear infinite;will-change:transform,opacity;transform:rotate(12deg)}" +
     ".kiizu-glass-bead{position:absolute;width:clamp(18px,2.3vw,34px);height:clamp(24px,3.5vw,48px);border-radius:48% 52% 55% 45%;background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.25) 0 4%,rgba(255,255,255,.07) 8%,transparent 24%),radial-gradient(ellipse at 52% 58%,rgba(190,215,235,.045),transparent 68%);border:1px solid rgba(225,238,248,.09);box-shadow:inset 3px 3px 8px rgba(255,255,255,.06),inset -4px -5px 9px rgba(0,0,0,.12);animation:kiizuGlassPulse 4.6s ease-in-out infinite}" +
     ".kiizu-glass-bead::before{content:\"\";position:absolute;left:22%;top:13%;width:26%;height:17%;border-radius:50%;background:rgba(255,255,255,.2);filter:blur(1px);transform:rotate(-20deg)}" +
     "@keyframes kiizuRainDot{0%{transform:translate3d(0,-8vh,0);opacity:0}12%{opacity:.7}82%{opacity:.55}100%{transform:translate3d(5vw,108vh,0);opacity:0}}" +
@@ -158,12 +158,12 @@
       filter.type = "lowpass";
       filter.frequency.value = 1500;
       filter.Q.value = .42;
-      gain.gain.value = .11;
+      gain.gain.value = .18;
 
       source.connect(filter).connect(gain).connect(master);
       source.start();
 
-      master.gain.setTargetAtTime(.72 * getVolume(), ac.currentTime, .25);
+      master.gain.setTargetAtTime(Math.max(.035, .30 * getVolume()), ac.currentTime, .22);
       rain = { master, source };
       rainTimer = window.setInterval(playDrop, 420);
     } catch (_) {
@@ -228,7 +228,7 @@
       const volume = Math.max(0, Math.min(1, Number(value) || 0));
       try { localStorage.setItem(RAIN_VOLUME_KEY, String(volume)); } catch (_) {}
       if (rain && ctx) {
-        rain.master.gain.setTargetAtTime(.72 * volume, ctx.currentTime, .08);
+        rain.master.gain.setTargetAtTime(Math.max(.035, .30 * volume), ctx.currentTime, .08);
       }
     }
   };
