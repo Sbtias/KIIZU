@@ -1,1 +1,28 @@
-<!doctype html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Marketplace · KIIZU</title><link rel="stylesheet" href="css/global.css"><link rel="stylesheet" href="css/kiizu-ui.css?v=20260918-2208"></head><body><main class="app-shell"><header class="appbar"><a class="brand" href="lobby.html">KIIZU</a><nav class="main-nav"><a href="lobby.html">Inicio</a><a href="discover.html">Jugar</a><a class="active" href="shop.html">Marketplace</a><a href="creator.html">Ropa</a><a href="game-creator.html">Crear juego</a></nav><div class="user-pill"></div></header><section class="page-heading"><span class="eyebrow">MARKETPLACE</span><h1>Encuentra tu estilo.</h1><p>Ropa y creaciones de la comunidad.</p></section><div class="filter-row"><span class="chip active">Todo</span><span class="chip">Ropa</span><span class="chip">Accesorios</span><span class="chip">Efectos</span><span class="chip">Emotes</span><a class="button button--small" href="creator.html">Crear ropa</a></div><section id="shop-grid" class="item-grid"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></section><section class="page-heading"><span class="eyebrow">JUEGOS</span><h2>Todos los juegos de KIIZU</h2><p>Descubre lo que está creando la comunidad.</p></section><section id="market-games" class="discover-grid"></section></main><script type="module" src="js/shop.js?v=20260918-1510"></script><script src="js/ui-sound.js?v=20260919-0232"></script></body></html>
+<!doctype html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Marketplace · KIIZU</title><link rel="stylesheet" href="css/global.css"><link rel="stylesheet" href="css/kiizu-ui.css?v=20260919-0238"></head><body><main class="app-shell"><header class="appbar"><a class="brand" href="lobby.html">KIIZU</a><nav class="main-nav"><a href="lobby.html">Inicio</a><a href="discover.html">Jugar</a><a class="active" href="shop.html">Marketplace</a><a href="creator.html">Ropa</a><a href="game-creator.html">Crear juego</a></nav><div class="user-pill"></div></header><section class="page-heading"><span class="eyebrow">MARKETPLACE</span><h1>Encuentra tu estilo.</h1><p>Ropa y creaciones de la comunidad.</p></section><div class="filter-row"><span class="chip active">Todo</span><span class="chip">Ropa</span><span class="chip">Accesorios</span><span class="chip">Efectos</span><span class="chip">Emotes</span><a class="button button--small" href="creator.html">Crear ropa</a></div><section id="shop-grid" class="item-grid"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></section><section class="page-heading"><span class="eyebrow">JUEGOS</span><h2>Todos los juegos de KIIZU</h2><p>Descubre lo que está creando la comunidad.</p></section><section id="market-games" class="discover-grid"></section><div id="clothing-detail" class="clothing-detail-modal" hidden>
+  <div class="clothing-detail-backdrop" data-detail-close></div>
+  <section class="clothing-detail-card" role="dialog" aria-modal="true" aria-labelledby="clothing-detail-title">
+    <button class="clothing-detail-close" type="button" aria-label="Cerrar detalle" data-detail-close>×</button>
+    <div class="clothing-detail-layout">
+      <div class="clothing-detail-preview" id="clothing-detail-preview"></div>
+      <div class="clothing-detail-main">
+        <div class="clothing-detail-meta"><span class="eyebrow" id="clothing-detail-type">ROPA</span><span id="clothing-detail-creator">por Creador</span></div>
+        <h2 id="clothing-detail-title">Creación</h2>
+        <p id="clothing-detail-description" class="clothing-detail-description">Sin descripción.</p>
+        <div class="clothing-detail-stats">
+          <span><b id="clothing-detail-price">0</b> 🪙</span>
+          <span>♡ <b id="clothing-detail-likes">0</b> likes</span>
+          <span>💬 <b id="clothing-detail-comment-count">0</b> comentarios</span>
+        </div>
+        <div class="clothing-detail-actions" id="clothing-detail-actions"></div>
+      </div>
+    </div>
+    <div class="clothing-comments">
+      <div class="clothing-comments-head"><div><span class="eyebrow">COMUNIDAD</span><h3>Comentarios</h3></div><span id="clothing-comments-status"></span></div>
+      <div id="clothing-comments-list" class="clothing-comments-list"></div>
+      <form id="clothing-comment-form" class="clothing-comment-form">
+        <textarea id="clothing-comment-input" maxlength="500" rows="3" placeholder="Escribe un comentario sobre esta creación..." required></textarea>
+        <div class="clothing-comment-form-bottom"><span>Máximo 500 caracteres</span><button class="button button--small" type="submit">Publicar comentario</button></div>
+      </form>
+    </div>
+  </section>
+</div></main><script type="module" src="js/shop.js?v=20260919-0238"></script><script src="js/ui-sound.js?v=20260919-0232"></script></body></html>
