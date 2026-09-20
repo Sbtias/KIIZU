@@ -1027,3 +1027,94 @@ img{max-width:100%}
 @keyframes kiizuPulse{from{opacity:.35}to{opacity:.75}}
 @media(max-width:800px){.chat-layout{grid-template-columns:1fr;min-height:0}.chat-sidebar{min-height:330px;max-height:390px}.chat-panel{min-height:600px}.chat-friend-list{max-height:245px}.chat-message-line{max-width:88%}}
 @media(max-width:560px){.chat-layout{gap:10px}.chat-panel{min-height:570px}.chat-header{padding:12px}.chat-header-actions{gap:4px}.chat-profile-link{display:none}.chat-messages{padding:14px 10px}.chat-composer{grid-template-columns:1fr}.chat-send{width:100%}.chat-compose-note{padding-inline:10px}.chat-bubble{font-size:10px}.friends-list-head{align-items:center;flex-direction:row}.friends-list-head .friends-mini-link{white-space:nowrap}}
+
+
+/* FRIENDS: refined three-dot action + menu */
+#friends .discover-card{position:relative;overflow:visible!important}
+#friends .friend-profile-head{position:relative;display:flex;align-items:center;gap:12px;min-width:0}
+#friends .friend-profile-head>div:nth-child(2){min-width:0;flex:1}
+#friends .friend-profile-head .friend-menu-wrap{position:relative;z-index:60;flex:0 0 auto;margin-left:auto}
+#friends .friend-more{
+  position:relative;
+  width:36px!important;height:36px!important;
+  display:grid!important;place-items:center;
+  padding:0!important;
+  border:1px solid rgba(255,255,255,.09)!important;
+  border-radius:11px!important;
+  background:rgba(255,255,255,.035)!important;
+  color:#9da5b4!important;
+  font-size:0!important;
+  line-height:1!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+  transition:transform .16s ease,border-color .16s ease,background .16s ease,color .16s ease,box-shadow .16s ease;
+}
+#friends .friend-more span{
+  display:block;
+  font-family:Arial,sans-serif;
+  font-size:22px;
+  font-weight:700;
+  line-height:18px;
+  transform:translateY(-1px);
+}
+#friends .friend-more:hover,
+#friends .friend-more[aria-expanded="true"]{
+  color:#f1f3f7!important;
+  background:rgba(124,92,255,.13)!important;
+  border-color:rgba(124,92,255,.32)!important;
+  box-shadow:0 8px 22px rgba(65,45,160,.16);
+}
+#friends .friend-more[aria-expanded="true"]{transform:rotate(90deg)}
+#friends .friend-menu{
+  position:absolute!important;
+  right:0!important;
+  top:calc(100% + 8px)!important;
+  width:205px;
+  min-width:205px!important;
+  max-width:calc(100vw - 32px);
+  padding:6px!important;
+  border:1px solid rgba(255,255,255,.11)!important;
+  border-radius:14px!important;
+  background:rgba(20,24,33,.98)!important;
+  box-shadow:0 20px 55px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,255,255,.04)!important;
+  backdrop-filter:blur(18px);
+  transform-origin:top right;
+  animation:friendsMenuIn .14s ease-out;
+}
+#friends .friend-menu[hidden]{display:none!important}
+#friends .friend-menu a,
+#friends .friend-menu button{
+  display:flex!important;
+  align-items:center;
+  width:100%;
+  min-height:38px;
+  margin:0;
+  padding:9px 11px!important;
+  border:0!important;
+  border-radius:9px!important;
+  background:transparent!important;
+  color:#dfe3ea!important;
+  font:600 10px "DM Sans",sans-serif!important;
+  text-align:left!important;
+  cursor:pointer;
+  text-decoration:none;
+  transition:background .14s ease,color .14s ease,transform .14s ease;
+}
+#friends .friend-menu a:hover,
+#friends .friend-menu button:hover{
+  background:rgba(255,255,255,.065)!important;
+  color:#fff!important;
+}
+#friends .friend-menu button.remove-friend:hover{color:#ff8585!important;background:rgba(255,101,119,.08)!important}
+html[data-theme="light"] #friends .friend-more{background:rgba(20,28,40,.035)!important;border-color:rgba(20,28,40,.1)!important;color:#596273!important}
+html[data-theme="light"] #friends .friend-more:hover,
+html[data-theme="light"] #friends .friend-more[aria-expanded="true"]{background:rgba(102,82,223,.09)!important;border-color:rgba(102,82,223,.25)!important;color:#4036a0!important}
+html[data-theme="light"] #friends .friend-menu{background:rgba(255,255,255,.98)!important;border-color:rgba(20,28,40,.1)!important;box-shadow:0 20px 55px rgba(35,43,60,.18)!important}
+html[data-theme="light"] #friends .friend-menu a,
+html[data-theme="light"] #friends .friend-menu button{color:#303746!important}
+html[data-theme="light"] #friends .friend-menu a:hover,
+html[data-theme="light"] #friends .friend-menu button:hover{background:rgba(20,28,40,.055)!important;color:#111827!important}
+@keyframes friendsMenuIn{from{opacity:0;transform:translateY(-4px) scale(.98)}to{opacity:1;transform:none}}
+@media(max-width:560px){
+  #friends .friend-more{width:34px!important;height:34px!important;border-radius:10px!important}
+  #friends .friend-menu{width:190px;min-width:190px!important;right:0!important}
+}
