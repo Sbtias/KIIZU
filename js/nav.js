@@ -153,6 +153,22 @@ function openSettings(){
     modal.addEventListener("keydown",event=>{if(event.key==="Escape")closeSettings()});
   }
   updateThemeOptions(document.documentElement.dataset.theme||"dark");
+  const premiumSection=modal.querySelector("[data-premium-cancel]")?.closest(".settings-section");
+  const premiumCancel=modal.querySelector("[data-premium-cancel]");
+  const premiumStatus=modal.querySelector("[data-premium-settings-status]");
+  if(premiumSection){
+    premiumSection.hidden=true;
+    try{
+      const {data}=await supabase.from("premium_subscriptions").select("status,expires_at,auto_renew").maybeSingle();
+      const active=data?.status==="active" && new Date(data.expires_at)>new Date();
+      premiumSection.hidden=!active;
+      if(active && premiumCancel){
+        premiumCancel.textContent=data.auto_renew===false?"Renovación cancelada":"Cancelar renovación";
+        premiumCancel.disabled=data.auto_renew===false;
+        if(data.auto_renew===false && premiumStatus) premiumStatus.textContent="Premium seguirá activo hasta "+new Date(data.expires_at).toLocaleDateString("es-PR")+".";
+      }
+    }catch{premiumSection.hidden=true;}
+  }
   const creatorTools=modal.querySelector("[data-creator-tools]");
   const creatorButton=modal.querySelector("[data-creator-coins]");
   const creatorStatus=modal.querySelector("[data-creator-coins-status]");
