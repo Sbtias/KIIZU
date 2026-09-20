@@ -1,5 +1,5 @@
 import { supabase } from "./app.js";
-import { bootShell } from "./nav.js?v=20260920-0330";
+import { bootShell } from "./nav.js?v=20260920-1635";
 import { toast, setBusy } from "./ui.js";
 
 const state = await bootShell();
