@@ -69,7 +69,7 @@ function setupAccount(profile) {
 
   const trigger = host.querySelector(".account-trigger");
   const menu = host.querySelector(".account-menu");
-  const settingsButton = host.querySelector("[data-settings]");
+  const settingsButton = host.querySelector("[data-settings]");\n  const premiumButton = host.querySelector("[data-premium]");
 
   trigger.addEventListener("click", event => {
     event.stopPropagation();
@@ -85,7 +85,7 @@ function setupAccount(profile) {
     menu.hidden = true;
   });
 
-  settingsButton.addEventListener("click", () => openSettings());
+  settingsButton.addEventListener("click", () => openSettings());\n  premiumButton?.addEventListener("click", () => openPremiumSubscription());
 
   host.querySelector("[data-signout]").addEventListener("click", async () => {
     await updatePresence("offline");
@@ -189,3 +189,43 @@ async function deleteAccount(){
   }
 }
 initTheme();
+
+function closePremiumModal(){const modal=document.querySelector("[data-premium-modal]");if(!modal)return;modal.classList.remove("is-open");document.body.classList.remove("premium-open");setTimeout(()=>{if(!modal.classList.contains("is-open"))modal.remove()},180)}
+async function openPremiumSubscription(){
+  let modal=document.querySelector("[data-premium-modal]");
+  if(!modal){
+    modal=document.createElement("div");modal.className="premium-modal";modal.dataset.premiumModal="";modal.innerHTML='<div class="premium-backdrop" data-premium-close></div><section class="premium-card" role="dialog" aria-modal="true" aria-labelledby="premium-title"><button class="premium-close" type="button" aria-label="Cerrar" data-premium-close>×</button><span class="premium-kicker">KIIZU PREMIUM</span><h2 id="premium-title">Desbloquea Premium ✦</h2><p class="premium-lead">Una suscripción de 30 días con todas las ventajas Premium.</p><div class="premium-price"><strong>500</strong><span>🪙 Coins / 30 días</span></div><div class="premium-benefits"><div><b>✦</b><span><strong>Creador automático gratis</strong><small>Sin pagar las 300 Coins.</small></span></div><div><b>✦</b><span><strong>Crear juegos gratis</strong><small>El costo normal de 20 Coins desaparece.</small></span></div><div><b>✦</b><span><strong>45 KB de chat</strong><small>Más espacio para tus conversaciones.</small></span></div><div><b>✦</b><span><strong>10% de descuento</strong><small>En las compras del Marketplace.</small></span></div></div><div class="premium-status" data-premium-status></div><button class="button premium-buy" type="button" data-premium-buy>Suscribirme por 500 Coins</button><small class="premium-note">La suscripción dura 30 días. Puedes volver a comprarla para añadir otros 30 días.</small></section></div>';
+    document.body.appendChild(modal);
+    modal.addEventListener("click",event=>{
+      if(event.target.closest("[data-premium-close]")) closePremiumModal();
+      if(event.target.closest("[data-premium-buy]")) purchasePremium(modal);
+    });
+    modal.addEventListener("keydown",event=>{if(event.key==="Escape")closePremiumModal()});
+  }
+  const status=modal.querySelector("[data-premium-status]");
+  const buy=modal.querySelector("[data-premium-buy]");
+  try{
+    const {data}=await supabase.from("premium_subscriptions").select("status,expires_at").maybeSingle();
+    if(data?.status==="active"&&new Date(data.expires_at)>new Date()){
+      status.textContent="Premium activo hasta "+new Date(data.expires_at).toLocaleDateString("es-PR");
+      buy.textContent="Añadir 30 días · 500 Coins";
+    }else status.textContent="Tu suscripción no está activa.";
+  }catch{status.textContent="Premium cuesta 500 Coins por 30 días."}
+  modal.hidden=false;requestAnimationFrame(()=>{modal.classList.add("is-open");document.body.classList.add("premium-open");modal.querySelector(".premium-close")?.focus()});
+}
+async function purchasePremium(modal){
+  const button=modal.querySelector("[data-premium-buy]"),status=modal.querySelector("[data-premium-status]");
+  if(button)button.disabled=true;
+  if(status)status.textContent="Activando Premium...";
+  try{
+    const {data,error}=await supabase.rpc("purchase_premium_subscription");
+    if(error)throw error;
+    if(status)status.textContent="Premium activo hasta "+new Date(data.expires_at).toLocaleDateString("es-PR")+" ✦";
+    if(button){button.textContent="Premium activo";button.disabled=true}
+    document.querySelectorAll("[data-premium-badge]").forEach(el=>el.hidden=false);
+    toast("¡Premium activado! ✦","success");
+  }catch(error){
+    if(status)status.textContent=error.message==="INSUFFICIENT_COINS"?"No tienes suficientes Coins.":"No se pudo activar Premium.";
+    if(button)button.disabled=false;
+  }
+}
