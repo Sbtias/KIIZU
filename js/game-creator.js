@@ -62,6 +62,64 @@ canvas.addEventListener("pointerdown",e=>{if(e.button!==0)return;if(space){camer
 canvas.addEventListener("pointermove",e=>{if(cameraDrag){pan.x=Math.max(0,Math.min(world.width-100,cameraDrag.px-(e.clientX-cameraDrag.x)/zoom));pan.y=Math.max(0,Math.min(world.height-100,cameraDrag.py-(e.clientY-cameraDrag.y)/zoom));draw();return}if(!drag)return;const p=screenToWorld(e.clientX,e.clientY),o=entities[drag.i];o.x=clamp(snap(p.x-drag.dx),0,world.width-o.w);o.y=clamp(snap(p.y-drag.dy),0,world.height-o.h);renderList();draw()});canvas.addEventListener("pointerup",()=>{drag=null;cameraDrag=null});canvas.addEventListener("pointercancel",()=>{drag=null;cameraDrag=null});canvas.addEventListener("wheel",e=>{e.preventDefault();zoom=clamp(zoom+(e.deltaY<0?.08:-.08),.35,2);draw()},{passive:false});
 addEventListener("keydown",e=>{if(e.code==="Space"){space=true;e.preventDefault()}if((e.key==="Delete"||e.key==="Backspace")&&selected!==null){entities.splice(selected,1);selected=null;renderList();draw();hideDragHelper()}if(selected!==null&&!e.target.matches("input,textarea,select,button")){if(e.key==="+"){e.preventDefault();resizeSelected(1.2)}if(e.key==="-"){e.preventDefault();resizeSelected(.83)}}});addEventListener("keyup",e=>{if(e.code==="Space")space=false});
 document.querySelectorAll("[data-tool]").forEach(b=>b.onclick=()=>setTool(b.dataset.tool));
+function buildAutoConfig(type){
+ const W=3600,H=900,items=[];
+ const addAuto=(t,x,y)=>{const d=defs[t]||defs.platform;const e={type:t,x,y,w:d.w,h:d.h};if(t==="moving"){e.range=220;e.speed=1.2}if(t==="spring")e.power=15;if(t==="platform")e.variant="";items.push(e)};
+ addAuto("spawn",120,720);
+ if(type==="obby"){
+  [[60,780],[340,700],[620,620],[900,540],[1220,620],[1540,540],[1860,620],[2180,520],[2520,620],[2880,700]].forEach(([x,y])=>addAuto("platform",x,y));
+  [[500,750],[1380,750],[2050,750],[2700,750]].forEach(([x,y])=>addAuto("hazard",x,y));
+  addAuto("checkpoint",1120,480);addAuto("checkpoint",2260,460);addAuto("goal",3260,690);
+ }else if(type==="coins"){
+  [[60,780],[360,700],[700,620],[1040,700],[1380,560],[1740,680],[2080,580],[2440,680],[2800,560],[3160,700]].forEach(([x,y])=>addAuto("platform",x,y));
+  [[420,640],[760,560],[1100,640],[1440,500],[1800,620],[2140,520],[2500,620],[2860,500],[3220,640]].forEach(([x,y])=>addAuto("coin",x,y));
+  addAuto("checkpoint",1600,620);addAuto("goal",3350,610);
+ }else if(type==="arena"){
+  [[60,780],[420,780],[780,780],[1140,700],[1500,780],[1860,680],[2220,780],[2580,680],[2940,780]].forEach(([x,y])=>addAuto("platform",x,y));
+  [[620,738],[1280,658],[1960,638],[2700,638]].forEach(([x,y])=>addAuto("enemy",x,y));
+  addAuto("checkpoint",1680,620);addAuto("goal",3260,690);
+ }else{
+  [[60,780],[400,700],[760,620],[1120,540],[1480,620],[1840,500],[2200,600],[2560,480],[2920,580],[3260,700]].forEach(([x,y])=>addAuto("platform",x,y));
+  [[520,750],[1260,750],[1980,750],[2700,750]].forEach(([x,y])=>addAuto("hazard",x,y));
+  [[900,580],[2360,540]].forEach(([x,y])=>addAuto("spring",x,y));
+  addAuto("checkpoint",1600,560);addAuto("goal",3400,610);
+ }
+ return {engine:"kiizu-2d",version:3,world:{width:W,height:H,gravity:.72,background:type==="arena"?"dusk":type==="coins"?"forest":"night"},entities:items,spawn:items.find(e=>e.type==="spawn"),objective:type==="coins"?"Recoge todas las monedas y llega a la meta":"Llega a la meta",time_limit:type==="rush"?150:180};
+}
+async function refreshAutoCoins(){
+ const box=$("#auto-game-coins"); if(!box||!state?.session?.user?.id)return;
+ const {data,error}=await supabase.from("profiles").select("coins").eq("id",state.session.user.id).maybeSingle();
+ box.textContent=error?"--":Number(data?.coins||0).toLocaleString("es-ES");
+}
+function openAutoCreator(){const m=$("#auto-game-modal");if(!m)return;m.hidden=false;$("#auto-game-status").textContent="Listo para generar.";refreshAutoCoins()}
+function closeAutoCreator(){const m=$("#auto-game-modal");if(m)m.hidden=true}
+document.querySelector("#auto-create-game")?.addEventListener("click",openAutoCreator);
+document.querySelectorAll("[data-auto-close]").forEach(b=>b.addEventListener("click",closeAutoCreator));
+document.querySelectorAll("[data-auto-type]").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("[data-auto-type]").forEach(x=>x.classList.toggle("active",x===b));}));
+document.querySelector("#auto-generate")?.addEventListener("click",async()=>{
+ if(!state?.session?.user?.id){toast("Inicia sesión para usar el creador automático.","error");return}
+ const btn=$("#auto-generate"),status=$("#auto-game-status"),type=document.querySelector("[data-auto-type].active")?.dataset.autoType||"obby";
+ setBusy(btn,true,"Generando...");
+ status.textContent="Construyendo tu juego y comprobando tus monedas...";
+ try{
+  const names={obby:["Neon Obby","Supera los obstáculos y llega a la meta."],coins:["Coin Rush","Recoge monedas y llega a la meta."],arena:["KIIZU Arena","Supera a los enemigos y alcanza la meta."],rush:["Speed Rush","Corre por el circuito y evita las trampas."]};
+  const [name,description]=names[type];
+  const config=buildAutoConfig(type);
+  const {data,error}=await supabase.rpc("create_auto_game",{p_name:name,p_description:description,p_max_players:8,p_game_config:config});
+  if(error)throw error;
+  const created=Array.isArray(data)?data[0]:data;
+  if(!created?.id)throw Error("El creador automático no pudo crear el juego.");
+  gameId=created.id;
+  entities=Array.isArray(config.entities)?config.entities.map(e=>({...e})):[];selected=null;hasBuilt=true;
+  world.width=config.world.width;world.height=config.world.height;world.gravity=config.world.gravity;world.background=config.world.background;
+  $("#name").value=created.name;$("#description").value=created.description||"";$("#max").value=created.max_players||8;$("#time").value=config.time_limit;$("#objective").value=config.objective;
+  $("#world-width").value=world.width;$("#world-height").value=world.height;$("#gravity").value=world.gravity;$("#background").value=world.background;
+  deleteGameButton?.removeAttribute("hidden");renderList();zoom=.8;pan={x:0,y:0};draw();await loadAchievements();await loadMyGames();closeAutoCreator();
+  $("#status").textContent="Juego automático creado como borrador. Ya puedes editarlo y publicarlo.";
+  toast("Juego creado. Se descontaron 300 monedas.","success");
+ }catch(e){status.textContent=e.message||"No se pudo crear el juego.";toast(status.textContent,"error");await refreshAutoCoins()}
+ finally{setBusy(btn,false)}
+});
 function template(type){
  const maps={
   obby:[["spawn",140,720],["platform",80,780],["platform",340,700],["platform",620,620],["hazard",500,750],["platform",900,540],["checkpoint",1080,480],["platform",1220,620],["hazard",1400,750],["goal",1600,690]],
