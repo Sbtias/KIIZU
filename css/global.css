@@ -1159,3 +1159,28 @@ html[data-theme="light"] #friends .friend-menu button:hover{background:rgba(20,2
     max-width:88px!important;max-height:88px!important;
   }
 }
+
+/* HEADER CONTAINMENT: keep KIIZU, navigation and account inside their own space */
+.appbar{min-width:0;overflow:visible}
+.appbar>.brand{flex:0 0 auto;min-width:0;white-space:nowrap}
+.appbar>.main-nav{flex:0 1 720px;min-width:0;max-width:720px;margin-inline:auto;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+.appbar>.main-nav::-webkit-scrollbar{display:none}
+.appbar>.main-nav a{flex:0 0 auto;white-space:nowrap}
+.appbar>.user-pill{flex:0 0 auto;min-width:0;max-width:235px}
+.appbar>.user-pill .account-trigger{max-width:100%}
+.appbar>.user-pill .account-name{max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:1050px) and (min-width:721px){
+  .appbar{gap:12px}
+  .appbar>.main-nav{flex-basis:560px;max-width:560px}
+  .appbar>.main-nav a{padding:8px 9px}
+  .appbar>.user-pill .account-name{max-width:90px}
+}
+@media(max-width:820px) and (min-width:721px){
+  .appbar>.main-nav{flex-basis:470px;max-width:470px}
+  .appbar>.main-nav a{padding:8px 8px;font-size:11px}
+  .appbar>.brand{font-size:17px}
+}
+@media(max-width:720px){
+  .appbar{overflow:visible}
+  .appbar>.brand,.appbar>.user-pill{position:relative;z-index:2}
+}
