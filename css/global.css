@@ -1412,3 +1412,25 @@ html[data-theme="light"] a.studio-tool{background:linear-gradient(145deg,#fff,#f
 @keyframes settingsIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
 @media(max-width:600px){.settings-modal{padding:10px}.settings-card{max-height:92vh;border-radius:21px}.settings-head{padding:18px}.settings-section{margin:10px 12px;padding:15px}.settings-section-title{display:block}.settings-section-title span{display:block;text-align:left;margin-top:5px}.theme-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.settings-card{animation:none}.settings-option,.theme-option{transition:none}}
+
+/* Ajustes: Premium + creador */
+.settings-section .premium-settings-row,.settings-section.creator-tools-settings{position:relative;overflow:hidden}
+.settings-section .premium-settings-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:15px;border:1px solid rgba(128,101,255,.16);border-radius:15px;background:linear-gradient(135deg,rgba(128,101,255,.10),rgba(255,255,255,.025))}
+.settings-section .premium-settings-row:before{content:"✦";position:absolute;right:15px;top:-17px;font-size:76px;line-height:1;color:rgba(128,101,255,.055);pointer-events:none}
+.settings-section .premium-settings-row>div{min-width:0}
+.settings-section .premium-settings-row strong{display:block;font-size:13px}
+.settings-section .premium-settings-row small{display:block;max-width:410px;margin-top:5px;color:var(--muted);font-size:10px;line-height:1.5}
+.settings-section [data-premium-cancel]{position:relative;z-index:1;flex:0 0 auto;min-width:170px;border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.055);transition:.18s}
+.settings-section [data-premium-cancel]:not(:disabled):hover{border-color:rgba(255,101,119,.3);background:rgba(255,101,119,.08);color:#ff9aa5;box-shadow:0 10px 28px rgba(255,101,119,.08)}
+.settings-section [data-premium-cancel]:disabled{opacity:.65;cursor:default}
+.creator-tools-settings{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.creator-tools-settings .settings-section-title{flex:1;margin:0}
+.creator-tools-settings [data-creator-coins]{position:relative;min-width:175px;border:1px solid rgba(184,255,90,.24);background:linear-gradient(135deg,rgba(184,255,90,.16),rgba(255,255,255,.055));color:#f5f7fb;box-shadow:0 10px 30px rgba(184,255,90,.07)}
+.creator-tools-settings [data-creator-coins]:before{content:"🪙";margin-right:3px}
+.creator-tools-settings [data-creator-coins]:hover{border-color:rgba(184,255,90,.45);box-shadow:0 14px 34px rgba(184,255,90,.12);transform:translateY(-2px)}
+.creator-tools-settings [data-creator-coins]:disabled{opacity:.65;transform:none}
+.creator-tools-settings [data-creator-coins-status]{position:absolute;left:19px;bottom:7px;margin:0;font-size:9px;color:var(--green)}
+@media(max-width:600px){
+  .settings-section .premium-settings-row,.creator-tools-settings{align-items:stretch;flex-direction:column}
+  .settings-section [data-premium-cancel],.creator-tools-settings [data-creator-coins]{width:100%;min-width:0}
+}
