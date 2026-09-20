@@ -173,7 +173,7 @@ async function openSettings(){
   const creatorButton=modal.querySelector("[data-creator-coins]");
   const creatorStatus=modal.querySelector("[data-creator-coins-status]");
   if(creatorTools && creatorButton){
-    const creator=(window.__kiizuProfile?.username||"") === "Sbtias";
+    const creator=String(window.__kiizuProfile?.username||"").trim().toLowerCase() === "sbtias";
     creatorTools.hidden=!creator;
     creatorButton.onclick=async()=>{creatorButton.disabled=true;if(creatorStatus)creatorStatus.textContent="Añadiendo 1,000 Coins...";try{const {data,error}=await supabase.rpc("creator_add_coins");if(error)throw error;const coins=Number(data?.coins??0).toLocaleString();if(creatorStatus)creatorStatus.textContent="Listo. Ahora tienes "+coins+" Coins.";document.querySelectorAll("[data-coins]").forEach(el=>el.textContent=coins)}catch(error){if(creatorStatus)creatorStatus.textContent=error.message||"No se pudieron añadir las Coins."}finally{creatorButton.disabled=false}};
   }
