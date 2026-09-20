@@ -146,7 +146,8 @@ function openSettings(){
       if(event.target.closest("[data-settings-close]"))closeSettings();
       const option=event.target.closest("[data-theme-option]");
       if(option)updateThemeOptions(applyTheme(option.dataset.themeOption));
-      if(event.target.closest("[data-premium-cancel]"))cancelPremiumFromSettings();\n      if(event.target.closest(".settings-delete-trigger"))openDeleteFlow();
+      if(event.target.closest("[data-premium-cancel]"))cancelPremiumFromSettings();
+      if(event.target.closest(".settings-delete-trigger"))openDeleteFlow();
     });
     modal.addEventListener("keydown",event=>{if(event.key==="Escape")closeSettings()});
   }
@@ -158,7 +159,8 @@ function openSettings(){
   modal.hidden=false;
   requestAnimationFrame(()=>{modal.classList.add("is-open");document.body.classList.add("settings-open");modal.querySelector(".settings-close")?.focus()});
 }
-async function cancelPremiumFromSettings(){const status=document.querySelector("[data-premium-settings-status]");const button=document.querySelector("[data-premium-cancel]");if(button)button.disabled=true;if(status)status.textContent="Cancelando renovación...";try{const {data,error}=await supabase.rpc("cancel_premium_subscription");if(error)throw error;if(status)status.textContent="Renovación cancelada. Premium seguirá activo hasta "+new Date(data.expires_at).toLocaleDateString("es-PR")+".";if(button){button.textContent="Renovación cancelada";button.disabled=true}}catch(error){if(status)status.textContent="No se pudo cancelar la renovación.";if(button)button.disabled=false}}\nfunction openDeleteFlow(){
+async function cancelPremiumFromSettings(){const status=document.querySelector("[data-premium-settings-status]");const button=document.querySelector("[data-premium-cancel]");if(button)button.disabled=true;if(status)status.textContent="Cancelando renovación...";try{const {data,error}=await supabase.rpc("cancel_premium_subscription");if(error)throw error;if(status)status.textContent="Renovación cancelada. Premium seguirá activo hasta "+new Date(data.expires_at).toLocaleDateString("es-PR")+".";if(button){button.textContent="Renovación cancelada";button.disabled=true}}catch(error){if(status)status.textContent="No se pudo cancelar la renovación.";if(button)button.disabled=false}}
+function openDeleteFlow(){
   const modal=document.querySelector("[data-settings-modal]");
   if(!modal)return;
   const card=modal.querySelector(".settings-card");
