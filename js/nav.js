@@ -63,6 +63,7 @@ function setupAccount(profile) {
         Number(profile.coins ?? 0).toLocaleString() + ' Coins</small></div></div>' +
       '<a href="profile.html">Mi perfil</a>' +
       '<a href="chat.html">Chat</a>' +
+      '<button data-premium type="button">✦ Premium</button>' +
       '<button data-settings type="button">Ajustes</button>' +
       '<button class="danger" data-signout type="button">Cerrar sesión</button>' +
     '</div>';
