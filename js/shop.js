@@ -3,6 +3,7 @@ import { bootShell } from "./nav.js?v=20260920-0330";
 import { toast, setBusy } from "./ui.js";
 
 const state = await bootShell();
+const isPremium = () => Boolean(window.__kiizuProfile?.is_premium);
 const grid = document.querySelector("#shop-grid");
 const gamesGrid = document.querySelector("#market-games");
 const filters = [...document.querySelectorAll(".filter-row .chip")];
@@ -143,7 +144,7 @@ function officialCard(item) {
     '<div class="item-art">✦</div>' +
     '<div><span class="eyebrow">' + escapeHtml(item.category) + '</span>' +
     '<h3>' + escapeHtml(item.name) + '</h3>' +
-    '<p>' + Number(item.price || 0).toLocaleString() + ' 🪙</p></div>' +
+    '<p>' + priceMarkup(item.price, false) + '</p></div>' +
     '<button class="button button--small buy-btn" ' + (owned ? "disabled" : "") + '>' +
     (owned ? "En inventario" : "Comprar") + '</button>';
 
@@ -177,7 +178,7 @@ function clothingCard(item) {
     '<div class="item-art clothing-preview"></div>' +
     '<div><span class="eyebrow">' + escapeHtml(item.type) + ' · por ' + escapeHtml(item.profiles?.username || "Usuario") + '</span>' +
     '<h3>' + escapeHtml(item.name) + '</h3>' +
-    '<p>' + Number(item.price || 0).toLocaleString() + ' 🪙 · <span class="like-count">' + like.count + '</span> likes</p></div>' +
+    '<p>' + priceMarkup(item.price, true) + ' · <span class="like-count">' + like.count + '</span> likes</p></div>' +
     '<div class="tool-row">' +
       '<button class="button button--small detail-btn" type="button">Ver más</button>' +
       '<button class="button button--small like-btn" type="button" aria-label="Me gusta">' + (like.mine ? "♥" : "♡") + '</button>' +
@@ -234,7 +235,7 @@ function openClothingDetail(item) {
   if (detailCreator) detailCreator.textContent = "por " + (item.profiles?.username || "Usuario");
   if (detailTitle) detailTitle.textContent = item.name || "Creación";
   if (detailDescription) detailDescription.textContent = item.description || "Esta creación todavía no tiene una descripción.";
-  if (detailPrice) detailPrice.textContent = Number(item.price || 0).toLocaleString();
+  if (detailPrice) detailPrice.innerHTML = priceMarkup(item.price, false);
   if (detailLikes) detailLikes.textContent = Number(like.count || 0);
   if (detailCommentCount) detailCommentCount.textContent = String((commentCache.get(item.id) || []).length);
   if (detailPreview) {
@@ -384,6 +385,13 @@ detailModal?.addEventListener("click", event => {
 document.addEventListener("keydown", event => {
   if (event.key === "Escape" && detailModal && !detailModal.hidden) closeClothingDetail();
 });
+
+function priceMarkup(value, compact) {
+  const base = Number(value || 0);
+  if (!isPremium() || base <= 0) return base.toLocaleString() + " 🪙";
+  const discounted = Math.floor(base * 0.9);
+  return '<span class="price-original">' + base.toLocaleString() + ' 🪙</span> <strong class="premium-discount-price">' + discounted.toLocaleString() + ' 🪙</strong> <span class="premium-discount-badge">-10% PREMIUM</span>';
+}
 
 function normalizeCategory(value) {
   const v = String(value || "").trim().toLowerCase();
