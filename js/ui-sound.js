@@ -252,13 +252,6 @@
     if (!target || target.disabled) return;
 
     init();
-    playTone(
-      target.classList.contains("danger") ? 280 : 520,
-      target.classList.contains("danger") ? 220 : 380,
-      target.classList.contains("danger") ? .065 : .045,
-      target.classList.contains("danger") ? .012 : .018
-    );
-
     target.classList.remove("ui-press");
     void target.offsetWidth;
     target.classList.add("ui-press");
@@ -269,7 +262,6 @@
     if ((event.key === "Enter" || event.key === " ") &&
         document.activeElement?.matches("button,a,select,input[type=submit]")) {
       init();
-      playTone();
     }
   }, { passive: true });
 
