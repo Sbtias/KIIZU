@@ -1,4 +1,4 @@
-import{bootShell}from"./nav.js?v=20260919-1426";import{supabase}from"./app.js";import{toast,setBusy}from"./ui.js";
+import{bootShell}from"./nav.js?v=20260920-0330";import{supabase}from"./app.js";import{toast,setBusy}from"./ui.js";
 let state=null;
 try{state=await bootShell();}catch(error){console.error("KIIZU Studio boot error:",error);}
 const $=s=>document.querySelector(s),canvas=$("#studio-canvas");
