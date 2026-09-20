@@ -76,7 +76,7 @@ async function load() {
           (r.status === "accepted" ? "AMIGOS" : (mine ? "SOLICITUD ENVIADA" : "SOLICITUD RECIBIDA")) +
         '</span><h3>' + esc(u?.username || "Usuario") + '</h3></div>' +
         '<div class="friend-menu-wrap">' +
-          '<button class="friend-more" type="button" aria-label="Más opciones" aria-expanded="false">•••</button>' +
+          '<button class="friend-more" type="button" aria-label="Más opciones" aria-expanded="false"><span aria-hidden="true">⋮</span></button>' +
           '<div class="friend-menu" hidden>' + menu + '</div>' +
         '</div>' +
       '</div>' +
