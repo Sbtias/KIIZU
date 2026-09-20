@@ -122,7 +122,7 @@ document.querySelector("#auto-generate")?.addEventListener("click",async()=>{
   $("#world-width").value=world.width;$("#world-height").value=world.height;$("#gravity").value=world.gravity;$("#background").value=world.background;
   deleteGameButton?.removeAttribute("hidden");renderList();zoom=.8;pan={x:0,y:0};draw();await loadAchievements();await loadMyGames();closeAutoCreator();
   $("#status").textContent="Juego automático creado como borrador. Ya puedes editarlo y publicarlo.";
-  toast("Juego creado. Se descontaron 300 monedas.","success");
+  toast("Juego creado gratis con Premium. ✨","success");
  }catch(e){status.textContent=e.message||"No se pudo crear el juego.";toast(status.textContent,"error");await refreshAutoCoins()}
  finally{setBusy(btn,false)}
 });
