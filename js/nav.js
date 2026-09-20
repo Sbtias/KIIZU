@@ -137,7 +137,7 @@ function applyTheme(theme){const selected=THEMES.includes(theme)?theme:"dark";do
 function initTheme(){try{applyTheme(localStorage.getItem(THEME_KEY)||"dark")}catch{applyTheme("dark")}}
 function closeSettings(){const modal=document.querySelector("[data-settings-modal]");if(!modal)return;modal.classList.remove("is-open");document.body.classList.remove("settings-open");setTimeout(()=>{if(!modal.classList.contains("is-open"))modal.hidden=true},180)}
 function updateThemeOptions(selected){document.querySelectorAll("[data-theme-option]").forEach(button=>{const active=button.dataset.themeOption===selected;button.classList.toggle("is-selected",active);button.setAttribute("aria-pressed",String(active))})}
-function openSettings(){
+async function openSettings(){
   let modal=document.querySelector("[data-settings-modal]");
   if(!modal){
     modal=document.createElement("div");modal.className="settings-modal";modal.dataset.settingsModal="";modal.hidden=true;
