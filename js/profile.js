@@ -37,7 +37,8 @@ if (state) {
   document.querySelector("#coins").textContent = Number(profile.coins ?? 0).toLocaleString();
   document.querySelector("#creator-points").textContent = Number(profile.creator_points ?? 0).toLocaleString();
   document.querySelector("#xpbar").style.width = Math.min(100, (profile.xp ?? 0) % 100) + "%";
-  const premiumBadge=document.querySelector("#premium-badge");\n  if(premiumBadge) premiumBadge.hidden=!Boolean(profile.is_premium);
+  const premiumBadge=document.querySelector("#premium-badge");
+  if(premiumBadge) premiumBadge.hidden=!Boolean(profile.is_premium);
 
   document.querySelector("#avatar-file").addEventListener("change", async event => {
     const file = event.target.files?.[0];
