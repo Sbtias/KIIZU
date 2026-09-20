@@ -1195,3 +1195,45 @@ html[data-theme="light"] #friends .friend-menu button:hover{background:rgba(20,2
   .appbar{overflow:visible}
   .appbar>.brand,.appbar>.user-pill{position:relative;z-index:2}
 }
+
+/* PROFILE BUTTON: compact avatar only, details inside the menu */
+.appbar>.user-pill{flex:0 0 auto!important;width:44px!important;max-width:44px!important;margin-left:auto}
+.appbar>.user-pill .account-trigger{
+  width:44px!important;height:44px!important;
+  padding:3px!important;margin:0!important;
+  display:grid!important;place-items:center!important;
+  border:1px solid rgba(255,255,255,.13)!important;
+  border-radius:50%!important;
+  background:rgba(255,255,255,.045)!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.06);
+  overflow:hidden!important;
+  transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease,background .16s ease;
+}
+.appbar>.user-pill .account-trigger:hover,
+.appbar>.user-pill.is-open .account-trigger{
+  transform:translateY(-1px);
+  border-color:rgba(128,101,255,.5)!important;
+  background:rgba(128,101,255,.09)!important;
+  box-shadow:0 10px 28px rgba(65,45,160,.22),0 0 0 3px rgba(128,101,255,.08);
+}
+.appbar>.user-pill .account-avatar{
+  display:block!important;
+  width:36px!important;height:36px!important;
+  min-width:36px!important;min-height:36px!important;
+  max-width:36px!important;max-height:36px!important;
+  border-radius:50%!important;
+  object-fit:cover!important;
+  border:0!important;
+}
+.appbar>.user-pill .account-trigger>.account-avatar:not(img){display:grid!important;place-items:center!important}
+.appbar>.user-pill .account-menu{
+  width:235px!important;
+  max-width:calc(100vw - 24px)!important;
+  right:0!important;
+  top:calc(100% + 10px)!important;
+}
+@media(max-width:720px){
+  .appbar>.user-pill{width:42px!important;max-width:42px!important}
+  .appbar>.user-pill .account-trigger{width:42px!important;height:42px!important}
+  .appbar>.user-pill .account-avatar{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important}
+}
