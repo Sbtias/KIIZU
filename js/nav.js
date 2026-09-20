@@ -69,7 +69,8 @@ function setupAccount(profile) {
 
   const trigger = host.querySelector(".account-trigger");
   const menu = host.querySelector(".account-menu");
-  const settingsButton = host.querySelector("[data-settings]");\n  const premiumButton = host.querySelector("[data-premium]");
+  const settingsButton = host.querySelector("[data-settings]");
+  const premiumButton = host.querySelector("[data-premium]");
 
   trigger.addEventListener("click", event => {
     event.stopPropagation();
@@ -85,7 +86,8 @@ function setupAccount(profile) {
     menu.hidden = true;
   });
 
-  settingsButton.addEventListener("click", () => openSettings());\n  premiumButton?.addEventListener("click", () => openPremiumSubscription());
+  settingsButton.addEventListener("click", () => openSettings());
+  premiumButton?.addEventListener("click", () => openPremiumSubscription());
 
   host.querySelector("[data-signout]").addEventListener("click", async () => {
     await updatePresence("offline");
