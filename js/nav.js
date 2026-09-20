@@ -54,9 +54,8 @@ function setupAccount(profile) {
 
   const name = profile.username || "Usuario";
   host.innerHTML =
-    '<button class="account-trigger" type="button" aria-expanded="false">' +
+    '<button class="account-trigger" type="button" aria-expanded="false" aria-label="Abrir menú de perfil">' +
       avatar(profile.avatar_url, name) +
-      '<span class="account-name">' + safe(name) + '</span><span aria-hidden="true">⌄</span>' +
     '</button>' +
     '<div class="account-menu" hidden>' +
       '<div class="account-menu-head">' + avatar(profile.avatar_url, name) +
