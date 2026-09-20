@@ -63,7 +63,7 @@ function setupAccount(profile) {
         Number(profile.coins ?? 0).toLocaleString() + ' Coins</small></div></div>' +
       '<a href="profile.html">Mi perfil</a>' +
       '<a href="chat.html">Chat</a>' +
-      '<button data-premium type="button">✦ Premium</button>' +
+      '<button data-premium type="button">✦ Suscripciones</button>' +
       '<button data-settings type="button">Ajustes</button>' +
       '<button class="danger" data-signout type="button">Cerrar sesión</button>' +
     '</div>';
@@ -221,41 +221,50 @@ async function deleteAccount(){
 initTheme();
 
 function closePremiumModal(){const modal=document.querySelector("[data-premium-modal]");if(!modal)return;modal.classList.remove("is-open");document.body.classList.remove("premium-open");setTimeout(()=>{if(!modal.classList.contains("is-open"))modal.remove()},180)}
-async function openPremiumSubscription(){
+async async function openPremiumSubscription(){
   let modal=document.querySelector("[data-premium-modal]");
   if(!modal){
-    modal=document.createElement("div");modal.className="premium-modal";modal.dataset.premiumModal="";modal.innerHTML='<div class="premium-backdrop" data-premium-close></div><section class="premium-card" role="dialog" aria-modal="true" aria-labelledby="premium-title"><button class="premium-close" type="button" aria-label="Cerrar" data-premium-close>×</button><span class="premium-kicker">KIIZU PREMIUM</span><h2 id="premium-title">Desbloquea Premium ✦</h2><p class="premium-lead">Una suscripción de 30 días con todas las ventajas Premium.</p><div class="premium-price"><strong>2000</strong><span>🪙 Coins / 30 días</span></div><div class="premium-benefits"><div><b>✦</b><span><strong>Creador automático gratis</strong><small>Sin pagar las 300 Coins.</small></span></div><div><b>✦</b><span><strong>Crear juegos gratis</strong><small>El costo normal de 20 Coins desaparece.</small></span></div><div><b>✦</b><span><strong>45 KB de chat</strong><small>Más espacio para tus conversaciones.</small></span></div><div><b>✦</b><span><strong>10% de descuento</strong><small>En las compras del Marketplace.</small></span></div></div><div class="premium-status" data-premium-status></div><button class="button premium-buy" type="button" data-premium-buy>Suscribirme por 2,000 Coins</button><small class="premium-note">La suscripción dura 30 días y se renueva automáticamente por 2,000 Coins si tienes saldo. Si no tienes suficientes Coins, no se cobra. Puedes cancelar la renovación desde Ajustes.</small></section></div>';
+    modal=document.createElement("div");modal.className="premium-modal";modal.dataset.premiumModal="";
+    modal.innerHTML='<div class="premium-backdrop" data-premium-close></div><section class="premium-card subscription-card" role="dialog" aria-modal="true" aria-labelledby="premium-title"><button class="premium-close" type="button" aria-label="Cerrar" data-premium-close>×</button><span class="premium-kicker">KIIZU · SUSCRIPCIONES</span><h2 id="premium-title">Elige tu plan.</h2><p class="premium-lead">Dos formas de desbloquear ventajas durante 30 días.</p><div class="subscription-plans"><article class="subscription-plan essential-plan"><span class="subscription-label">ESSENTIAL</span><h3>Essential</h3><div class="subscription-price"><strong>600</strong><span>🪙 / 30 días</span></div><ul><li>20 KB de chat</li><li>5% de descuento en Marketplace</li><li>Acceso a funciones Essential</li></ul><button class="button subscription-buy essential-buy" type="button" data-plan="essential">Elegir Essential · 600</button></article><article class="subscription-plan premium-plan"><span class="subscription-label">✦ PREMIUM</span><h3>Premium</h3><div class="subscription-price"><strong>2,000</strong><span>🪙 / 30 días</span></div><ul><li>Creador automático gratis</li><li>Crear juegos gratis</li><li>45 KB de chat</li><li>10% de descuento en Marketplace</li></ul><button class="button subscription-buy premium-buy" type="button" data-plan="premium">Elegir Premium · 2,000</button></article></div><div class="premium-status" data-premium-status></div><small class="premium-note">Premium se renueva automáticamente por 2,000 Coins si tienes saldo suficiente. Essential no tiene renovación automática. Puedes cancelar la renovación desde Ajustes.</small></section></div>';
     document.body.appendChild(modal);
     modal.addEventListener("click",event=>{
       if(event.target.closest("[data-premium-close]")) closePremiumModal();
-      if(event.target.closest("[data-premium-buy]")) purchasePremium(modal);
+      const planButton=event.target.closest("[data-plan]");
+      if(planButton) purchaseSubscription(modal,planButton.dataset.plan);
     });
     modal.addEventListener("keydown",event=>{if(event.key==="Escape")closePremiumModal()});
   }
   const status=modal.querySelector("[data-premium-status]");
-  const buy=modal.querySelector("[data-premium-buy]");
+  const buttons=[...modal.querySelectorAll("[data-plan]")];
+  buttons.forEach(b=>{b.disabled=false});
   try{
-    const {data}=await supabase.from("premium_subscriptions").select("status,expires_at").maybeSingle();
-    if(data?.status==="active"&&new Date(data.expires_at)>new Date()){
-      status.textContent="Premium activo hasta "+new Date(data.expires_at).toLocaleDateString("es-PR");
-      buy.textContent="Añadir 30 días · 2,000 Coins";
-    }else status.textContent="Tu suscripción no está activa.";
-  }catch{status.textContent="Premium cuesta 2,000 Coins por 30 días. Se renueva automáticamente si tienes suficientes Coins."}
+    const {data}=await supabase.from("premium_subscriptions").select("status,expires_at,auto_renew,plan").maybeSingle();
+    const active=data?.status==="active"&&new Date(data.expires_at)>new Date();
+    if(active){
+      const plan=(data.plan||"premium").toLowerCase();
+      status.textContent=(plan==="premium"?"Premium":"Essential")+" activo hasta "+new Date(data.expires_at).toLocaleDateString("es-PR")+(plan==="premium"&&data.auto_renew?" · renovación automática":"");
+      buttons.forEach(b=>b.disabled=true);
+    }else status.textContent="Selecciona una suscripción para comenzar.";
+  }catch{status.textContent="Selecciona una suscripción para comenzar."}
   modal.hidden=false;requestAnimationFrame(()=>{modal.classList.add("is-open");document.body.classList.add("premium-open");modal.querySelector(".premium-close")?.focus()});
 }
-async function purchasePremium(modal){
-  const button=modal.querySelector("[data-premium-buy]"),status=modal.querySelector("[data-premium-status]");
+async function purchaseSubscription(modal,plan){
+  const button=modal.querySelector('[data-plan="'+plan+'"]');
+  const status=modal.querySelector("[data-premium-status]");
   if(button)button.disabled=true;
-  if(status)status.textContent="Activando Premium...";
+  if(status)status.textContent=plan==="premium"?"Activando Premium...":"Activando Essential...";
   try{
-    const {data,error}=await supabase.rpc("purchase_premium_subscription");
+    const rpc=plan==="premium"?"purchase_premium_subscription":"purchase_essential_subscription";
+    const {data,error}=await supabase.rpc(rpc);
     if(error)throw error;
-    if(status)status.textContent="Premium activo hasta "+new Date(data.expires_at).toLocaleDateString("es-PR")+" ✦";
-    if(button){button.textContent="Premium activo";button.disabled=true}
-    document.querySelectorAll("[data-premium-badge]").forEach(el=>el.hidden=false);
-    toast("¡Premium activado! ✦","success");
+    const name=plan==="premium"?"Premium":"Essential";
+    if(status)status.textContent=name+" activo hasta "+new Date(data.expires_at).toLocaleDateString("es-PR")+" ✦";
+    modal.querySelectorAll("[data-plan]").forEach(b=>b.disabled=true);
+    if(plan==="premium")document.querySelectorAll("[data-premium-badge]").forEach(el=>el.hidden=false);
+    toast("¡"+name+" activado! ✦","success");
   }catch(error){
-    if(status)status.textContent=error.message==="INSUFFICIENT_COINS"?"No tienes suficientes Coins.":"No se pudo activar Premium.";
+    if(status)status.textContent=error.message==="INSUFFICIENT_COINS"?"No tienes suficientes Coins.":"No se pudo activar la suscripción.";
     if(button)button.disabled=false;
   }
 }
+
