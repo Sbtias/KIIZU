@@ -1,5 +1,5 @@
 import { supabase } from "./app.js";
-import { bootShell } from "./nav.js?v=20260920-1545";
+import { bootShell } from "./nav.js?v=20260920-1635";
 import { toast } from "./ui.js";
 
 export async function getProfile(userId) {
