@@ -1163,22 +1163,33 @@ html[data-theme="light"] #friends .friend-menu button:hover{background:rgba(20,2
 /* HEADER CONTAINMENT: keep KIIZU, navigation and account inside their own space */
 .appbar{min-width:0;overflow:visible}
 .appbar>.brand{flex:0 0 auto;min-width:0;white-space:nowrap}
-.appbar>.main-nav{flex:0 1 720px;min-width:0;max-width:720px;margin-inline:auto;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+.appbar>.main-nav{flex:1 1 auto;min-width:0;max-width:none;margin-inline:10px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
 .appbar>.main-nav::-webkit-scrollbar{display:none}
 .appbar>.main-nav a{flex:0 0 auto;white-space:nowrap}
-.appbar>.user-pill{flex:0 0 auto;min-width:0;max-width:235px}
-.appbar>.user-pill .account-trigger{max-width:100%}
-.appbar>.user-pill .account-name{max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-@media(max-width:1050px) and (min-width:721px){
-  .appbar{gap:12px}
-  .appbar>.main-nav{flex-basis:560px;max-width:560px}
+.appbar>.user-pill{flex:0 1 235px;min-width:0;max-width:235px}
+.appbar>.user-pill .account-trigger{width:100%;max-width:100%;min-width:0;overflow:hidden}
+.appbar>.user-pill .account-name{min-width:0;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.appbar>.user-pill .account-menu{max-width:calc(100vw - 24px)}
+@media(max-width:1050px) and (min-width:901px){
+  .appbar{gap:10px}
+  .appbar>.main-nav{margin-inline:6px}
   .appbar>.main-nav a{padding:8px 9px}
-  .appbar>.user-pill .account-name{max-width:90px}
+  .appbar>.user-pill{flex-basis:190px;max-width:190px}
+  .appbar>.user-pill .account-name{max-width:85px}
 }
-@media(max-width:820px) and (min-width:721px){
-  .appbar>.main-nav{flex-basis:470px;max-width:470px}
-  .appbar>.main-nav a{padding:8px 8px;font-size:11px}
-  .appbar>.brand{font-size:17px}
+@media(max-width:900px) and (min-width:721px){
+  .appbar{gap:8px}
+  .appbar>.brand{font-size:16px}
+  .appbar>.main-nav{margin-inline:4px}
+  .appbar>.main-nav a{padding:7px 7px;font-size:10px}
+  .appbar>.user-pill{flex-basis:170px;max-width:170px}
+  .appbar>.user-pill .account-name{max-width:65px}
+}
+@media(max-width:760px) and (min-width:721px){
+  .appbar>.brand{font-size:15px}
+  .appbar>.main-nav a{padding-inline:6px}
+  .appbar>.user-pill{flex-basis:150px;max-width:150px}
+  .appbar>.user-pill .account-name{display:none}
 }
 @media(max-width:720px){
   .appbar{overflow:visible}
