@@ -45,23 +45,6 @@
     }
   };
 
-  const playTone = (freq = 520, end = 380, duration = .045, volume = .018) => {
-    const ac = ensureContext();
-    if (!ac) return;
-    try {
-      const osc = ac.createOscillator();
-      const gain = ac.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(freq, ac.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(end, ac.currentTime + duration * .8);
-      gain.gain.setValueAtTime(volume, ac.currentTime);
-      gain.gain.exponentialRampToValueAtTime(.0001, ac.currentTime + duration);
-      osc.connect(gain).connect(ac.destination);
-      osc.start();
-      osc.stop(ac.currentTime + duration + .005);
-    } catch (_) {}
-  };
-
   const rainCSS =
     ".kiizu-rain{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden;background:transparent;isolation:isolate}" +
     ".kiizu-rain::after{content:\"\";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 18% 12%,rgba(220,235,248,.035),transparent 32%),radial-gradient(circle at 82% 72%,rgba(170,205,232,.025),transparent 34%);box-shadow:inset 0 0 120px rgba(0,0,0,.10)}" +
