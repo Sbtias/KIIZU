@@ -221,7 +221,7 @@ async function deleteAccount(){
 initTheme();
 
 function closePremiumModal(){const modal=document.querySelector("[data-premium-modal]");if(!modal)return;modal.classList.remove("is-open");document.body.classList.remove("premium-open");setTimeout(()=>{if(!modal.classList.contains("is-open"))modal.remove()},180)}
-async async function openPremiumSubscription(){
+async function openPremiumSubscription(){
   let modal=document.querySelector("[data-premium-modal]");
   if(!modal){
     modal=document.createElement("div");modal.className="premium-modal";modal.dataset.premiumModal="";
