@@ -89,9 +89,9 @@ function updateCharCount(){
 
 function updateStorage(rows){
   const used=(rows||[]).reduce((sum,m)=>sum+byteLength(m.body),0);
-  storageEl.textContent=formatBytes(used)+" / 10 KB";
-  storageEl.classList.toggle("is-full",used>=10240);
-  storageEl.classList.toggle("is-near",used>=8192);
+  storageEl.textContent=formatBytes(used)+" / 45 KB";
+  storageEl.classList.toggle("is-full",used>=46080);
+  storageEl.classList.toggle("is-near",used>=36864);
   return used;
 }
 
@@ -215,7 +215,7 @@ form.addEventListener("submit",async e=>{
   try{
     const{error}=await supabase.rpc("send_friend_message",{p_recipient_id:activeFriend.id,p_body:body});
     if(error){
-      if(error.message?.includes("CHAT_STORAGE_FULL"))throw new Error("Este chat llegó a 10 KB. Borra algunos mensajes para liberar espacio.");
+      if(error.message?.includes("CHAT_STORAGE_FULL"))throw new Error("Este chat llegó a 45 KB. Borra algunos mensajes para liberar espacio.");
       throw error;
     }
     input.value="";updateCharCount();await loadMessages();
