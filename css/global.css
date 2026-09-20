@@ -1166,7 +1166,7 @@ html[data-theme="light"] #friends .friend-menu button:hover{background:rgba(20,2
 .appbar>.main-nav{flex:1 1 auto;min-width:0;max-width:none;margin-inline:10px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
 .appbar>.main-nav::-webkit-scrollbar{display:none}
 .appbar>.main-nav a{flex:0 0 auto;white-space:nowrap}
-.appbar>.user-pill{flex:0 1 235px;min-width:0;max-width:235px}
+.appbar>.user-pill{flex:0 1 190px;min-width:0;max-width:190px}
 .appbar>.user-pill .account-trigger{width:100%;max-width:100%;min-width:0;overflow:hidden}
 .appbar>.user-pill .account-name{min-width:0;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .appbar>.user-pill .account-menu{max-width:calc(100vw - 24px)}
@@ -1188,7 +1188,7 @@ html[data-theme="light"] #friends .friend-menu button:hover{background:rgba(20,2
 @media(max-width:760px) and (min-width:721px){
   .appbar>.brand{font-size:15px}
   .appbar>.main-nav a{padding-inline:6px}
-  .appbar>.user-pill{flex-basis:150px;max-width:150px}
+  .appbar>.user-pill{flex-basis:120px;max-width:120px}
   .appbar>.user-pill .account-name{display:none}
 }
 @media(max-width:720px){
