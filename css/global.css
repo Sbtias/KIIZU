@@ -1237,3 +1237,94 @@ html[data-theme="light"] #friends .friend-menu button:hover{background:rgba(20,2
   .appbar>.user-pill .account-trigger{width:42px!important;height:42px!important}
   .appbar>.user-pill .account-avatar{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important}
 }
+
+
+/* PROFILE MENU: premium click glow + reveal */
+.appbar>.user-pill .account-trigger{
+  position:relative!important;
+  isolation:isolate;
+}
+.appbar>.user-pill .account-trigger::before{
+  content:"";
+  position:absolute;
+  inset:-7px;
+  border-radius:50%;
+  background:conic-gradient(from 0deg,transparent 0deg,rgba(128,101,255,.0) 35deg,rgba(128,101,255,.8) 72deg,rgba(184,255,90,.55) 105deg,transparent 150deg,transparent 360deg);
+  filter:blur(7px);
+  opacity:0;
+  transform:scale(.72) rotate(-20deg);
+  transition:opacity .18s ease,transform .35s cubic-bezier(.2,.8,.2,1);
+  z-index:-2;
+  pointer-events:none;
+}
+.appbar>.user-pill .account-trigger::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 25%,rgba(255,255,255,.22),transparent 28%),radial-gradient(circle,rgba(128,101,255,.16),transparent 68%);
+  opacity:0;
+  transform:scale(.72);
+  transition:opacity .2s ease,transform .25s ease;
+  z-index:-1;
+  pointer-events:none;
+}
+.appbar>.user-pill.is-open .account-trigger::before{
+  opacity:1;
+  transform:scale(1.05) rotate(25deg);
+  animation:kiizuProfileSpark 1.8s linear infinite;
+}
+.appbar>.user-pill.is-open .account-trigger::after{
+  opacity:1;
+  transform:scale(1);
+}
+.appbar>.user-pill.is-open .account-avatar{
+  box-shadow:0 0 0 2px rgba(255,255,255,.08),0 0 24px rgba(128,101,255,.38);
+}
+.appbar>.user-pill .account-menu{
+  transform-origin:top right;
+}
+.appbar>.user-pill.is-open .account-menu{
+  animation:kiizuProfileMenuIn .2s cubic-bezier(.2,.8,.2,1);
+}
+.appbar>.user-pill .account-menu::before{
+  content:"";
+  display:block;
+  height:2px;
+  margin:-8px -8px 8px;
+  border-radius:99px;
+  background:linear-gradient(90deg,transparent,rgba(128,101,255,.85),rgba(184,255,90,.65),transparent);
+  opacity:.85;
+}
+.appbar>.user-pill .account-menu-head{
+  position:relative;
+  overflow:hidden;
+  padding:10px;
+  margin-bottom:4px;
+  border-radius:11px;
+  background:linear-gradient(135deg,rgba(128,101,255,.10),rgba(255,255,255,.025));
+  border:1px solid rgba(255,255,255,.06);
+}
+.appbar>.user-pill .account-menu-head::after{
+  content:"";
+  position:absolute;
+  width:90px;
+  height:90px;
+  right:-35px;
+  top:-45px;
+  border-radius:50%;
+  background:rgba(128,101,255,.14);
+  filter:blur(18px);
+  pointer-events:none;
+}
+@keyframes kiizuProfileSpark{
+  to{transform:scale(1.05) rotate(385deg)}
+}
+@keyframes kiizuProfileMenuIn{
+  from{opacity:0;transform:translateY(-8px) scale(.96)}
+  to{opacity:1;transform:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .appbar>.user-pill.is-open .account-trigger::before{animation:none}
+  .appbar>.user-pill.is-open .account-menu{animation:none}
+}
