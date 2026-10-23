@@ -1,2 +1,299 @@
-@import url("global-part1.css");
-@import url("global-part2.css");
+/* KIIZU global styles — restored from f80d0a6 + depth layer */
+@import url("https://cdn.jsdelivr.net/gh/Sbtias/KIIZU@f80d0a6b4a8dcdf86da8547848b146f5b715f46c/css/global.css");
+
+/* =========================================================
+   KIIZU UI DEPTH 2.0 — elevación, capas y atmósfera
+   ========================================================= */
+
+:root{
+  --elev-1: 0 1px 0 rgba(255,255,255,.04), 0 4px 16px rgba(0,0,0,.28);
+  --elev-2: 0 1px 0 rgba(255,255,255,.05), 0 10px 32px rgba(0,0,0,.36), 0 2px 6px rgba(0,0,0,.2);
+  --elev-3: 0 1px 0 rgba(255,255,255,.06), 0 18px 48px rgba(0,0,0,.42), 0 6px 14px rgba(0,0,0,.25);
+  --elev-4: 0 1px 0 rgba(255,255,255,.07), 0 28px 70px rgba(0,0,0,.5), 0 10px 24px rgba(0,0,0,.3);
+  --elev-hover: 0 1px 0 rgba(255,255,255,.08), 0 22px 56px rgba(0,0,0,.45), 0 0 0 1px rgba(128,101,255,.22), 0 0 40px rgba(128,101,255,.12);
+  --glow-purple: 0 0 40px rgba(128,101,255,.18);
+  --glow-green: 0 0 36px rgba(184,255,90,.12);
+  --inset-hi: inset 0 1px 0 rgba(255,255,255,.06);
+  --inset-deep: inset 0 1px 0 rgba(255,255,255,.05), inset 0 -1px 0 rgba(0,0,0,.25);
+}
+
+body{
+  background:
+    radial-gradient(1100px 620px at 82% -8%, rgba(42,32,89,.55) 0%, transparent 58%),
+    radial-gradient(800px 520px at -8% 85%, rgba(23,37,14,.4) 0%, transparent 52%),
+    radial-gradient(600px 400px at 50% 50%, rgba(128,101,255,.04) 0%, transparent 70%),
+    var(--bg);
+}
+body:before{
+  opacity:.1;
+  background-image:
+    linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size:64px 64px;
+}
+
+.appbar{
+  background: rgba(7,8,11,.72);
+  backdrop-filter: blur(22px) saturate(1.2);
+  -webkit-backdrop-filter: blur(22px) saturate(1.2);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 8px 32px rgba(0,0,0,.25);
+}
+
+.main-nav{
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.1);
+  box-shadow: var(--inset-hi), 0 4px 16px rgba(0,0,0,.2);
+}
+.main-nav a:hover,
+.main-nav .active{
+  background: rgba(255,255,255,.1);
+  box-shadow: var(--inset-hi), 0 2px 8px rgba(0,0,0,.15);
+}
+
+.account-trigger{
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: var(--elev-1);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.account-trigger:hover{
+  transform: translateY(-1px);
+  border-color: rgba(128,101,255,.35);
+  box-shadow: var(--elev-2), var(--glow-purple);
+}
+.account-menu{
+  background: linear-gradient(165deg, #161a24 0%, #0e1118 100%);
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: var(--elev-4);
+  backdrop-filter: blur(16px);
+}
+
+.button{
+  box-shadow: var(--elev-1), var(--inset-hi);
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.button:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--elev-2), 0 0 24px rgba(245,247,251,.08);
+}
+.button:active{
+  transform: translateY(0);
+  box-shadow: var(--inset-deep);
+}
+.button--ghost{
+  background: rgba(255,255,255,.05);
+  border-color: rgba(255,255,255,.14);
+  box-shadow: var(--elev-1), var(--inset-hi);
+}
+.button--ghost:hover{
+  background: rgba(255,255,255,.09);
+  box-shadow: var(--elev-2), var(--glow-purple);
+}
+
+.panel,
+.landing-panel,
+.home-quick-card,
+.home-info-panel,
+.experience,
+.discover-card,
+.item-card,
+.achievement,
+.account-card,
+.stats > div,
+.studio-card,
+.creator-tools,
+.creator-canvas,
+.room-social,
+.room-picker,
+.results-card,
+.match-card,
+.settings-panel,
+.settings-card,
+.settings-section,
+.preferences-panel,
+.preferences-card,
+.account-settings-panel{
+  background: linear-gradient(155deg, rgba(22,26,36,.98) 0%, rgba(12,14,20,.98) 100%);
+  border: 1px solid rgba(255,255,255,.09);
+  box-shadow: var(--elev-2), var(--inset-hi);
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+
+.landing-panel,
+.panel{
+  box-shadow: var(--elev-3), var(--inset-hi);
+}
+
+.home-quick-card:hover,
+.experience:hover,
+.discover-card:hover,
+.item-card:hover,
+.account-card:hover{
+  transform: translateY(-4px);
+  border-color: rgba(128,101,255,.4);
+  box-shadow: var(--elev-hover);
+}
+
+.feature-row{
+  background: linear-gradient(180deg, #12151d 0%, #0e1117 100%);
+  border: 1px solid rgba(255,255,255,.09);
+  box-shadow: var(--elev-2), var(--inset-hi);
+  overflow: hidden;
+}
+.feature-row > div{
+  border-right: 1px solid rgba(255,255,255,.07);
+  transition: background .2s ease;
+}
+.feature-row > div:hover{
+  background: rgba(128,101,255,.06);
+}
+
+.landing-hero h1 em{
+  text-shadow: 0 0 40px rgba(184,255,90,.25);
+}
+.hero-start{
+  box-shadow: var(--elev-2), var(--glow-green), var(--inset-hi) !important;
+}
+.hero-start:hover{
+  box-shadow: var(--elev-3), 0 0 48px rgba(184,255,90,.22) !important;
+}
+
+.discover-art,
+.item-art{
+  box-shadow: var(--inset-deep), 0 8px 24px rgba(0,0,0,.3);
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+.chat-layout{
+  box-shadow: var(--elev-3), var(--inset-hi);
+  border: 1px solid rgba(255,255,255,.09);
+}
+.chat-sidebar,
+.chat-panel{
+  background: linear-gradient(180deg, #12161f 0%, #0e1118 100%);
+}
+
+.profile-avatar,
+.profile-photo,
+.public-profile-photo{
+  box-shadow: var(--elev-2), 0 0 0 1px rgba(255,255,255,.08), var(--glow-purple);
+}
+
+.xpbar{
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.4);
+}
+.xpbar i{
+  box-shadow: 0 0 12px rgba(184,255,90,.4);
+}
+
+.play-orb{
+  box-shadow:
+    0 0 80px rgba(184,255,90,.2),
+    0 20px 50px rgba(0,0,0,.4),
+    inset 0 2px 8px rgba(255,255,255,.15),
+    inset 0 -8px 20px rgba(0,0,0,.35);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.play-orb:hover{
+  transform: scale(1.04);
+  box-shadow:
+    0 0 100px rgba(184,255,90,.3),
+    0 24px 60px rgba(0,0,0,.45),
+    inset 0 2px 10px rgba(255,255,255,.2);
+}
+
+.toast{
+  background: linear-gradient(145deg, rgba(28,32,42,.96), rgba(16,18,24,.98));
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: var(--elev-4);
+  backdrop-filter: blur(12px);
+}
+
+input, textarea, select{
+  background: rgba(8,10,15,.85);
+  border: 1px solid rgba(255,255,255,.1);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.25);
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+input:focus, textarea:focus, select:focus{
+  border-color: rgba(128,101,255,.55);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.2), 0 0 0 3px rgba(128,101,255,.12), var(--glow-purple);
+}
+
+.chip{
+  box-shadow: var(--elev-1);
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.chip:hover, .chip.active{
+  transform: translateY(-1px);
+  box-shadow: var(--elev-2);
+}
+
+.brand-mark{
+  box-shadow: 0 0 28px rgba(255,255,255,.12), var(--elev-1);
+}
+
+.studio,
+.studio-stage{
+  box-shadow: var(--elev-2), var(--inset-hi);
+}
+.canvas-wrap,
+.studio-canvas-wrap,
+.clothing-canvas-wrap{
+  box-shadow: inset 0 2px 12px rgba(0,0,0,.35), 0 12px 40px rgba(0,0,0,.25);
+}
+
+.presence-dot{
+  box-shadow: 0 0 12px var(--green), 0 0 24px rgba(184,255,90,.35);
+}
+
+.skeleton-card{
+  box-shadow: var(--elev-1);
+}
+
+html[data-theme="light"] body{
+  background:
+    radial-gradient(1100px 620px at 82% -8%, rgba(112,91,230,.12) 0%, transparent 58%),
+    radial-gradient(800px 520px at -8% 85%, rgba(90,140,60,.08) 0%, transparent 52%),
+    #f4f5f8;
+}
+html[data-theme="light"] .appbar{
+  background: rgba(255,255,255,.82);
+  border-bottom-color: rgba(22,28,40,.08);
+  box-shadow: 0 8px 28px rgba(35,43,60,.08);
+}
+html[data-theme="light"] .panel,
+html[data-theme="light"] .landing-panel,
+html[data-theme="light"] .home-quick-card,
+html[data-theme="light"] .experience,
+html[data-theme="light"] .discover-card,
+html[data-theme="light"] .item-card,
+html[data-theme="light"] .stats > div,
+html[data-theme="light"] .account-card{
+  background: linear-gradient(155deg, #ffffff 0%, #f6f7fa 100%);
+  border-color: rgba(22,28,40,.08);
+  box-shadow: 0 1px 0 #fff, 0 12px 36px rgba(35,43,60,.1);
+}
+html[data-theme="light"] .home-quick-card:hover,
+html[data-theme="light"] .experience:hover,
+html[data-theme="light"] .discover-card:hover,
+html[data-theme="light"] .item-card:hover{
+  box-shadow: 0 1px 0 #fff, 0 20px 48px rgba(35,43,60,.14), 0 0 0 1px rgba(102,82,223,.2);
+}
+
+@keyframes kiizu-float{
+  0%,100%{ transform: translateY(0); }
+  50%{ transform: translateY(-3px); }
+}
+.landing-panel{
+  animation: kiizu-float 7s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce){
+  .landing-panel{ animation: none; }
+  .button:hover,
+  .home-quick-card:hover,
+  .experience:hover,
+  .discover-card:hover,
+  .item-card:hover{ transform: none; }
+}
