@@ -1,1 +1,4 @@
-PLACEHOLDER
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root{--bg:#07080b;--panel:#0f1117;--panel2:#131620;--panel3:#181c27;--line:#242936;--line2:#303645;--text:#f5f7fb;--muted:#9299aa;--soft:#686f80;--purple:#8065ff;--green:#b8ff5a;--danger:#ff6577;--elev-1:0 1px 0 rgba(255,255,255,.04),0 4px 16px rgba(0,0,0,.28);--elev-2:0 1px 0 rgba(255,255,255,.05),0 10px 32px rgba(0,0,0,.36);--elev-3:0 1px 0 rgba(255,255,255,.06),0 18px 48px rgba(0,0,0,.42);--elev-4:0 1px 0 rgba(255,255,255,.07),0 28px 70px rgba(0,0,0,.5);--inset-hi:inset 0 1px 0 rgba(255,255,255,.06)}
+/* RESTORED_MARKER - full file continues via next commit */
